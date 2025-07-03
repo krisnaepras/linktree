@@ -36,9 +36,11 @@ export async function GET(request: NextRequest) {
                         isVisible: true
                     },
                     include: {
-                        category: true
+                        category: true,
+                        clicks: true
                     }
-                }
+                },
+                views: true
             }
         });
 
@@ -49,25 +51,46 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // For now, return mock data since we don't have real analytics tracking
-        // In a real application, you would:
-        // 1. Store page views in a separate table
-        // 2. Track link clicks with timestamps
-        // 3. Calculate real statistics from the data
+        // Calculate real statistics from database
+        const totalViews = linktree.views.length;
+        const totalClicks = linktree.detailLinktrees.reduce(
+            (sum, link) => sum + link.clicks.length,
+            0
+        );
 
-        const mockStats = {
-            profileViews: Math.floor(Math.random() * 1000) + 50,
-            totalClicks: Math.floor(Math.random() * 500) + 25,
-            todayViews: Math.floor(Math.random() * 50) + 5,
-            weeklyViews: Math.floor(Math.random() * 200) + 20,
-            topLinks: linktree.detailLinktrees.slice(0, 3).map((link) => ({
+        // Today's views
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const todayViews = linktree.views.filter(
+            (view) => view.createdAt >= today
+        ).length;
+
+        // This week's views
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        const weeklyViews = linktree.views.filter(
+            (view) => view.createdAt >= weekAgo
+        ).length;
+
+        // Top links by clicks
+        const topLinks = linktree.detailLinktrees
+            .map((link) => ({
                 title: link.title,
-                url: link.url,
-                clicks: Math.floor(Math.random() * 100) + 1
+                clicks: link.clicks.length,
+                url: link.url
             }))
+            .sort((a, b) => b.clicks - a.clicks)
+            .slice(0, 5);
+
+        const stats = {
+            profileViews: totalViews,
+            totalClicks: totalClicks,
+            todayViews: todayViews,
+            weeklyViews: weeklyViews,
+            topLinks: topLinks
         };
 
-        return NextResponse.json(mockStats);
+        return NextResponse.json(stats);
     } catch (error) {
         console.error("Error fetching stats:", error);
         return NextResponse.json(
@@ -76,10 +99,3 @@ export async function GET(request: NextRequest) {
         );
     }
 }
-
-// TODO: In a real application, you would implement:
-// 1. POST endpoint to record page views
-// 2. POST endpoint to record link clicks
-// 3. Database tables for tracking analytics
-// 4. Real-time statistics calculation
-// 5. Privacy-compliant data collection

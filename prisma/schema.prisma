@@ -38,8 +38,9 @@ model Linktree {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   detailLinktrees DetailLinktree[]
+  views           LinktreeView[]
 
   @@map("linktrees")
 }
@@ -57,6 +58,7 @@ model DetailLinktree {
 
   linktree Linktree @relation(fields: [linktreeId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  clicks   LinkClick[]
 
   @@map("detail_linktrees")
 }
@@ -71,6 +73,31 @@ model Category {
   detailLinktrees DetailLinktree[]
 
   @@map("categories")
+}
+
+model LinktreeView {
+  id         String   @id @default(cuid())
+  linktreeId String   @map("linktree_id")
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  linktree Linktree @relation(fields: [linktreeId], references: [id], onDelete: Cascade)
+
+  @@map("linktree_views")
+}
+
+model LinkClick {
+  id               String   @id @default(cuid())
+  detailLinktreeId String   @map("detail_linktree_id")
+  ipAddress        String?  @map("ip_address")
+  userAgent        String?  @map("user_agent")
+  referrer         String?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  detailLinktree DetailLinktree @relation(fields: [detailLinktreeId], references: [id], onDelete: Cascade)
+
+  @@map("link_clicks")
 }
 
 enum Role {

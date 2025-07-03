@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
+import TrackableLink from "@/components/TrackableLink";
 
 type Props = {
     params: { slug: string };
@@ -45,6 +47,9 @@ export default async function LinktreePage({ params }: Props) {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+            {/* Track page view */}
+            <AnalyticsTracker slug={params.slug} action="view" />
+
             <div className="max-w-md mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -70,11 +75,10 @@ export default async function LinktreePage({ params }: Props) {
                 {/* Links */}
                 <div className="space-y-4 mb-8">
                     {linktree.detailLinktrees.map((link) => (
-                        <a
+                        <TrackableLink
                             key={link.id}
                             href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            linkId={link.id}
                             className="block w-full p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200 group"
                         >
                             <div className="flex items-center">
@@ -127,7 +131,7 @@ export default async function LinktreePage({ params }: Props) {
                                     />
                                 </svg>
                             </div>
-                        </a>
+                        </TrackableLink>
                     ))}
                 </div>
 

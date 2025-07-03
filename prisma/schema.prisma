@@ -101,6 +101,7 @@ model LinkClick {
 }
 
 enum Role {
-  ADMIN
   USER
+  ADMIN
+  SUPERADMIN
 }

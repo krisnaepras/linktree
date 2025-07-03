@@ -41,6 +41,21 @@ async function main() {
         }
     });
 
+    // Seed Super Admin User
+    const superAdminPassword = await bcrypt.hash("superadmin123", 10);
+
+    console.log("Seeding super admin user...");
+    await prisma.user.upsert({
+        where: { email: "superadmin@linktree.com" },
+        update: {},
+        create: {
+            name: "Super Admin",
+            email: "superadmin@linktree.com",
+            password: superAdminPassword,
+            role: "SUPERADMIN"
+        }
+    });
+
     // Seed Test User
     const testUserPassword = await bcrypt.hash("user123", 10);
 

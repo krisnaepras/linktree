@@ -10,6 +10,56 @@ const categorySchema = z.object({
     icon: z.string().optional()
 });
 
+// Get category details (Admin only)
+export async function GET(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    try {
+        const session = await getServerSession(authOptions);
+
+        if (
+            !session?.user?.id ||
+            (session.user.role !== "ADMIN" &&
+                session.user.role !== "SUPERADMIN")
+        ) {
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+        }
+
+        const { id } = params;
+
+        // Get category with count of links
+        const category = await prisma.category.findUnique({
+            where: { id },
+            include: {
+                _count: {
+                    select: {
+                        detailLinktrees: true
+                    }
+                }
+            }
+        });
+
+        if (!category) {
+            return NextResponse.json(
+                { error: "Kategori tidak ditemukan" },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(category);
+    } catch (error) {
+        console.error("Error getting category:", error);
+        return NextResponse.json(
+            { error: "Terjadi kesalahan saat mengambil data kategori" },
+            { status: 500 }
+        );
+    }
+}
+
 // Update category (Admin only)
 export async function PATCH(
     request: NextRequest,
@@ -18,7 +68,11 @@ export async function PATCH(
     try {
         const session = await getServerSession(authOptions);
 
-        if (!session?.user?.id || session.user.role !== "ADMIN") {
+        if (
+            !session?.user?.id ||
+            (session.user.role !== "ADMIN" &&
+                session.user.role !== "SUPERADMIN")
+        ) {
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }
@@ -105,7 +159,11 @@ export async function DELETE(
     try {
         const session = await getServerSession(authOptions);
 
-        if (!session?.user?.id || session.user.role !== "ADMIN") {
+        if (
+            !session?.user?.id ||
+            (session.user.role !== "ADMIN" &&
+                session.user.role !== "SUPERADMIN")
+        ) {
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }

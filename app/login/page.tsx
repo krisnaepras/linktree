@@ -52,9 +52,18 @@ export default function LoginPage() {
             if (result?.error) {
                 setError("Email atau password salah");
             } else {
-                // Check session to get user data
+                // Check session to get user data and redirect based on role
                 const session = await getSession();
-                if (session) {
+                if (session?.user?.role) {
+                    const role = session.user.role;
+                    if (role === "SUPERADMIN") {
+                        router.push("/superadmin");
+                    } else if (role === "ADMIN") {
+                        router.push("/admin");
+                    } else {
+                        router.push("/dashboard");
+                    }
+                } else {
                     router.push("/dashboard");
                 }
             }

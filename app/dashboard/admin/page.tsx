@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Swal from "sweetalert2";
 
 const categorySchema = z.object({
     name: z
@@ -190,7 +191,19 @@ export default function AdminDashboard() {
     };
 
     const handleDelete = async (categoryId: string) => {
-        if (!confirm("Apakah Anda yakin ingin menghapus kategori ini?")) {
+        const result = await Swal.fire({
+            title: "Hapus Kategori?",
+            text: "Tindakan ini tidak dapat dibatalkan. Kategori akan dihapus permanen.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dc2626",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Ya, Hapus",
+            cancelButtonText: "Batal",
+            reverseButtons: true
+        });
+
+        if (!result.isConfirmed) {
             return;
         }
 
@@ -203,13 +216,34 @@ export default function AdminDashboard() {
             );
 
             if (response.ok) {
+                await Swal.fire({
+                    title: "Berhasil!",
+                    text: "Kategori berhasil dihapus.",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
                 setSuccessMessage("Kategori berhasil dihapus!");
                 fetchCategories();
             } else {
                 const errorData = await response.json();
+                await Swal.fire({
+                    title: "Gagal!",
+                    text:
+                        errorData.error ||
+                        "Terjadi kesalahan saat menghapus kategori.",
+                    icon: "error",
+                    confirmButtonColor: "#dc2626"
+                });
                 setError(errorData.error || "Terjadi kesalahan");
             }
         } catch (error) {
+            await Swal.fire({
+                title: "Gagal!",
+                text: "Terjadi kesalahan pada server.",
+                icon: "error",
+                confirmButtonColor: "#dc2626"
+            });
             setError("Terjadi kesalahan pada server");
         }
     };

@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import CategoryDropdown from "@/components/CategoryDropdown";
+import Swal from "sweetalert2";
 
 const editLinkSchema = z.object({
     title: z
@@ -49,10 +51,15 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
         register,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
+        watch,
+        setValue
     } = useForm<EditLinkFormData>({
         resolver: zodResolver(editLinkSchema)
     });
+
+    // Watch categoryId value
+    const categoryId = watch("categoryId") || "";
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -126,7 +133,19 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
     };
 
     const handleDelete = async () => {
-        if (!confirm("Apakah Anda yakin ingin menghapus link ini?")) {
+        const result = await Swal.fire({
+            title: "Hapus Link?",
+            text: "Tindakan ini tidak dapat dibatalkan. Link akan dihapus permanen.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dc2626",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Ya, Hapus",
+            cancelButtonText: "Batal",
+            reverseButtons: true
+        });
+
+        if (!result.isConfirmed) {
             return;
         }
 
@@ -137,12 +156,33 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
             });
 
             if (response.ok) {
+                await Swal.fire({
+                    title: "Berhasil!",
+                    text: "Link berhasil dihapus.",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
                 router.push("/dashboard");
             } else {
                 const errorData = await response.json();
+                await Swal.fire({
+                    title: "Gagal!",
+                    text:
+                        errorData.error ||
+                        "Terjadi kesalahan saat menghapus link.",
+                    icon: "error",
+                    confirmButtonColor: "#dc2626"
+                });
                 setError(errorData.error || "Terjadi kesalahan");
             }
         } catch (error) {
+            await Swal.fire({
+                title: "Gagal!",
+                text: "Terjadi kesalahan pada server.",
+                icon: "error",
+                confirmButtonColor: "#dc2626"
+            });
             setError("Terjadi kesalahan pada server");
         } finally {
             setIsLoading(false);
@@ -277,26 +317,14 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
                             >
                                 Kategori *
                             </label>
-                            <select
-                                id="categoryId"
-                                {...register("categoryId")}
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
-                            >
-                                <option value="">Pilih kategori</option>
-                                {categories.map((category) => (
-                                    <option
-                                        key={category.id}
-                                        value={category.id}
-                                    >
-                                        {category.icon &&
-                                            !category.icon.startsWith(
-                                                "/uploads/"
-                                            ) &&
-                                            `${category.icon} `}
-                                        {category.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <CategoryDropdown
+                                categories={categories}
+                                selectedCategoryId={categoryId}
+                                onSelect={(id) => setValue("categoryId", id)}
+                                placeholder="Pilih kategori"
+                                error={errors.categoryId?.message}
+                                loading={isFetching}
+                            />
                             {errors.categoryId && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {errors.categoryId.message}
@@ -347,32 +375,50 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
                         </div>
 
                         {/* Submit Buttons */}
-                        <div className="flex justify-between">
-                            <button
-                                type="button"
-                                onClick={handleDelete}
-                                disabled={isLoading}
-                                className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            >
-                                Hapus Link
-                            </button>
-
-                            <div className="flex space-x-4">
+                        <div className="space-y-6">
+                            {/* Main action buttons */}
+                            <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                                 <Link
                                     href="/dashboard"
-                                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                    className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-center"
                                 >
                                     Batal
                                 </Link>
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     {isLoading
                                         ? "Menyimpan..."
                                         : "Simpan Perubahan"}
                                 </button>
+                            </div>
+
+                            {/* Danger zone - Delete button separated */}
+                            <div className="pt-6 border-t border-gray-200">
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="mb-3 sm:mb-0">
+                                            <h3 className="text-sm font-medium text-red-800">
+                                                Hapus Link
+                                            </h3>
+                                            <p className="text-sm text-red-600 mt-1">
+                                                Tindakan ini tidak dapat
+                                                dibatalkan. Link akan dihapus
+                                                permanen.
+                                            </p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleDelete}
+                                            disabled={isLoading}
+                                            className="w-full sm:w-auto px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        >
+                                            Hapus Link
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>

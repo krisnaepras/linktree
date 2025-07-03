@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import CategoryDropdown from "@/components/CategoryDropdown";
 
 const createLinkSchema = z.object({
     title: z
@@ -38,13 +39,18 @@ export default function CreateLinkPage() {
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        watch,
+        setValue
     } = useForm<CreateLinkFormData>({
         resolver: zodResolver(createLinkSchema),
         defaultValues: {
             isVisible: true
         }
     });
+
+    // Watch categoryId value
+    const categoryId = watch("categoryId") || "";
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -211,26 +217,14 @@ export default function CreateLinkPage() {
                             >
                                 Kategori *
                             </label>
-                            <select
-                                id="categoryId"
-                                {...register("categoryId")}
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
-                            >
-                                <option value="">Pilih kategori</option>
-                                {categories.map((category) => (
-                                    <option
-                                        key={category.id}
-                                        value={category.id}
-                                    >
-                                        {category.icon &&
-                                            !category.icon.startsWith(
-                                                "/uploads/"
-                                            ) &&
-                                            `${category.icon} `}
-                                        {category.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <CategoryDropdown
+                                categories={categories}
+                                selectedCategoryId={categoryId}
+                                onSelect={(id) => setValue("categoryId", id)}
+                                placeholder="Pilih kategori"
+                                error={errors.categoryId?.message}
+                                loading={isFetching}
+                            />
                             {errors.categoryId && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {errors.categoryId.message}
@@ -284,17 +278,17 @@ export default function CreateLinkPage() {
                         </div>
 
                         {/* Submit Button */}
-                        <div className="flex justify-end space-x-4">
+                        <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                             <Link
                                 href="/dashboard"
-                                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-center"
                             >
                                 Batal
                             </Link>
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 {isLoading ? "Menyimpan..." : "Tambah Link"}
                             </button>

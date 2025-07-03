@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 type DetailLinktree = {
     id: string;
@@ -119,11 +120,31 @@ export default function DraggableLinks({
                                     <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                                 </svg>
                             </div>
-                            {link.category.icon && (
-                                <span className="text-xl">
-                                    {link.category.icon}
-                                </span>
-                            )}
+                            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                                {link.category.icon ? (
+                                    link.category.icon.startsWith(
+                                        "/uploads/"
+                                    ) ? (
+                                        <Image
+                                            src={link.category.icon}
+                                            alt={link.category.name}
+                                            width={40}
+                                            height={40}
+                                            className="w-10 h-10 object-cover rounded-lg"
+                                        />
+                                    ) : (
+                                        <span className="text-3xl">
+                                            {link.category.icon}
+                                        </span>
+                                    )
+                                ) : (
+                                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span className="text-gray-400 text-xl">
+                                            📄
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
                             <div>
                                 <h4 className="font-medium text-gray-900">
                                     {link.title}

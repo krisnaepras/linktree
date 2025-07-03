@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import Swal from "sweetalert2";
 import DraggableLinks from "@/components/DraggableLinks";
 import QuickStats from "@/components/QuickStats";
 
@@ -121,6 +122,47 @@ export default function DashboardPage() {
         }
     };
 
+    const handleSignOut = async () => {
+        const result = await Swal.fire({
+            title: "Konfirmasi Keluar",
+            text: "Apakah Anda yakin ingin keluar dari akun?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Ya, Keluar",
+            cancelButtonText: "Batal",
+            reverseButtons: true
+        });
+
+        if (result.isConfirmed) {
+            // Show loading while signing out
+            Swal.fire({
+                title: "Sedang keluar...",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                await signOut({
+                    callbackUrl: "/login",
+                    redirect: true
+                });
+            } catch (error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Terjadi kesalahan saat keluar. Silakan coba lagi.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        }
+    };
+
     if (status === "loading" || loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -166,7 +208,7 @@ export default function DashboardPage() {
                                 Halo, {session.user.name}!
                             </span>
                             <button
-                                onClick={() => router.push("/api/auth/signout")}
+                                onClick={handleSignOut}
                                 className="text-sm text-red-600 hover:text-red-700 font-medium"
                             >
                                 Keluar

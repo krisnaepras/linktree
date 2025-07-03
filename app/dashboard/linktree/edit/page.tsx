@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Image from "next/image";
 
 const editLinktreeSchema = z.object({
     title: z
@@ -42,6 +43,9 @@ export default function EditLinktreePage() {
     const [isFetching, setIsFetching] = useState(true);
     const [error, setError] = useState("");
     const [linktree, setLinktree] = useState<Linktree | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [photoMethod, setPhotoMethod] = useState<"url" | "upload">("url");
 
     const {
         register,
@@ -94,12 +98,27 @@ export default function EditLinktreePage() {
         setError("");
 
         try {
+            let photoUrl = data.photo;
+
+            // If user selected file upload method and has a file, upload it first
+            if (photoMethod === "upload" && selectedFile) {
+                const uploadedPath = await uploadPhotoFile();
+                if (uploadedPath === null) {
+                    setIsLoading(false);
+                    return;
+                }
+                photoUrl = uploadedPath;
+            }
+
             const response = await fetch("/api/linktree", {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    ...data,
+                    photo: photoUrl
+                })
             });
 
             if (response.ok) {
@@ -112,6 +131,41 @@ export default function EditLinktreePage() {
             setError("Terjadi kesalahan pada server");
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const uploadPhotoFile = async (): Promise<string | null> => {
+        if (!selectedFile) return null;
+
+        const formData = new FormData();
+        formData.append("photo", selectedFile);
+
+        try {
+            const response = await fetch("/api/upload/linktree-photo", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                return result.filePath;
+            } else {
+                const error = await response.json();
+                setError(error.error || "Failed to upload file");
+                return null;
+            }
+        } catch (error) {
+            setError("Failed to upload file");
+            return null;
         }
     };
 
@@ -246,30 +300,94 @@ export default function EditLinktreePage() {
                             </p>
                         </div>
 
-                        {/* Photo URL */}
+                        {/* Photo */}
                         <div>
-                            <label
-                                htmlFor="photo"
-                                className="block text-sm font-medium text-gray-700 mb-2"
-                            >
-                                URL Foto Profil
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Foto Profil
                             </label>
-                            <input
-                                type="url"
-                                id="photo"
-                                {...register("photo")}
-                                placeholder="https://example.com/foto-umkm.jpg"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
-                            />
+
+                            {/* Method selector */}
+                            <div className="flex space-x-4 mb-4">
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="photoMethod"
+                                        value="url"
+                                        checked={photoMethod === "url"}
+                                        onChange={(e) => {
+                                            setPhotoMethod("url");
+                                            setSelectedFile(null);
+                                            setPreviewUrl(null);
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    URL Gambar
+                                </label>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="photoMethod"
+                                        value="upload"
+                                        checked={photoMethod === "upload"}
+                                        onChange={(e) => {
+                                            setPhotoMethod("upload");
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    Upload File
+                                </label>
+                            </div>
+
+                            {photoMethod === "url" ? (
+                                <div>
+                                    <input
+                                        type="url"
+                                        id="photo"
+                                        {...register("photo")}
+                                        placeholder="https://example.com/foto-umkm.jpg"
+                                        className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                    />
+                                    <p className="mt-1 text-sm text-gray-500">
+                                        Masukkan URL gambar yang akan
+                                        ditampilkan sebagai foto profil
+                                    </p>
+                                </div>
+                            ) : (
+                                <div>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                    />
+                                    <p className="mt-1 text-sm text-gray-500">
+                                        Format: JPG, PNG, GIF, WebP. Maksimal
+                                        2MB
+                                    </p>
+
+                                    {/* Preview */}
+                                    {previewUrl && (
+                                        <div className="mt-3">
+                                            <p className="text-sm text-gray-600 mb-2">
+                                                Preview:
+                                            </p>
+                                            <Image
+                                                src={previewUrl}
+                                                alt="Preview"
+                                                width={120}
+                                                height={120}
+                                                className="rounded-full object-cover border-4 border-white shadow-lg"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             {errors.photo && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {errors.photo.message}
                                 </p>
                             )}
-                            <p className="mt-1 text-sm text-gray-500">
-                                Opsional. URL gambar yang akan ditampilkan
-                                sebagai foto profil
-                            </p>
                         </div>
 
                         {/* Is Active */}

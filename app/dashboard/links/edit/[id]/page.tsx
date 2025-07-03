@@ -288,7 +288,11 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
                                         key={category.id}
                                         value={category.id}
                                     >
-                                        {category.icon && `${category.icon} `}
+                                        {category.icon &&
+                                            !category.icon.startsWith(
+                                                "/uploads/"
+                                            ) &&
+                                            `${category.icon} `}
                                         {category.name}
                                     </option>
                                 ))}

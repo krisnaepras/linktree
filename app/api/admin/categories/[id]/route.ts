@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { deleteCategoryIcon } from "@/lib/upload";
 
 const categorySchema = z.object({
     name: z.string().min(1, "Nama kategori harus diisi"),
@@ -52,6 +53,16 @@ export async function PATCH(
                     { status: 400 }
                 );
             }
+        }
+
+        // Delete old icon file if replacing with new one
+        if (
+            icon &&
+            icon !== existingCategory.icon &&
+            existingCategory.icon &&
+            existingCategory.icon.startsWith("/uploads/")
+        ) {
+            await deleteCategoryIcon(existingCategory.icon);
         }
 
         const updatedCategory = await prisma.category.update({
@@ -130,6 +141,14 @@ export async function DELETE(
                 },
                 { status: 400 }
             );
+        }
+
+        // Delete icon file if exists
+        if (
+            existingCategory.icon &&
+            existingCategory.icon.startsWith("/uploads/")
+        ) {
+            await deleteCategoryIcon(existingCategory.icon);
         }
 
         await prisma.category.delete({

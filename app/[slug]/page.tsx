@@ -77,12 +77,34 @@ export default async function LinktreePage({ params }: Props) {
                             rel="noopener noreferrer"
                             className="block w-full p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200 group"
                         >
-                            <div className="flex items-center space-x-3">
-                                {link.category.icon && (
-                                    <span className="text-2xl">
-                                        {link.category.icon}
-                                    </span>
-                                )}
+                            <div className="flex items-center">
+                                <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
+                                    {link.category.icon ? (
+                                        link.category.icon.startsWith(
+                                            "/uploads/"
+                                        ) ? (
+                                            <Image
+                                                src={link.category.icon}
+                                                alt={link.category.name}
+                                                width={56}
+                                                height={56}
+                                                className="w-14 h-14 object-cover rounded-lg"
+                                            />
+                                        ) : (
+                                            <div className="w-14 h-14 flex items-center justify-center">
+                                                <span className="text-4xl leading-none">
+                                                    {link.category.icon}
+                                                </span>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <span className="text-gray-400 text-2xl">
+                                                📄
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="flex-1">
                                     <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
                                         {link.title}
@@ -114,21 +136,21 @@ export default async function LinktreePage({ params }: Props) {
                     <div className="flex justify-center space-x-4 mb-4">
                         <div className="flex items-center space-x-2">
                             <Image
-                                src="/images/logos/logo-surabaya.png"
+                                src="/images/logos/logo_surabaya.png"
                                 alt="Logo Surabaya"
                                 width={24}
                                 height={24}
                                 className="object-contain"
                             />
                             <Image
-                                src="/images/logos/logo-upn.png"
+                                src="/images/logos/logo_upnjatim.png"
                                 alt="Logo UPN"
                                 width={24}
                                 height={24}
                                 className="object-contain"
                             />
                             <Image
-                                src="/images/logos/logo-kkn.png"
+                                src="/images/logos/logo_kkn15bongkaran.png"
                                 alt="Logo KKN"
                                 width={24}
                                 height={24}

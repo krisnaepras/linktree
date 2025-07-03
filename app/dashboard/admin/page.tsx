@@ -38,6 +38,8 @@ export default function AdminDashboard() {
     const [editingCategory, setEditingCategory] = useState<Category | null>(
         null
     );
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     const {
         register,
@@ -78,12 +80,59 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const uploadIconFile = async (): Promise<string | null> => {
+        if (!selectedFile) return null;
+
+        const formData = new FormData();
+        formData.append("icon", selectedFile);
+
+        try {
+            const response = await fetch("/api/upload/category-icon", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                return result.filePath;
+            } else {
+                const error = await response.json();
+                setError(error.error || "Failed to upload file");
+                return null;
+            }
+        } catch (error) {
+            setError("Failed to upload file");
+            return null;
+        }
+    };
+
     const onSubmit = async (data: CategoryFormData) => {
         setIsLoading(true);
         setError("");
         setSuccessMessage("");
 
         try {
+            let iconPath = data.icon; // Use text icon if provided
+
+            // If a file is selected, upload it first
+            if (selectedFile) {
+                const uploadedPath = await uploadIconFile();
+                if (uploadedPath === null) {
+                    setIsLoading(false);
+                    return;
+                }
+                iconPath = uploadedPath;
+            }
+
             const method = editingCategory ? "PATCH" : "POST";
             const url = editingCategory
                 ? `/api/admin/categories/${editingCategory.id}`
@@ -94,7 +143,7 @@ export default function AdminDashboard() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ ...data, icon: iconPath })
             });
 
             if (response.ok) {
@@ -105,6 +154,8 @@ export default function AdminDashboard() {
                 );
                 reset();
                 setEditingCategory(null);
+                setSelectedFile(null);
+                setPreviewUrl(null);
                 fetchCategories();
             } else {
                 const errorData = await response.json();
@@ -123,6 +174,8 @@ export default function AdminDashboard() {
             name: category.name,
             icon: category.icon || ""
         });
+        setSelectedFile(null);
+        setPreviewUrl(null);
         setError("");
         setSuccessMessage("");
     };
@@ -130,6 +183,8 @@ export default function AdminDashboard() {
     const handleCancelEdit = () => {
         setEditingCategory(null);
         reset();
+        setSelectedFile(null);
+        setPreviewUrl(null);
         setError("");
         setSuccessMessage("");
     };
@@ -280,28 +335,64 @@ export default function AdminDashboard() {
                                 </div>
 
                                 <div>
-                                    <label
-                                        htmlFor="icon"
-                                        className="block text-sm font-medium text-gray-700 mb-2"
-                                    >
-                                        Icon (Emoji)
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Icon Kategori
                                     </label>
-                                    <input
-                                        type="text"
-                                        id="icon"
-                                        {...register("icon")}
-                                        placeholder="📱"
-                                        className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
-                                    />
+
+                                    {/* Option to use emoji or upload image */}
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label
+                                                htmlFor="icon"
+                                                className="block text-sm font-medium text-gray-600 mb-1"
+                                            >
+                                                Emoji Icon
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="icon"
+                                                {...register("icon")}
+                                                placeholder="📱"
+                                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                            />
+                                            <p className="mt-1 text-xs text-gray-500">
+                                                Atau gunakan emoji sebagai icon
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-600 mb-1">
+                                                Upload Gambar Icon
+                                            </label>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleFileChange}
+                                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                            />
+                                            <p className="mt-1 text-xs text-gray-500">
+                                                Format: JPG, PNG, GIF, WebP.
+                                                Maksimal 2MB
+                                            </p>
+
+                                            {/* Preview */}
+                                            {previewUrl && (
+                                                <div className="mt-2">
+                                                    <img
+                                                        src={previewUrl}
+                                                        alt="Preview"
+                                                        className="w-16 h-16 object-cover rounded-lg border"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     {errors.icon && (
                                         <p className="mt-1 text-sm text-red-600">
                                             {errors.icon.message}
                                         </p>
                                     )}
-                                    <p className="mt-1 text-sm text-gray-500">
-                                        Opsional. Gunakan emoji untuk icon
-                                        kategori
-                                    </p>
                                 </div>
 
                                 <div className="flex space-x-3">
@@ -352,11 +443,33 @@ export default function AdminDashboard() {
                                             className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
                                         >
                                             <div className="flex items-center space-x-3">
-                                                {category.icon && (
-                                                    <span className="text-2xl">
-                                                        {category.icon}
-                                                    </span>
-                                                )}
+                                                <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                                                    {category.icon ? (
+                                                        category.icon.startsWith(
+                                                            "/uploads/"
+                                                        ) ? (
+                                                            <img
+                                                                src={
+                                                                    category.icon
+                                                                }
+                                                                alt={
+                                                                    category.name
+                                                                }
+                                                                className="w-10 h-10 object-cover rounded-lg border"
+                                                            />
+                                                        ) : (
+                                                            <span className="text-3xl">
+                                                                {category.icon}
+                                                            </span>
+                                                        )
+                                                    ) : (
+                                                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                                            <span className="text-gray-400 text-xl">
+                                                                📄
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
                                                 <div>
                                                     <h4 className="font-medium text-gray-900">
                                                         {category.name}

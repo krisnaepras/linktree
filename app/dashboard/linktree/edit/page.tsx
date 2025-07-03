@@ -1,0 +1,320 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const editLinktreeSchema = z.object({
+    title: z
+        .string()
+        .min(1, "Judul harus diisi")
+        .max(100, "Judul maksimal 100 karakter"),
+    slug: z
+        .string()
+        .min(3, "Slug minimal 3 karakter")
+        .max(50, "Slug maksimal 50 karakter")
+        .regex(
+            /^[a-z0-9-]+$/,
+            "Slug hanya boleh berisi huruf kecil, angka, dan tanda strip"
+        ),
+    photo: z.string().url("URL foto tidak valid").optional().or(z.literal("")),
+    isActive: z.boolean()
+});
+
+type EditLinktreeFormData = z.infer<typeof editLinktreeSchema>;
+
+type Linktree = {
+    id: string;
+    title: string;
+    slug: string;
+    photo: string | null;
+    isActive: boolean;
+};
+
+export default function EditLinktreePage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFetching, setIsFetching] = useState(true);
+    const [error, setError] = useState("");
+    const [linktree, setLinktree] = useState<Linktree | null>(null);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue,
+        reset
+    } = useForm<EditLinktreeFormData>({
+        resolver: zodResolver(editLinktreeSchema)
+    });
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/login");
+            return;
+        }
+
+        if (status === "authenticated") {
+            fetchLinktree();
+        }
+    }, [status, router]);
+
+    const fetchLinktree = async () => {
+        try {
+            const response = await fetch("/api/linktree");
+            if (response.ok) {
+                const data = await response.json();
+                if (data) {
+                    setLinktree(data);
+                    reset({
+                        title: data.title,
+                        slug: data.slug,
+                        photo: data.photo || "",
+                        isActive: data.isActive
+                    });
+                } else {
+                    router.push("/dashboard");
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching linktree:", error);
+            setError("Gagal memuat data linktree");
+        } finally {
+            setIsFetching(false);
+        }
+    };
+
+    const onSubmit = async (data: EditLinktreeFormData) => {
+        setIsLoading(true);
+        setError("");
+
+        try {
+            const response = await fetch("/api/linktree", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                router.push("/dashboard");
+            } else {
+                const errorData = await response.json();
+                setError(errorData.error || "Terjadi kesalahan");
+            }
+        } catch (error) {
+            setError("Terjadi kesalahan pada server");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    if (status === "loading" || isFetching) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    if (status === "unauthenticated") {
+        return null;
+    }
+
+    if (!linktree) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-gray-600 mb-4">
+                        Linktree tidak ditemukan
+                    </p>
+                    <Link
+                        href="/dashboard"
+                        className="text-blue-600 hover:text-blue-700"
+                    >
+                        Kembali ke Dashboard
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white shadow-sm border-b">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-16">
+                        <div className="flex items-center space-x-4">
+                            <Link
+                                href="/dashboard"
+                                className="text-blue-600 hover:text-blue-700"
+                            >
+                                ← Kembali
+                            </Link>
+                            <h1 className="text-xl font-semibold text-gray-900">
+                                Edit Linktree
+                            </h1>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <span className="text-sm text-gray-600">
+                                Halo, {session?.user?.name}!
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {/* Main Content */}
+            <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="bg-white rounded-lg shadow-md p-6">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                            Edit Linktree UMKM Anda
+                        </h2>
+                        <p className="text-gray-600">
+                            Perbarui informasi dasar untuk halaman linktree UMKM
+                            Anda
+                        </p>
+                    </div>
+
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                            {error}
+                        </div>
+                    )}
+
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-6"
+                    >
+                        {/* Title */}
+                        <div>
+                            <label
+                                htmlFor="title"
+                                className="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Judul Linktree *
+                            </label>
+                            <input
+                                type="text"
+                                id="title"
+                                {...register("title")}
+                                placeholder="Contoh: Warung Makan Ibu Sari"
+                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                            />
+                            {errors.title && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.title.message}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Slug */}
+                        <div>
+                            <label
+                                htmlFor="slug"
+                                className="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                URL Slug *
+                            </label>
+                            <div className="flex">
+                                <span className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-lg">
+                                    linkumkm.com/
+                                </span>
+                                <input
+                                    type="text"
+                                    id="slug"
+                                    {...register("slug")}
+                                    placeholder="warung-makan-ibu-sari"
+                                    className="flex-1 px-3 py-2 border border-gray-400 rounded-r-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                />
+                            </div>
+                            {errors.slug && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.slug.message}
+                                </p>
+                            )}
+                            <p className="mt-1 text-sm text-gray-500">
+                                URL unik untuk halaman linktree Anda
+                            </p>
+                        </div>
+
+                        {/* Photo URL */}
+                        <div>
+                            <label
+                                htmlFor="photo"
+                                className="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                URL Foto Profil
+                            </label>
+                            <input
+                                type="url"
+                                id="photo"
+                                {...register("photo")}
+                                placeholder="https://example.com/foto-umkm.jpg"
+                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                            />
+                            {errors.photo && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.photo.message}
+                                </p>
+                            )}
+                            <p className="mt-1 text-sm text-gray-500">
+                                Opsional. URL gambar yang akan ditampilkan
+                                sebagai foto profil
+                            </p>
+                        </div>
+
+                        {/* Is Active */}
+                        <div>
+                            <div className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id="isActive"
+                                    {...register("isActive")}
+                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                />
+                                <label
+                                    htmlFor="isActive"
+                                    className="ml-2 block text-sm text-gray-700"
+                                >
+                                    Aktifkan halaman linktree
+                                </label>
+                            </div>
+                            <p className="mt-1 text-sm text-gray-500">
+                                Jika dicentang, halaman linktree akan dapat
+                                diakses publik
+                            </p>
+                        </div>
+
+                        {/* Submit Button */}
+                        <div className="flex justify-end space-x-4">
+                            <Link
+                                href="/dashboard"
+                                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                                Batal
+                            </Link>
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {isLoading
+                                    ? "Menyimpan..."
+                                    : "Simpan Perubahan"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    );
+}

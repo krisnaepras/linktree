@@ -6,15 +6,15 @@ const prisma = new PrismaClient();
 async function main() {
     // Seed Categories
     const categories = [
-        { name: "Social Media", icon: "fab fa-share-alt" },
-        { name: "Website", icon: "fas fa-globe" },
-        { name: "E-commerce", icon: "fas fa-shopping-cart" },
-        { name: "Contact", icon: "fas fa-address-book" },
-        { name: "Portfolio", icon: "fas fa-briefcase" },
-        { name: "Blog", icon: "fas fa-blog" },
-        { name: "Video", icon: "fas fa-video" },
-        { name: "Music", icon: "fas fa-music" },
-        { name: "Other", icon: "fas fa-ellipsis-h" }
+        { name: "Social Media", icon: "📱" },
+        { name: "Website", icon: "🌐" },
+        { name: "E-commerce", icon: "🛒" },
+        { name: "Contact", icon: "📞" },
+        { name: "Portfolio", icon: "💼" },
+        { name: "Blog", icon: "📝" },
+        { name: "Video", icon: "🎥" },
+        { name: "Music", icon: "🎵" },
+        { name: "Other", icon: "⭐" }
     ];
 
     console.log("Seeding categories...");
@@ -67,8 +67,14 @@ async function main() {
     });
 
     if (socialMediaCategory && websiteCategory) {
-        const sampleLinktree = await prisma.linktree.create({
-            data: {
+        const sampleLinktree = await prisma.linktree.upsert({
+            where: { slug: "my-awesome-links" },
+            update: {
+                title: "My Awesome Links",
+                photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                isActive: true
+            },
+            create: {
                 userId: testUser.id,
                 title: "My Awesome Links",
                 slug: "my-awesome-links",
@@ -79,34 +85,47 @@ async function main() {
 
         // Seed Sample Links
         console.log("Seeding sample links...");
-        await prisma.detailLinktree.createMany({
-            data: [
-                {
-                    linktreeId: sampleLinktree.id,
-                    categoryId: socialMediaCategory.id,
-                    title: "Instagram",
-                    url: "https://instagram.com/username",
-                    sortOrder: 1,
-                    isVisible: true
-                },
-                {
-                    linktreeId: sampleLinktree.id,
-                    categoryId: socialMediaCategory.id,
-                    title: "Twitter",
-                    url: "https://twitter.com/username",
-                    sortOrder: 2,
-                    isVisible: true
-                },
-                {
-                    linktreeId: sampleLinktree.id,
-                    categoryId: websiteCategory.id,
-                    title: "My Website",
-                    url: "https://mywebsite.com",
-                    sortOrder: 3,
-                    isVisible: true
+        const linkData = [
+            {
+                linktreeId: sampleLinktree.id,
+                categoryId: socialMediaCategory.id,
+                title: "Instagram",
+                url: "https://instagram.com/username",
+                sortOrder: 1,
+                isVisible: true
+            },
+            {
+                linktreeId: sampleLinktree.id,
+                categoryId: socialMediaCategory.id,
+                title: "Twitter",
+                url: "https://twitter.com/username",
+                sortOrder: 2,
+                isVisible: true
+            },
+            {
+                linktreeId: sampleLinktree.id,
+                categoryId: websiteCategory.id,
+                title: "My Website",
+                url: "https://mywebsite.com",
+                sortOrder: 3,
+                isVisible: true
+            }
+        ];
+
+        for (const link of linkData) {
+            const existingLink = await prisma.detailLinktree.findFirst({
+                where: {
+                    linktreeId: link.linktreeId,
+                    title: link.title
                 }
-            ]
-        });
+            });
+
+            if (!existingLink) {
+                await prisma.detailLinktree.create({
+                    data: link
+                });
+            }
+        }
     }
 
     console.log("Seeding completed!");

@@ -106,20 +106,19 @@ export default function DraggableLinks({
                         {/* Mobile Layout */}
                         <div className="block sm:hidden">
                             <div className="flex items-start space-x-3 mb-3">
-                                <div className="flex items-center space-x-2 text-gray-400 mt-1">
+                                <div className="flex items-center justify-center w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200 cursor-grab active:cursor-grabbing mt-1">
                                     <svg
-                                        className="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
+                                        className="w-4 h-4 text-gray-500"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                     >
-                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                    </svg>
-                                    <svg
-                                        className="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M4 8h16M4 16h16"
+                                        />
                                     </svg>
                                 </div>
                                 <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
@@ -201,20 +200,19 @@ export default function DraggableLinks({
                         {/* Desktop Layout */}
                         <div className="hidden sm:flex sm:items-center sm:justify-between">
                             <div className="flex items-center space-x-3">
-                                <div className="flex items-center space-x-2 text-gray-400">
+                                <div className="flex items-center justify-center w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200 cursor-grab active:cursor-grabbing">
                                     <svg
-                                        className="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
+                                        className="w-4 h-4 text-gray-500"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                     >
-                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                    </svg>
-                                    <svg
-                                        className="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M4 8h16M4 16h16"
+                                        />
                                     </svg>
                                 </div>
                                 <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">

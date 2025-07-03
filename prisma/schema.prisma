@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  linktrees Linktree[]
+
+  @@map("users")
+}
+
+model Linktree {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  photo     String?
+  title     String
+  slug      String   @unique
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  detailLinktrees DetailLinktree[]
+
+  @@map("linktrees")
+}
+
+model DetailLinktree {
+  id         String   @id @default(cuid())
+  linktreeId String   @map("linktree_id")
+  categoryId String   @map("category_id")
+  title      String
+  url        String
+  sortOrder  Int      @map("sort_order")
+  isVisible  Boolean  @default(true) @map("is_visible")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  linktree Linktree @relation(fields: [linktreeId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("detail_linktrees")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  icon      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  detailLinktrees DetailLinktree[]
+
+  @@map("categories")
+}
+
+enum Role {
+  ADMIN
+  USER
+}

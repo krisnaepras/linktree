@@ -39,7 +39,8 @@ async function getLinktree(slug: string) {
 }
 
 export default async function LinktreePage({ params }: Props) {
-    const linktree = await getLinktree(params.slug);
+    const { slug } = await params;
+    const linktree = await getLinktree(slug);
 
     if (!linktree) {
         notFound();
@@ -48,7 +49,7 @@ export default async function LinktreePage({ params }: Props) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
             {/* Track page view */}
-            <AnalyticsTracker slug={params.slug} action="view" />
+            <AnalyticsTracker slug={slug} action="view" />
 
             <div className="max-w-md mx-auto px-4 py-8">
                 {/* Header */}

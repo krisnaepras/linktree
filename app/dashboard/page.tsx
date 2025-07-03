@@ -8,6 +8,7 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import DraggableLinks from "@/components/DraggableLinks";
 import QuickStats from "@/components/QuickStats";
+import LinktreeUrl from "@/components/LinktreeUrl";
 
 type Linktree = {
     id: string;
@@ -185,33 +186,38 @@ export default function DashboardPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center">
-                            <h1 className="text-2xl font-bold text-gray-900">
+                            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                                 LinkUMKM Dashboard
                             </h1>
                         </div>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 sm:space-x-4">
                             {session.user.role === "ADMIN" && (
                                 <Link
                                     href="/dashboard/admin"
                                     className="text-sm text-red-600 hover:text-red-700 font-medium"
                                 >
-                                    Admin
+                                    <span className="hidden sm:inline">
+                                        Admin
+                                    </span>
+                                    <span className="sm:hidden">👨‍💼</span>
                                 </Link>
                             )}
                             <Link
                                 href="/dashboard/profile"
                                 className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                             >
-                                Profil
+                                <span className="hidden sm:inline">Profil</span>
+                                <span className="sm:hidden">👤</span>
                             </Link>
-                            <span className="text-sm text-gray-600">
+                            <span className="text-sm text-gray-600 hidden sm:inline">
                                 Halo, {session.user.name}!
                             </span>
                             <button
                                 onClick={handleSignOut}
                                 className="text-sm text-red-600 hover:text-red-700 font-medium"
                             >
-                                Keluar
+                                <span className="hidden sm:inline">Keluar</span>
+                                <span className="sm:hidden">🚪</span>
                             </button>
                         </div>
                     </div>
@@ -443,9 +449,9 @@ export default function DashboardPage() {
                                         <h4 className="text-lg font-medium text-gray-900">
                                             {linktree.title}
                                         </h4>
-                                        <p className="text-sm text-gray-600">
-                                            linkumkm.com/{linktree.slug}
-                                        </p>
+                                        <div className="mt-2 mb-2">
+                                            <LinktreeUrl slug={linktree.slug} />
+                                        </div>
                                         <Link
                                             href={`/${linktree.slug}`}
                                             target="_blank"
@@ -459,15 +465,28 @@ export default function DashboardPage() {
 
                             {/* Links Management */}
                             <div className="bg-white rounded-lg shadow-md p-6">
-                                <div className="flex items-center justify-between mb-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                                     <h3 className="text-xl font-semibold text-gray-900">
                                         Daftar Link (
                                         {linktree.detailLinktrees.length})
                                     </h3>
                                     <Link
                                         href="/dashboard/links/create"
-                                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                                        className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                                     >
+                                        <svg
+                                            className="w-4 h-4 mr-2"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M12 4v16m8-8H4"
+                                            />
+                                        </svg>
                                         Tambah Link
                                     </Link>
                                 </div>

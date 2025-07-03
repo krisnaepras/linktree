@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Image from "next/image";
+import SlugInput from "@/components/SlugInput";
 
 const editLinktreeSchema = z.object({
     title: z
@@ -278,18 +279,10 @@ export default function EditLinktreePage() {
                             >
                                 URL Slug *
                             </label>
-                            <div className="flex">
-                                <span className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-lg">
-                                    linkumkm.com/
-                                </span>
-                                <input
-                                    type="text"
-                                    id="slug"
-                                    {...register("slug")}
-                                    placeholder="warung-makan-ibu-sari"
-                                    className="flex-1 px-3 py-2 border border-gray-400 rounded-r-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
-                                />
-                            </div>
+                            <SlugInput
+                                placeholder="warung-makan-ibu-sari"
+                                register={register("slug")}
+                            />
                             {errors.slug && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {errors.slug.message}

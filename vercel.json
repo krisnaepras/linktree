@@ -3,18 +3,6 @@
     "outputDirectory": ".next",
     "installCommand": "npm install",
     "devCommand": "npm run dev",
-    "env": {
-        "DATABASE_URL": "@database_url",
-        "DIRECT_URL": "@direct_url",
-        "NEXTAUTH_URL": "@nextauth_url",
-        "NEXTAUTH_SECRET": "@nextauth_secret"
-    },
-    "build": {
-        "env": {
-            "DATABASE_URL": "@database_url",
-            "DIRECT_URL": "@direct_url"
-        }
-    },
     "functions": {
         "app/api/**": {
             "maxDuration": 30

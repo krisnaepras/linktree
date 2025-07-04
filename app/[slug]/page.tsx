@@ -132,8 +132,8 @@ export default async function LinktreePage({ params }: Props) {
                     </div>
                 </div>
 
-                {/* Links */}
-                <div className="space-y-4 mb-8">
+                {/* Links - Simple version with only icon and title */}
+                <div className="space-y-3 mb-8">
                     {linktree.detailLinktrees.map((link, index) => (
                         <div
                             key={link.id}
@@ -143,57 +143,49 @@ export default async function LinktreePage({ params }: Props) {
                             <TrackableLink
                                 href={link.url}
                                 linkId={link.id}
-                                className="block w-full p-5 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 hover:shadow-xl hover:bg-white/90 transition-all duration-300 group hover:scale-105 hover:-translate-y-1"
+                                className="block w-full p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md border border-white/30 hover:shadow-lg hover:bg-white/90 transition-all duration-300 group hover:scale-105"
                             >
-                                <div className="flex items-center">
-                                    <div className="w-16 h-16 flex items-center justify-center mr-4 flex-shrink-0 relative">
+                                <div className="flex items-center space-x-4">
+                                    {/* Icon */}
+                                    <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
                                         {link.category.icon ? (
                                             link.category.icon.startsWith(
                                                 "/uploads/"
                                             ) ? (
-                                                <div className="relative w-16 h-16">
-                                                    <Image
-                                                        src={link.category.icon}
-                                                        alt={link.category.name}
-                                                        width={64}
-                                                        height={64}
-                                                        className="w-16 h-16 object-cover rounded-xl shadow-md"
-                                                    />
-                                                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/10 rounded-xl"></div>
-                                                </div>
+                                                <Image
+                                                    src={link.category.icon}
+                                                    alt={link.category.name}
+                                                    width={48}
+                                                    height={48}
+                                                    className="w-12 h-12 object-cover rounded-lg"
+                                                />
                                             ) : (
-                                                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center shadow-md">
-                                                    <span className="text-3xl leading-none">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
+                                                    <span className="text-2xl leading-none">
                                                         {link.category.icon}
                                                     </span>
                                                 </div>
                                             )
                                         ) : (
-                                            <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center shadow-md">
-                                                <span className="text-gray-400 text-3xl">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                                                <span className="text-gray-400 text-2xl">
                                                     📄
                                                 </span>
                                             </div>
                                         )}
-                                        {/* Hover effect overlay */}
-                                        <div className="absolute inset-0 bg-blue-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
+
+                                    {/* Title */}
                                     <div className="flex-1">
-                                        <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors text-lg mb-1">
+                                        <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-lg">
                                             {link.title}
                                         </h3>
-                                        <div className="flex items-center space-x-2">
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                {link.category.name}
-                                            </span>
-                                            <span className="text-xs text-gray-500">
-                                                Klik untuk mengunjungi
-                                            </span>
-                                        </div>
                                     </div>
-                                    <div className="flex items-center space-x-2">
+
+                                    {/* Simple arrow */}
+                                    <div className="flex-shrink-0">
                                         <svg
-                                            className="w-6 h-6 text-gray-400 group-hover:text-blue-600 transition-colors group-hover:scale-110 duration-300"
+                                            className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -202,7 +194,7 @@ export default async function LinktreePage({ params }: Props) {
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
                                                 strokeWidth={2}
-                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                                d="M9 5l7 7-7 7"
                                             />
                                         </svg>
                                     </div>

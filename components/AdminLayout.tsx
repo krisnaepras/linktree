@@ -151,7 +151,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     : "lg:hidden"
                             } hidden`}
                         >
-                            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <button
+                                onClick={() =>
+                                    setDesktopSidebarCollapsed(false)
+                                }
+                                className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                                title="Expand Sidebar"
+                            >
                                 <Image
                                     src="/images/logos/logo_surabaya.png"
                                     alt="Logo Surabaya"
@@ -159,7 +165,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     height={28}
                                     className="object-contain"
                                 />
-                            </div>
+                            </button>
                         </div>
 
                         {/* Title and Logo for expanded sidebar */}
@@ -189,7 +195,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             </div>
                         </div>
 
-                        {/* Desktop toggle button */}
+                        {/* Desktop toggle button - only show when expanded */}
                         <button
                             onClick={() =>
                                 setDesktopSidebarCollapsed(
@@ -197,18 +203,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 )
                             }
                             className={`hidden lg:flex items-center justify-center w-8 h-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 ${
-                                desktopSidebarCollapsed
-                                    ? "absolute right-3 top-5"
-                                    : ""
+                                desktopSidebarCollapsed ? "lg:hidden" : ""
                             }`}
-                            title={`${
-                                desktopSidebarCollapsed ? "Expand" : "Collapse"
-                            } Sidebar (Ctrl/Cmd + B)`}
+                            title="Collapse Sidebar (Ctrl/Cmd + B)"
                         >
                             <svg
-                                className={`w-5 h-5 transition-transform duration-200 ${
-                                    desktopSidebarCollapsed ? "rotate-180" : ""
-                                }`}
+                                className="w-5 h-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -419,10 +419,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     </span>
                                 </div>
                             </div>
+                            
+                            {/* Logout button - hidden when collapsed */}
                             <button
                                 onClick={handleSignOut}
                                 className={`text-slate-400 hover:text-white hover:bg-white/10 rounded-lg p-2 transition-all duration-200 flex-shrink-0 ${
-                                    desktopSidebarCollapsed ? "" : "ml-3"
+                                    desktopSidebarCollapsed ? "lg:hidden ml-3" : "ml-3"
                                 }`}
                                 title="Keluar"
                             >

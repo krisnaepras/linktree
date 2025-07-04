@@ -603,14 +603,16 @@ export default function AdminCategoriesPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [detailCategory, setDetailCategory] = useState<Category | null>(null);
-    
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
-    
+
     // Sorting state
-    const [sortBy, setSortBy] = useState<'name' | 'createdAt' | 'detailLinktrees'>('createdAt');
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortBy, setSortBy] = useState<
+        "name" | "createdAt" | "detailLinktrees"
+    >("createdAt");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
     useEffect(() => {
         fetchCategories();
@@ -759,12 +761,12 @@ export default function AdminCategoriesPage() {
     );
 
     // Sorting function
-    const handleSort = (column: 'name' | 'createdAt' | 'detailLinktrees') => {
+    const handleSort = (column: "name" | "createdAt" | "detailLinktrees") => {
         if (sortBy === column) {
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
         } else {
             setSortBy(column);
-            setSortOrder('asc');
+            setSortOrder("asc");
         }
         setCurrentPage(1); // Reset to first page when sorting
     };
@@ -773,25 +775,25 @@ export default function AdminCategoriesPage() {
     const sortedCategories = [...filteredCategories].sort((a, b) => {
         let aValue: any;
         let bValue: any;
-        
+
         switch (sortBy) {
-            case 'name':
+            case "name":
                 aValue = a.name.toLowerCase();
                 bValue = b.name.toLowerCase();
                 break;
-            case 'createdAt':
+            case "createdAt":
                 aValue = new Date(a.createdAt).getTime();
                 bValue = new Date(b.createdAt).getTime();
                 break;
-            case 'detailLinktrees':
+            case "detailLinktrees":
                 aValue = a._count.detailLinktrees;
                 bValue = b._count.detailLinktrees;
                 break;
             default:
                 return 0;
         }
-        
-        if (sortOrder === 'asc') {
+
+        if (sortOrder === "asc") {
             return aValue > bValue ? 1 : -1;
         } else {
             return aValue < bValue ? 1 : -1;
@@ -814,12 +816,16 @@ export default function AdminCategoriesPage() {
         const range = [];
         const rangeWithDots = [];
 
-        for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+        for (
+            let i = Math.max(2, currentPage - delta);
+            i <= Math.min(totalPages - 1, currentPage + delta);
+            i++
+        ) {
             range.push(i);
         }
 
         if (currentPage - delta > 2) {
-            rangeWithDots.push(1, '...');
+            rangeWithDots.push(1, "...");
         } else {
             rangeWithDots.push(1);
         }
@@ -827,7 +833,7 @@ export default function AdminCategoriesPage() {
         rangeWithDots.push(...range);
 
         if (currentPage + delta < totalPages - 1) {
-            rangeWithDots.push('...', totalPages);
+            rangeWithDots.push("...", totalPages);
         } else {
             rangeWithDots.push(totalPages);
         }
@@ -840,25 +846,55 @@ export default function AdminCategoriesPage() {
         setCurrentPage(1);
     }, [searchTerm]);
 
-    const getSortIcon = (column: 'name' | 'createdAt' | 'detailLinktrees') => {
+    const getSortIcon = (column: "name" | "createdAt" | "detailLinktrees") => {
         if (sortBy !== column) {
             return (
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                <svg
+                    className="w-4 h-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
                 </svg>
             );
         }
-        
-        if (sortOrder === 'asc') {
+
+        if (sortOrder === "asc") {
             return (
-                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                <svg
+                    className="w-4 h-4 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 15l7-7 7 7"
+                    />
                 </svg>
             );
         } else {
             return (
-                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <svg
+                    className="w-4 h-4 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                    />
                 </svg>
             );
         }
@@ -951,7 +987,8 @@ export default function AdminCategoriesPage() {
                         <span className="text-gray-600">
                             Menampilkan{" "}
                             <span className="font-medium text-gray-900">
-                                {startIndex + 1}-{Math.min(endIndex, sortedCategories.length)}
+                                {startIndex + 1}-
+                                {Math.min(endIndex, sortedCategories.length)}
                             </span>{" "}
                             dari{" "}
                             <span className="font-medium text-gray-900">
@@ -960,7 +997,8 @@ export default function AdminCategoriesPage() {
                             kategori
                             {searchTerm && (
                                 <span className="ml-2 text-blue-600">
-                                    (difilter dari {categories.length} total kategori)
+                                    (difilter dari {categories.length} total
+                                    kategori)
                                 </span>
                             )}
                         </span>
@@ -983,11 +1021,11 @@ export default function AdminCategoriesPage() {
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <button
-                                            onClick={() => handleSort('name')}
+                                            onClick={() => handleSort("name")}
                                             className="flex items-center space-x-1 hover:text-gray-700 focus:outline-none focus:text-gray-700"
                                         >
                                             <span>Kategori</span>
-                                            {getSortIcon('name')}
+                                            {getSortIcon("name")}
                                         </button>
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -995,20 +1033,24 @@ export default function AdminCategoriesPage() {
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <button
-                                            onClick={() => handleSort('detailLinktrees')}
+                                            onClick={() =>
+                                                handleSort("detailLinktrees")
+                                            }
                                             className="flex items-center space-x-1 hover:text-gray-700 focus:outline-none focus:text-gray-700"
                                         >
                                             <span>Jumlah Link</span>
-                                            {getSortIcon('detailLinktrees')}
+                                            {getSortIcon("detailLinktrees")}
                                         </button>
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <button
-                                            onClick={() => handleSort('createdAt')}
+                                            onClick={() =>
+                                                handleSort("createdAt")
+                                            }
                                             className="flex items-center space-x-1 hover:text-gray-700 focus:outline-none focus:text-gray-700"
                                         >
                                             <span>Dibuat</span>
-                                            {getSortIcon('createdAt')}
+                                            {getSortIcon("createdAt")}
                                         </button>
                                     </th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -1199,41 +1241,49 @@ export default function AdminCategoriesPage() {
                             </div>
                             <div className="flex items-center space-x-1">
                                 <button
-                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    onClick={() =>
+                                        handlePageChange(currentPage - 1)
+                                    }
                                     disabled={currentPage === 1}
                                     className={`px-3 py-1 text-sm font-medium rounded-md ${
                                         currentPage === 1
-                                            ? 'text-gray-400 cursor-not-allowed'
-                                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                                            ? "text-gray-400 cursor-not-allowed"
+                                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                                     }`}
                                 >
                                     ← Sebelumnya
                                 </button>
-                                
+
                                 {getPaginationRange().map((page, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => typeof page === 'number' ? handlePageChange(page) : undefined}
-                                        disabled={page === '...'}
+                                        onClick={() =>
+                                            typeof page === "number"
+                                                ? handlePageChange(page)
+                                                : undefined
+                                        }
+                                        disabled={page === "..."}
                                         className={`px-3 py-1 text-sm font-medium rounded-md ${
                                             page === currentPage
-                                                ? 'bg-blue-600 text-white'
-                                                : page === '...'
-                                                ? 'text-gray-400 cursor-default'
-                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                                                ? "bg-blue-600 text-white"
+                                                : page === "..."
+                                                ? "text-gray-400 cursor-default"
+                                                : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                                         }`}
                                     >
                                         {page}
                                     </button>
                                 ))}
-                                
+
                                 <button
-                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    onClick={() =>
+                                        handlePageChange(currentPage + 1)
+                                    }
                                     disabled={currentPage === totalPages}
                                     className={`px-3 py-1 text-sm font-medium rounded-md ${
                                         currentPage === totalPages
-                                            ? 'text-gray-400 cursor-not-allowed'
-                                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                                            ? "text-gray-400 cursor-not-allowed"
+                                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                                     }`}
                                 >
                                     Selanjutnya →

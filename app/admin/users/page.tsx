@@ -493,12 +493,14 @@ export default function AdminUsersPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [detailUser, setDetailUser] = useState<User | null>(null);
-    
+
     // Pagination and Sorting
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
-    const [sortBy, setSortBy] = useState<'name' | 'email' | 'role' | 'createdAt' | 'linktrees'>('createdAt');
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortBy, setSortBy] = useState<
+        "name" | "email" | "role" | "createdAt" | "linktrees"
+    >("createdAt");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
     const isAdmin = session?.user?.role === "ADMIN";
     const isSuperAdmin = session?.user?.role === "SUPERADMIN";
@@ -651,12 +653,14 @@ export default function AdminUsersPage() {
     };
 
     // Sorting function
-    const handleSort = (field: 'name' | 'email' | 'role' | 'createdAt' | 'linktrees') => {
+    const handleSort = (
+        field: "name" | "email" | "role" | "createdAt" | "linktrees"
+    ) => {
         if (sortBy === field) {
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
         } else {
             setSortBy(field);
-            setSortOrder('asc');
+            setSortOrder("asc");
         }
         setCurrentPage(1); // Reset to first page when sorting
     };
@@ -670,40 +674,43 @@ export default function AdminUsersPage() {
         )
         .sort((a, b) => {
             let aValue, bValue;
-            
+
             switch (sortBy) {
-                case 'name':
+                case "name":
                     aValue = a.name.toLowerCase();
                     bValue = b.name.toLowerCase();
                     break;
-                case 'email':
+                case "email":
                     aValue = a.email.toLowerCase();
                     bValue = b.email.toLowerCase();
                     break;
-                case 'role':
+                case "role":
                     aValue = a.role;
                     bValue = b.role;
                     break;
-                case 'linktrees':
+                case "linktrees":
                     aValue = a._count.linktrees;
                     bValue = b._count.linktrees;
                     break;
-                case 'createdAt':
+                case "createdAt":
                 default:
                     aValue = new Date(a.createdAt).getTime();
                     bValue = new Date(b.createdAt).getTime();
                     break;
             }
-            
-            if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-            if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+
+            if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+            if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
             return 0;
-        });;
+        });
 
     // Pagination
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+    const paginatedUsers = filteredUsers.slice(
+        startIndex,
+        startIndex + itemsPerPage
+    );
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -713,7 +720,7 @@ export default function AdminUsersPage() {
     const getPaginationRange = () => {
         const range = [];
         const maxVisible = 5;
-        
+
         if (totalPages <= maxVisible) {
             for (let i = 1; i <= totalPages; i++) {
                 range.push(i);
@@ -721,12 +728,12 @@ export default function AdminUsersPage() {
         } else {
             const start = Math.max(1, currentPage - 2);
             const end = Math.min(totalPages, start + maxVisible - 1);
-            
+
             for (let i = start; i <= end; i++) {
                 range.push(i);
             }
         }
-        
+
         return range;
     };
 
@@ -901,7 +908,9 @@ export default function AdminUsersPage() {
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <button
-                                            onClick={() => handleSort("linktrees")}
+                                            onClick={() =>
+                                                handleSort("linktrees")
+                                            }
                                             className="flex items-center focus:outline-none"
                                         >
                                             Linktrees
@@ -928,7 +937,9 @@ export default function AdminUsersPage() {
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <button
-                                            onClick={() => handleSort("createdAt")}
+                                            onClick={() =>
+                                                handleSort("createdAt")
+                                            }
                                             className="flex items-center focus:outline-none"
                                         >
                                             Terdaftar

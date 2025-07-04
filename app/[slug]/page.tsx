@@ -47,130 +47,232 @@ export default async function LinktreePage({ params }: Props) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-0 right-0 w-72 h-72 bg-gradient-to-br from-green-400 to-blue-400 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl animate-pulse delay-1000"></div>
+            </div>
+
             {/* Track page view */}
             <AnalyticsTracker slug={slug} action="view" />
 
-            <div className="max-w-md mx-auto px-4 py-8">
+            <div className="relative z-10 max-w-md mx-auto px-4 py-8">
                 {/* Header */}
-                <div className="text-center mb-8">
+                <div className="text-center mb-8 animate-fade-in">
                     {linktree.photo && (
-                        <div className="mb-4">
-                            <Image
-                                src={linktree.photo}
-                                alt={linktree.title}
-                                width={120}
-                                height={120}
-                                className="rounded-full mx-auto object-cover border-4 border-white shadow-lg"
-                            />
+                        <div className="mb-6 relative">
+                            <div className="relative w-32 h-32 mx-auto">
+                                {/* Decorative ring */}
+                                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 animate-pulse">
+                                    <div className="w-full h-full bg-white rounded-full p-1">
+                                        <Image
+                                            src={linktree.photo}
+                                            alt={linktree.title}
+                                            width={120}
+                                            height={120}
+                                            className="w-full h-full rounded-full object-cover"
+                                        />
+                                    </div>
+                                </div>
+                                {/* Floating badge */}
+                                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                                    <svg
+                                        className="w-5 h-5 text-white"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     )}
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                        {linktree.title}
-                    </h1>
-                    <p className="text-gray-600">
-                        UMKM Kelurahan Bongkaran, Surabaya
-                    </p>
+
+                    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 mb-6">
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                            {linktree.title}
+                        </h1>
+                        <div className="flex items-center justify-center space-x-2 text-gray-600">
+                            <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                />
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                            </svg>
+                            <span className="text-sm font-medium">
+                                UMKM Kelurahan Bongkaran, Surabaya
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-center space-x-1 mt-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs text-green-600 font-medium">
+                                Aktif
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Links */}
                 <div className="space-y-4 mb-8">
-                    {linktree.detailLinktrees.map((link) => (
-                        <TrackableLink
+                    {linktree.detailLinktrees.map((link, index) => (
+                        <div
                             key={link.id}
-                            href={link.url}
-                            linkId={link.id}
-                            className="block w-full p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200 group"
+                            className="animate-slide-up"
+                            style={{ animationDelay: `${index * 100}ms` }}
                         >
-                            <div className="flex items-center">
-                                <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
-                                    {link.category.icon ? (
-                                        link.category.icon.startsWith(
-                                            "/uploads/"
-                                        ) ? (
-                                            <Image
-                                                src={link.category.icon}
-                                                alt={link.category.name}
-                                                width={56}
-                                                height={56}
-                                                className="w-14 h-14 object-cover rounded-lg"
-                                            />
+                            <TrackableLink
+                                href={link.url}
+                                linkId={link.id}
+                                className="block w-full p-5 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 hover:shadow-xl hover:bg-white/90 transition-all duration-300 group hover:scale-105 hover:-translate-y-1"
+                            >
+                                <div className="flex items-center">
+                                    <div className="w-16 h-16 flex items-center justify-center mr-4 flex-shrink-0 relative">
+                                        {link.category.icon ? (
+                                            link.category.icon.startsWith(
+                                                "/uploads/"
+                                            ) ? (
+                                                <div className="relative w-16 h-16">
+                                                    <Image
+                                                        src={link.category.icon}
+                                                        alt={link.category.name}
+                                                        width={64}
+                                                        height={64}
+                                                        className="w-16 h-16 object-cover rounded-xl shadow-md"
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/10 rounded-xl"></div>
+                                                </div>
+                                            ) : (
+                                                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center shadow-md">
+                                                    <span className="text-3xl leading-none">
+                                                        {link.category.icon}
+                                                    </span>
+                                                </div>
+                                            )
                                         ) : (
-                                            <div className="w-14 h-14 flex items-center justify-center">
-                                                <span className="text-4xl leading-none">
-                                                    {link.category.icon}
+                                            <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center shadow-md">
+                                                <span className="text-gray-400 text-3xl">
+                                                    📄
                                                 </span>
                                             </div>
-                                        )
-                                    ) : (
-                                        <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center">
-                                            <span className="text-gray-400 text-2xl">
-                                                📄
+                                        )}
+                                        {/* Hover effect overlay */}
+                                        <div className="absolute inset-0 bg-blue-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors text-lg mb-1">
+                                            {link.title}
+                                        </h3>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {link.category.name}
+                                            </span>
+                                            <span className="text-xs text-gray-500">
+                                                Klik untuk mengunjungi
                                             </span>
                                         </div>
-                                    )}
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <svg
+                                            className="w-6 h-6 text-gray-400 group-hover:text-blue-600 transition-colors group-hover:scale-110 duration-300"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                            />
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div className="flex-1">
-                                    <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                                        {link.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-500">
-                                        {link.category.name}
-                                    </p>
-                                </div>
-                                <svg
-                                    className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                    />
-                                </svg>
-                            </div>
-                        </TrackableLink>
+                            </TrackableLink>
+                        </div>
                     ))}
                 </div>
 
                 {/* Footer */}
-                <div className="text-center text-sm text-gray-500 space-y-2">
-                    <div className="flex justify-center space-x-4 mb-4">
-                        <div className="flex items-center space-x-2">
-                            <Image
-                                src="/images/logos/logo_surabaya.png"
-                                alt="Logo Surabaya"
-                                width={24}
-                                height={24}
-                                className="object-contain"
-                            />
-                            <Image
-                                src="/images/logos/logo_upnjatim.png"
-                                alt="Logo UPN"
-                                width={24}
-                                height={24}
-                                className="object-contain"
-                            />
-                            <Image
-                                src="/images/logos/logo_kkn15bongkaran.png"
-                                alt="Logo KKN"
-                                width={24}
-                                height={24}
-                                className="object-contain"
-                            />
+                <div className="text-center space-y-6 animate-fade-in">
+                    {/* Logo section */}
+                    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
+                        <div className="flex justify-center space-x-6 mb-4">
+                            <div className="flex items-center space-x-2 transform hover:scale-110 transition-transform duration-300">
+                                <div className="w-8 h-8 bg-white rounded-full p-1 shadow-md">
+                                    <Image
+                                        src="/images/logos/logo_surabaya.png"
+                                        alt="Logo Surabaya"
+                                        width={24}
+                                        height={24}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                                <div className="w-8 h-8 bg-white rounded-full p-1 shadow-md">
+                                    <Image
+                                        src="/images/logos/logo_upnjatim.png"
+                                        alt="Logo UPN"
+                                        width={24}
+                                        height={24}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                                <div className="w-8 h-8 bg-white rounded-full p-1 shadow-md">
+                                    <Image
+                                        src="/images/logos/logo_kkn15bongkaran.png"
+                                        alt="Logo KKN"
+                                        width={24}
+                                        height={24}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <p className="text-sm text-gray-600 font-medium">
+                            Dibuat dengan ❤️ oleh KKN UPN di Kelurahan Bongkaran
+                        </p>
+                        <div className="flex items-center justify-center space-x-2 mt-2">
+                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs text-gray-500">
+                                Mendukung UMKM Lokal Surabaya
+                            </span>
                         </div>
                     </div>
-                    <p>Dibuat dengan ❤️ oleh KKN UPN di Kelurahan Bongkaran</p>
-                    <div className="pt-4">
+
+                    {/* CTA section */}
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white shadow-xl">
+                        <h3 className="text-lg font-bold mb-2">
+                            Punya UMKM juga?
+                        </h3>
+                        <p className="text-sm opacity-90 mb-4">
+                            Buat LinkUMKM Anda sendiri dan jangkau lebih banyak
+                            pelanggan!
+                        </p>
                         <Link
                             href="/"
-                            className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                            className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 duration-300"
                         >
                             <svg
-                                className="w-4 h-4 mr-1"
+                                className="w-5 h-5 mr-2"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -182,9 +284,28 @@ export default async function LinktreePage({ params }: Props) {
                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                                 />
                             </svg>
-                            Buat LinkUMKM Anda
+                            Buat LinkUMKM Gratis
                         </Link>
                     </div>
+                </div>
+            </div>
+
+            {/* Floating elements */}
+            <div className="fixed bottom-4 right-4 z-20">
+                <div className="bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg border border-white/30 animate-bounce">
+                    <svg
+                        className="w-6 h-6 text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        />
+                    </svg>
                 </div>
             </div>
         </div>

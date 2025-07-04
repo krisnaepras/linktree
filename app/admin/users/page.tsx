@@ -493,6 +493,12 @@ export default function AdminUsersPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [detailUser, setDetailUser] = useState<User | null>(null);
+    
+    // Pagination and Sorting
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+    const [sortBy, setSortBy] = useState<'name' | 'email' | 'role' | 'createdAt' | 'linktrees'>('createdAt');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
     const isAdmin = session?.user?.role === "ADMIN";
     const isSuperAdmin = session?.user?.role === "SUPERADMIN";
@@ -644,11 +650,87 @@ export default function AdminUsersPage() {
         }
     };
 
-    const filteredUsers = users.filter(
-        (user) =>
-            user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Sorting function
+    const handleSort = (field: 'name' | 'email' | 'role' | 'createdAt' | 'linktrees') => {
+        if (sortBy === field) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(field);
+            setSortOrder('asc');
+        }
+        setCurrentPage(1); // Reset to first page when sorting
+    };
+
+    // Filter and sort users
+    const filteredUsers = users
+        .filter(
+            (user) =>
+                user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .sort((a, b) => {
+            let aValue, bValue;
+            
+            switch (sortBy) {
+                case 'name':
+                    aValue = a.name.toLowerCase();
+                    bValue = b.name.toLowerCase();
+                    break;
+                case 'email':
+                    aValue = a.email.toLowerCase();
+                    bValue = b.email.toLowerCase();
+                    break;
+                case 'role':
+                    aValue = a.role;
+                    bValue = b.role;
+                    break;
+                case 'linktrees':
+                    aValue = a._count.linktrees;
+                    bValue = b._count.linktrees;
+                    break;
+                case 'createdAt':
+                default:
+                    aValue = new Date(a.createdAt).getTime();
+                    bValue = new Date(b.createdAt).getTime();
+                    break;
+            }
+            
+            if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+            if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });;
+
+    // Pagination
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    // Pagination range
+    const getPaginationRange = () => {
+        const range = [];
+        const maxVisible = 5;
+        
+        if (totalPages <= maxVisible) {
+            for (let i = 1; i <= totalPages; i++) {
+                range.push(i);
+            }
+        } else {
+            const start = Math.max(1, currentPage - 2);
+            const end = Math.min(totalPages, start + maxVisible - 1);
+            
+            for (let i = start; i <= end; i++) {
+                range.push(i);
+            }
+        }
+        
+        return range;
+    };
+
+    const filteredAndSortedUsers = filteredUsers; // Use the filtered and sorted users for display
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("id-ID", {
@@ -764,16 +846,112 @@ export default function AdminUsersPage() {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Pengguna
+                                        <button
+                                            onClick={() => handleSort("name")}
+                                            className="flex items-center focus:outline-none"
+                                        >
+                                            Pengguna
+                                            {sortBy === "name" && (
+                                                <svg
+                                                    className={`ml-2 h-4 w-4 ${
+                                                        sortOrder === "asc"
+                                                            ? ""
+                                                            : "transform rotate-180"
+                                                    }`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M5 15l7-7 7 7"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Role
+                                        <button
+                                            onClick={() => handleSort("role")}
+                                            className="flex items-center focus:outline-none"
+                                        >
+                                            Role
+                                            {sortBy === "role" && (
+                                                <svg
+                                                    className={`ml-2 h-4 w-4 ${
+                                                        sortOrder === "asc"
+                                                            ? ""
+                                                            : "transform rotate-180"
+                                                    }`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M5 15l7-7 7 7"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Linktrees
+                                        <button
+                                            onClick={() => handleSort("linktrees")}
+                                            className="flex items-center focus:outline-none"
+                                        >
+                                            Linktrees
+                                            {sortBy === "linktrees" && (
+                                                <svg
+                                                    className={`ml-2 h-4 w-4 ${
+                                                        sortOrder === "asc"
+                                                            ? ""
+                                                            : "transform rotate-180"
+                                                    }`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M5 15l7-7 7 7"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Terdaftar
+                                        <button
+                                            onClick={() => handleSort("createdAt")}
+                                            className="flex items-center focus:outline-none"
+                                        >
+                                            Terdaftar
+                                            {sortBy === "createdAt" && (
+                                                <svg
+                                                    className={`ml-2 h-4 w-4 ${
+                                                        sortOrder === "asc"
+                                                            ? "transform rotate-180"
+                                                            : ""
+                                                    }`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M6 18L18 6M6 6l12 12"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
                                     </th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Aksi
@@ -781,7 +959,7 @@ export default function AdminUsersPage() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {filteredUsers.map((user) => (
+                                {paginatedUsers.map((user) => (
                                     <tr
                                         key={user.id}
                                         className="hover:bg-gray-50 transition-colors"
@@ -927,6 +1105,75 @@ export default function AdminUsersPage() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                {/* Pagination */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-3 flex items-center justify-between">
+                    <div className="text-sm text-gray-700">
+                        Halaman{" "}
+                        <span className="font-medium text-gray-900">
+                            {currentPage}
+                        </span>{" "}
+                        dari{" "}
+                        <span className="font-medium text-gray-900">
+                            {totalPages}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Sebelumnya"
+                        >
+                            <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 18l-6-6 6-6"
+                                />
+                            </svg>
+                        </button>
+                        {getPaginationRange().map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none ${
+                                    page === currentPage
+                                        ? "bg-blue-600 text-white shadow-md"
+                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                }`}
+                            >
+                                {page}
+                            </button>
+                        ))}
+                        <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Selanjutnya"
+                        >
+                            <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 6l6 6-6 6"
+                                />
+                            </svg>
+                        </button>
                     </div>
                 </div>
 

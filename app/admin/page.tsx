@@ -146,10 +146,14 @@ export default function AdminDashboard() {
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-gray-600">
-                                    Total Users
+                                    {isSuperAdmin
+                                        ? "Total Users"
+                                        : "Total Regular Users"}
                                 </p>
                                 <p className="text-3xl font-bold text-gray-900">
-                                    {stats.overview.totalUsers}
+                                    {isSuperAdmin
+                                        ? stats.overview.totalUsers
+                                        : stats.overview.totalRegularUsers}
                                 </p>
                                 <p className="text-sm text-gray-500 mt-1">
                                     +{stats.overview.recentUsers} minggu ini
@@ -292,48 +296,54 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Secondary Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* User Types */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                            Distribusi Pengguna
-                        </h3>
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                                    <span className="text-sm text-gray-600">
-                                        Regular Users
+                <div
+                    className={`grid grid-cols-1 gap-6 ${
+                        isSuperAdmin ? "md:grid-cols-3" : "md:grid-cols-2"
+                    }`}
+                >
+                    {/* User Types - Only for SuperAdmin */}
+                    {isSuperAdmin && (
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                                Distribusi Pengguna
+                            </h3>
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                        <span className="text-sm text-gray-600">
+                                            Regular Users
+                                        </span>
+                                    </div>
+                                    <span className="text-sm font-medium text-gray-900">
+                                        {stats.overview.totalRegularUsers}
                                     </span>
                                 </div>
-                                <span className="text-sm font-medium text-gray-900">
-                                    {stats.overview.totalRegularUsers}
-                                </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
-                                    <span className="text-sm text-gray-600">
-                                        Admins
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                                        <span className="text-sm text-gray-600">
+                                            Admins
+                                        </span>
+                                    </div>
+                                    <span className="text-sm font-medium text-gray-900">
+                                        {stats.overview.totalAdmins}
                                     </span>
                                 </div>
-                                <span className="text-sm font-medium text-gray-900">
-                                    {stats.overview.totalAdmins}
-                                </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
-                                    <span className="text-sm text-gray-600">
-                                        Super Admins
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                                        <span className="text-sm text-gray-600">
+                                            Super Admins
+                                        </span>
+                                    </div>
+                                    <span className="text-sm font-medium text-gray-900">
+                                        {stats.overview.totalSuperAdmins}
                                     </span>
                                 </div>
-                                <span className="text-sm font-medium text-gray-900">
-                                    {stats.overview.totalSuperAdmins}
-                                </span>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Activity Ratios */}
                     <div className="bg-white p-6 rounded-lg shadow-md">

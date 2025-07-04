@@ -419,12 +419,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     </span>
                                 </div>
                             </div>
-                            
+
                             {/* Logout button - hidden when collapsed */}
                             <button
                                 onClick={handleSignOut}
                                 className={`text-slate-400 hover:text-white hover:bg-white/10 rounded-lg p-2 transition-all duration-200 flex-shrink-0 ${
-                                    desktopSidebarCollapsed ? "lg:hidden ml-3" : "ml-3"
+                                    desktopSidebarCollapsed
+                                        ? "lg:hidden ml-3"
+                                        : "ml-3"
                                 }`}
                                 title="Keluar"
                             >

@@ -71,47 +71,14 @@ export default async function Home() {
     const featuredArticles = await getFeaturedArticles();
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-            {/* Header with Logos and Auth Buttons */}
+            {/* Header with Auth Buttons */}
             <header className="w-full px-4 py-6 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm border-b border-gray-100">
                 <div className="flex items-center justify-between">
-                    {/* Logo Section */}
-                    <div className="flex items-center space-x-4 sm:space-x-6">
-                        <div className="flex items-center space-x-2">
-                            <Image
-                                src="/images/logos/logo_surabaya.png"
-                                alt="Logo Kota Surabaya"
-                                width={50}
-                                height={50}
-                                className="w-8 h-8 sm:w-10 sm:h-10"
-                            />
-                            <span className="text-xs sm:text-sm font-medium text-gray-700 hidden lg:block">
-                                Kota Surabaya
-                            </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Image
-                                src="/images/logos/logo_upnjatim.png"
-                                alt="Logo UPN Jawa Timur"
-                                width={50}
-                                height={50}
-                                className="w-8 h-8 sm:w-10 sm:h-10"
-                            />
-                            <span className="text-xs sm:text-sm font-medium text-gray-700 hidden lg:block">
-                                UPN Jawa Timur
-                            </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Image
-                                src="/images/logos/logo_kkn15bongkaran.png"
-                                alt="Logo KKN 15 Bongkaran"
-                                width={50}
-                                height={50}
-                                className="w-8 h-8 sm:w-10 sm:h-10"
-                            />
-                            <span className="text-xs sm:text-sm font-medium text-gray-700 hidden lg:block">
-                                KKN 15 Bongkaran
-                            </span>
-                        </div>
+                    {/* Brand Name */}
+                    <div className="flex items-center">
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                            LinkUMKM Bongkaran
+                        </h1>
                     </div>
 
                     {/* Auth Buttons */}
@@ -277,13 +244,143 @@ export default async function Home() {
             </main>
 
             {/* Footer */}
-            <footer className="bg-gray-50 border-t border-gray-200 py-8 mt-16">
+            <footer className="bg-gray-900 text-white py-12 mt-16">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center text-gray-600">
-                        <p className="text-sm sm:text-base">
-                            © 2025 LinkUMKM Bongkaran. Dibuat dengan ❤️ oleh KKN
-                            UPN di Surabaya.
-                        </p>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        {/* About Section */}
+                        <div className="md:col-span-1">
+                            <h3 className="text-lg font-semibold mb-4">
+                                LinkUMKM Bongkaran
+                            </h3>
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                Platform digital untuk membantu UMKM di
+                                Kelurahan Bongkaran, Surabaya tampil online
+                                dengan mudah dan profesional.
+                            </p>
+                        </div>
+
+                        {/* Quick Links */}
+                        <div className="md:col-span-1">
+                            <h3 className="text-lg font-semibold mb-4">
+                                Tautan Cepat
+                            </h3>
+                            <ul className="space-y-2 text-sm">
+                                <li>
+                                    <Link
+                                        href="/articles"
+                                        className="text-gray-400 hover:text-white transition-colors"
+                                    >
+                                        Artikel
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/register"
+                                        className="text-gray-400 hover:text-white transition-colors"
+                                    >
+                                        Daftar
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/login"
+                                        className="text-gray-400 hover:text-white transition-colors"
+                                    >
+                                        Masuk
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/dashboard"
+                                        className="text-gray-400 hover:text-white transition-colors"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Contact Info */}
+                        <div className="md:col-span-1">
+                            <h3 className="text-lg font-semibold mb-4">
+                                Kontak
+                            </h3>
+                            <ul className="space-y-2 text-sm text-gray-400">
+                                <li>Kelurahan Bongkaran</li>
+                                <li>Kota Surabaya</li>
+                                <li>Jawa Timur, Indonesia</li>
+                                <li>Email: info@linkumkm-bongkaran.id</li>
+                            </ul>
+                        </div>
+
+                        {/* Partner Logos */}
+                        <div className="md:col-span-1">
+                            <h3 className="text-lg font-semibold mb-4">
+                                Partner
+                            </h3>
+                            <div className="space-y-4">
+                                <div className="flex items-center space-x-3">
+                                    <Image
+                                        src="/images/logos/logo_surabaya.png"
+                                        alt="Logo Kota Surabaya"
+                                        width={40}
+                                        height={40}
+                                        className="w-8 h-8 rounded"
+                                    />
+                                    <span className="text-sm text-gray-400">
+                                        Kota Surabaya
+                                    </span>
+                                </div>
+                                <div className="flex items-center space-x-3">
+                                    <Image
+                                        src="/images/logos/logo_upnjatim.png"
+                                        alt="Logo UPN Jawa Timur"
+                                        width={40}
+                                        height={40}
+                                        className="w-8 h-8 rounded"
+                                    />
+                                    <span className="text-sm text-gray-400">
+                                        UPN Jawa Timur
+                                    </span>
+                                </div>
+                                <div className="flex items-center space-x-3">
+                                    <Image
+                                        src="/images/logos/logo_kkn15bongkaran.png"
+                                        alt="Logo KKN 15 Bongkaran"
+                                        width={40}
+                                        height={40}
+                                        className="w-8 h-8 rounded"
+                                    />
+                                    <span className="text-sm text-gray-400">
+                                        KKN 15 Bongkaran
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom Footer */}
+                    <div className="border-t border-gray-800 mt-8 pt-6">
+                        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                            <p className="text-sm text-gray-400">
+                                © 2025 LinkUMKM Bongkaran. Dibuat dengan ❤️ oleh
+                                KKN UPN di Surabaya.
+                            </p>
+                            <div className="flex items-center space-x-6">
+                                <Link
+                                    href="/privacy"
+                                    className="text-sm text-gray-400 hover:text-white transition-colors"
+                                >
+                                    Kebijakan Privasi
+                                </Link>
+                                <Link
+                                    href="/terms"
+                                    className="text-sm text-gray-400 hover:text-white transition-colors"
+                                >
+                                    Syarat & Ketentuan
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </footer>

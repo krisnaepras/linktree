@@ -77,7 +77,7 @@ export default function ArticleFilters({
                             className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
                         />
                         <svg
-                            className="absolute left-3 top-3.5 h-5 w-5 text-gray-400"
+                            className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -103,7 +103,7 @@ export default function ArticleFilters({
                                         `/articles?${params.toString()}`
                                     );
                                 }}
-                                className="absolute right-3 top-3.5 h-5 w-5 text-gray-400 hover:text-gray-600"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600"
                             >
                                 <svg
                                     fill="none"

@@ -418,47 +418,47 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                     href={`/articles/${article.slug}`}
                                     className="group"
                                 >
-                                    <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
+                                    <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-row md:flex-col">
                                         {article.featuredImage && (
-                                            <div className="aspect-w-16 aspect-h-9">
+                                            <div className="w-24 h-24 md:w-full md:h-48 flex-shrink-0">
                                                 <Image
                                                     src={article.featuredImage}
                                                     alt={article.title}
                                                     width={400}
                                                     height={225}
-                                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                 />
                                             </div>
                                         )}
-                                        <div className="p-6 flex-1 flex flex-col">
-                                            <div className="flex items-center gap-4 mb-3">
+                                        <div className="p-4 md:p-6 flex-1 flex flex-col">
+                                            <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-3 flex-wrap">
                                                 {article.category && (
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                         {article.category.name}
                                                     </span>
                                                 )}
-                                                <span className="text-sm text-gray-500">
+                                                <span className="text-xs md:text-sm text-gray-500">
                                                     {getReadingTime(
                                                         article.readingTime
                                                     )}
                                                 </span>
                                             </div>
-                                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 flex-shrink-0">
+                                            <h3 className="text-sm md:text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 flex-shrink-0">
                                                 {article.title}
                                             </h3>
                                             {article.excerpt && (
-                                                <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
+                                                <p className="text-gray-600 mb-4 line-clamp-2 md:line-clamp-3 flex-1 text-xs md:text-base hidden md:block">
                                                     {article.excerpt}
                                                 </p>
                                             )}
-                                            <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
+                                            <div className="flex items-center justify-between text-xs md:text-sm text-gray-500 mt-auto">
                                                 <span>
                                                     Oleh {article.author.name}
                                                 </span>
-                                                <div className="flex items-center space-x-3">
+                                                <div className="flex items-center space-x-2 md:space-x-3">
                                                     <div className="flex items-center">
                                                         <svg
-                                                            className="w-4 h-4 mr-1"
+                                                            className="w-3 h-3 md:w-4 md:h-4 mr-1"
                                                             fill="none"
                                                             stroke="currentColor"
                                                             viewBox="0 0 24 24"
@@ -478,7 +478,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                                         </svg>
                                                         {article.viewCount}
                                                     </div>
-                                                    <span>
+                                                    <span className="hidden md:inline">
                                                         {formatDate(
                                                             article.publishedAt
                                                         )}

@@ -44,11 +44,15 @@ export default function ArticleCard({
 
     const cardClass = featured
         ? "group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white"
-        : "group relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white";
+        : "group relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white flex flex-row";
 
     const imageClass = featured
         ? "w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-        : "w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300";
+        : "w-24 h-24 object-cover group-hover:scale-105 transition-transform duration-300 flex-shrink-0";
+
+    const imageContainerClass = featured
+        ? "relative overflow-hidden"
+        : "relative overflow-hidden w-24 h-24 flex-shrink-0";
 
     return (
         <Link href={`/articles/${article.slug}`} className="block">
@@ -63,13 +67,13 @@ export default function ArticleCard({
                 )}
 
                 {/* Image */}
-                <div className="relative overflow-hidden">
+                <div className={imageContainerClass}>
                     {article.featuredImage ? (
                         <Image
                             src={article.featuredImage}
                             alt={article.title}
-                            width={featured ? 600 : 400}
-                            height={featured ? 300 : 250}
+                            width={featured ? 600 : 96}
+                            height={featured ? 300 : 96}
                             className={imageClass}
                         />
                     ) : (
@@ -78,7 +82,11 @@ export default function ArticleCard({
                         >
                             <div className="text-center">
                                 <svg
-                                    className="w-12 h-12 text-gray-400 mx-auto mb-2"
+                                    className={`${
+                                        featured ? "w-12 h-12" : "w-4 h-4"
+                                    } text-gray-400 mx-auto ${
+                                        featured ? "mb-2" : ""
+                                    }`}
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -90,22 +98,30 @@ export default function ArticleCard({
                                         d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
                                     />
                                 </svg>
-                                <span className="text-sm text-gray-500">
-                                    Artikel
-                                </span>
+                                {featured && (
+                                    <span className="text-sm text-gray-500">
+                                        Artikel
+                                    </span>
+                                )}
                             </div>
                         </div>
                     )}
 
-                    {/* Overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    {/* Overlay gradient - only for featured */}
+                    {featured && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    )}
                 </div>
 
                 {/* Content */}
-                <div className={featured ? "p-6" : "p-4"}>
+                <div className={featured ? "p-6" : "p-4 flex-1"}>
                     {/* Category & Meta */}
-                    <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-3">
+                    <div
+                        className={`flex items-center justify-between mb-2 ${
+                            featured ? "" : "flex-wrap gap-1"
+                        }`}
+                    >
+                        <div className="flex items-center space-x-2">
                             {article.category && (
                                 <span className="text-xs font-medium px-2 py-1 rounded-md bg-gray-100 text-gray-700">
                                     {article.category.name}
@@ -144,19 +160,15 @@ export default function ArticleCard({
                     {/* Title */}
                     <h3
                         className={`font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2 ${
-                            featured ? "text-xl mb-3" : "text-lg mb-2"
+                            featured ? "text-xl mb-3" : "text-sm mb-2"
                         }`}
                     >
                         {article.title}
                     </h3>
 
-                    {/* Excerpt */}
-                    {article.excerpt && (
-                        <p
-                            className={`text-gray-600 line-clamp-3 ${
-                                featured ? "text-base mb-4" : "text-sm mb-3"
-                            }`}
-                        >
+                    {/* Excerpt - only for featured */}
+                    {article.excerpt && featured && (
+                        <p className="text-gray-600 line-clamp-2 text-base mb-4">
                             {article.excerpt}
                         </p>
                     )}

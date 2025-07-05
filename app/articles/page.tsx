@@ -126,7 +126,7 @@ async function getFeaturedArticles() {
             }
         },
         orderBy: { publishedAt: "desc" },
-        take: 3
+        take: 6
     });
 }
 
@@ -279,11 +279,18 @@ export default async function ArticlesPage({ searchParams }: Props) {
                 {/* Featured Articles */}
                 {!categorySlug && !search && featuredArticles.length > 0 && (
                     <section className="mb-12">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                            Artikel Unggulan
-                        </h2>
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold text-gray-900">
+                                Artikel Unggulan
+                            </h2>
+                            {featuredArticles.length > 3 && (
+                                <div className="text-sm text-gray-500">
+                                    Geser untuk melihat lebih banyak →
+                                </div>
+                            )}
+                        </div>
                         <div className="relative">
-                            <div className="flex overflow-x-auto pb-4 space-x-6 scrollbar-hide">
+                            <div className="flex overflow-x-auto pb-4 space-x-6 scrollbar-hide scroll-smooth">
                                 {featuredArticles.map((article) => (
                                     <Link
                                         key={article.id}

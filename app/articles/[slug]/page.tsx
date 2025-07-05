@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import ShareButtons from "@/components/ShareButtons";
+import ViewTracker from "@/components/ViewTracker";
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -59,35 +60,6 @@ async function getRelatedArticles(
     });
 }
 
-async function trackView(articleId: string, request: Request) {
-    const forwarded = request.headers.get("x-forwarded-for");
-    const ip = forwarded ? forwarded.split(/, /)[0] : "unknown";
-    const userAgent = request.headers.get("user-agent") || "unknown";
-
-    try {
-        await prisma.articleView.create({
-            data: {
-                articleId,
-                ipAddress: ip,
-                userAgent
-            }
-        });
-
-        // Update view count
-        await prisma.article.update({
-            where: { id: articleId },
-            data: {
-                viewCount: {
-                    increment: 1
-                }
-            }
-        });
-    } catch (error) {
-        // Ignore errors (e.g., duplicate views from same IP)
-        console.log("View tracking error (ignored):", error);
-    }
-}
-
 export default async function ArticlePage({ params }: Props) {
     const { slug } = await params;
     const article = await getArticle(slug);
@@ -95,9 +67,6 @@ export default async function ArticlePage({ params }: Props) {
     if (!article) {
         notFound();
     }
-
-    // Track view (fire and forget)
-    // trackView(article.id, request);
 
     const relatedArticles = await getRelatedArticles(
         article.category?.id || null,
@@ -296,6 +265,9 @@ export default async function ArticlePage({ params }: Props) {
                         </div>
                     </div>
                 </article>
+
+                {/* View Tracker */}
+                <ViewTracker articleId={article.id} slug={article.slug} />
 
                 {/* Related Articles */}
                 {relatedArticles.length > 0 && (

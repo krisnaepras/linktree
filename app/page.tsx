@@ -71,44 +71,63 @@ export default async function Home() {
     const featuredArticles = await getFeaturedArticles();
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-            {/* Header with Logos */}
-            <header className="w-full px-4 py-6 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-center space-x-8 sm:space-x-12">
-                    <div className="flex items-center space-x-2">
-                        <Image
-                            src="/images/logos/logo_surabaya.png"
-                            alt="Logo Kota Surabaya"
-                            width={50}
-                            height={50}
-                            className="w-10 h-10 sm:w-12 sm:h-12"
-                        />
-                        <span className="text-xs sm:text-sm font-medium text-gray-700 hidden sm:block">
-                            Kota Surabaya
-                        </span>
+            {/* Header with Logos and Auth Buttons */}
+            <header className="w-full px-4 py-6 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                    {/* Logo Section */}
+                    <div className="flex items-center space-x-4 sm:space-x-6">
+                        <div className="flex items-center space-x-2">
+                            <Image
+                                src="/images/logos/logo_surabaya.png"
+                                alt="Logo Kota Surabaya"
+                                width={50}
+                                height={50}
+                                className="w-8 h-8 sm:w-10 sm:h-10"
+                            />
+                            <span className="text-xs sm:text-sm font-medium text-gray-700 hidden lg:block">
+                                Kota Surabaya
+                            </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Image
+                                src="/images/logos/logo_upnjatim.png"
+                                alt="Logo UPN Jawa Timur"
+                                width={50}
+                                height={50}
+                                className="w-8 h-8 sm:w-10 sm:h-10"
+                            />
+                            <span className="text-xs sm:text-sm font-medium text-gray-700 hidden lg:block">
+                                UPN Jawa Timur
+                            </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Image
+                                src="/images/logos/logo_kkn15bongkaran.png"
+                                alt="Logo KKN 15 Bongkaran"
+                                width={50}
+                                height={50}
+                                className="w-8 h-8 sm:w-10 sm:h-10"
+                            />
+                            <span className="text-xs sm:text-sm font-medium text-gray-700 hidden lg:block">
+                                KKN 15 Bongkaran
+                            </span>
+                        </div>
                     </div>
+
+                    {/* Auth Buttons */}
                     <div className="flex items-center space-x-2">
-                        <Image
-                            src="/images/logos/logo_upnjatim.png"
-                            alt="Logo UPN Jawa Timur"
-                            width={50}
-                            height={50}
-                            className="w-10 h-10 sm:w-12 sm:h-12"
-                        />
-                        <span className="text-xs sm:text-sm font-medium text-gray-700 hidden sm:block">
-                            UPN Jawa Timur
-                        </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Image
-                            src="/images/logos/logo_kkn15bongkaran.png"
-                            alt="Logo KKN 15 Bongkaran"
-                            width={50}
-                            height={50}
-                            className="w-10 h-10 sm:w-12 sm:h-12"
-                        />
-                        <span className="text-xs sm:text-sm font-medium text-gray-700 hidden sm:block">
-                            KKN 15 Bongkaran
-                        </span>
+                        <Link
+                            href="/login"
+                            className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base px-6 py-2.5 rounded-full hover:bg-blue-50 border border-blue-600 hover:border-blue-700 transition-all duration-200"
+                        >
+                            Masuk
+                        </Link>
+                        <Link
+                            href="/register"
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm sm:text-base px-6 py-2.5 rounded-full transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                        >
+                            Daftar
+                        </Link>
                     </div>
                 </div>
             </header>
@@ -120,25 +139,10 @@ export default async function Home() {
                         Satu Tautan untuk{" "}
                         <span className="text-blue-600">UMKM Bongkaran</span>
                     </h1>
-                    <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    <p className="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
                         Bantu UMKM di Surabaya tampil online dengan mudah dan
                         cepat.
                     </p>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <Link
-                            href="/register"
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto"
-                        >
-                            Daftar Sekarang
-                        </Link>
-                        <Link
-                            href="/login"
-                            className="bg-white hover:bg-gray-50 text-blue-600 font-semibold py-4 px-8 rounded-full text-lg border-2 border-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto"
-                        >
-                            Masuk
-                        </Link>
-                    </div>
                 </div>
 
                 {/* Features Section */}
@@ -247,6 +251,7 @@ export default async function Home() {
                                 <ArticleCard
                                     key={article.id}
                                     article={article}
+                                    variant="homepage"
                                 />
                             ))}
                         </div>

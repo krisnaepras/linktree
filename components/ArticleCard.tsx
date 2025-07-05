@@ -27,11 +27,13 @@ type Article = {
 interface ArticleCardProps {
     article: Article;
     featured?: boolean;
+    variant?: "default" | "homepage";
 }
 
 export default function ArticleCard({
     article,
-    featured = false
+    featured = false,
+    variant = "default"
 }: ArticleCardProps) {
     const formatDate = (dateString: string | null) => {
         if (!dateString) return "";
@@ -44,6 +46,8 @@ export default function ArticleCard({
 
     const cardClass = featured
         ? "group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white"
+        : variant === "homepage"
+        ? "group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white flex flex-col border border-gray-100"
         : "group relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white flex flex-col";
 
     const imageClass = featured

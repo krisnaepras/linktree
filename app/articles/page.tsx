@@ -23,6 +23,9 @@ type Article = {
         name: string;
     };
     category: ArticleCategory | null;
+    _count: {
+        views: number;
+    };
 };
 
 type Props = {
@@ -61,7 +64,15 @@ async function getArticles(
     const [articles, total] = await Promise.all([
         prisma.article.findMany({
             where,
-            include: {
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                excerpt: true,
+                featuredImage: true,
+                publishedAt: true,
+                readingTime: true,
+                viewCount: true,
                 author: {
                     select: {
                         name: true
@@ -73,9 +84,14 @@ async function getArticles(
                         name: true,
                         slug: true
                     }
+                },
+                _count: {
+                    select: {
+                        views: true
+                    }
                 }
             },
-            orderBy: [{ isFeatured: "desc" }, { publishedAt: "desc" }],
+            orderBy: [{ publishedAt: "desc" }],
             skip,
             take: limit
         }),
@@ -104,13 +120,20 @@ async function getCategories() {
     });
 }
 
-async function getFeaturedArticles() {
+async function getPopularArticles() {
     return await prisma.article.findMany({
         where: {
-            status: "PUBLISHED",
-            isFeatured: true
+            status: "PUBLISHED"
         },
-        include: {
+        select: {
+            id: true,
+            title: true,
+            slug: true,
+            excerpt: true,
+            featuredImage: true,
+            publishedAt: true,
+            readingTime: true,
+            viewCount: true,
             author: {
                 select: {
                     name: true
@@ -122,9 +145,16 @@ async function getFeaturedArticles() {
                     name: true,
                     slug: true
                 }
+            },
+            _count: {
+                select: {
+                    views: true
+                }
             }
         },
-        orderBy: { publishedAt: "desc" },
+        orderBy: {
+            viewCount: "desc"
+        },
         take: 6
     });
 }
@@ -135,11 +165,11 @@ export default async function ArticlesPage({ searchParams }: Props) {
     const categorySlug = resolvedSearchParams.category;
     const search = resolvedSearchParams.search;
 
-    const [{ articles, pagination }, categories, featuredArticles] =
+    const [{ articles, pagination }, categories, popularArticles] =
         await Promise.all([
             getArticles(categorySlug, search, page),
             getCategories(),
-            getFeaturedArticles()
+            getPopularArticles()
         ]);
 
     const formatDate = (date: Date | null) => {
@@ -262,14 +292,14 @@ export default async function ArticlesPage({ searchParams }: Props) {
                     ))}
                 </div>
 
-                {/* Featured Articles */}
-                {!categorySlug && !search && featuredArticles.length > 0 && (
+                {/* Popular Articles */}
+                {!categorySlug && !search && popularArticles.length > 0 && (
                     <section className="mb-12">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-bold text-gray-900">
-                                Artikel Unggulan
+                                Artikel Terpopuler
                             </h2>
-                            {featuredArticles.length > 3 && (
+                            {popularArticles.length > 3 && (
                                 <div className="text-sm text-gray-500">
                                     Geser untuk melihat lebih banyak →
                                 </div>
@@ -277,7 +307,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
                         </div>
                         <div className="relative">
                             <div className="flex overflow-x-auto pb-4 space-x-6 scrollbar-hide scroll-smooth">
-                                {featuredArticles.map((article) => (
+                                {popularArticles.map((article) => (
                                     <Link
                                         key={article.id}
                                         href={`/articles/${article.slug}`}
@@ -420,7 +450,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                 >
                                     <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-row md:flex-col">
                                         {article.featuredImage && (
-                                            <div className="w-24 h-24 md:w-full md:h-48 flex-shrink-0">
+                                            <div className="w-24 h-24 md:w-full md:h-48 flex-shrink-0 ml-2 mt-1 md:ml-0 md:-mx-6 md:-mt-6 md:mb-0 rounded-lg md:rounded-t-lg md:rounded-b-none overflow-hidden">
                                                 <Image
                                                     src={article.featuredImage}
                                                     alt={article.title}

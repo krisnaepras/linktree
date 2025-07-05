@@ -7,8 +7,6 @@ type ArticleCategory = {
     id: string;
     name: string;
     slug: string;
-    icon: string | null;
-    color: string | null;
 };
 
 interface ArticleFiltersProps {
@@ -25,6 +23,7 @@ export default function ArticleFilters({
     const router = useRouter();
     const searchParams = useSearchParams();
     const [searchInput, setSearchInput] = useState(currentSearch || "");
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const handleCategoryChange = (categorySlug: string) => {
         const params = new URLSearchParams(searchParams);
@@ -39,6 +38,7 @@ export default function ArticleFilters({
         params.delete("page");
 
         router.push(`/articles?${params.toString()}`);
+        setIsDropdownOpen(false);
     };
 
     const handleSearchSubmit = (e: React.FormEvent) => {
@@ -57,9 +57,15 @@ export default function ArticleFilters({
         router.push(`/articles?${params.toString()}`);
     };
 
+    const getCurrentCategoryName = () => {
+        if (!currentCategory) return "Semua Kategori";
+        const category = categories.find((c) => c.slug === currentCategory);
+        return category ? category.name : "Semua Kategori";
+    };
+
     return (
-        <div className="mb-8 sm:mb-8">
-            <div className="flex flex-col sm:flex-row gap-4 mb-6 sm:mb-6">
+        <div className="mb-8">
+            <div className="flex flex-col sm:flex-row gap-4">
                 {/* Search */}
                 <div className="flex-1">
                     <form onSubmit={handleSearchSubmit} className="relative">
@@ -68,10 +74,10 @@ export default function ArticleFilters({
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             placeholder="Cari artikel..."
-                            className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
                         />
                         <svg
-                            className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
+                            className="absolute left-3 top-3.5 h-5 w-5 text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -97,7 +103,7 @@ export default function ArticleFilters({
                                         `/articles?${params.toString()}`
                                     );
                                 }}
-                                className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 hover:text-gray-600"
+                                className="absolute right-3 top-3.5 h-5 w-5 text-gray-400 hover:text-gray-600"
                             >
                                 <svg
                                     fill="none"
@@ -116,37 +122,75 @@ export default function ArticleFilters({
                     </form>
                 </div>
 
-                {/* Category Filter */}
-                <div className="sm:w-64 relative">
-                    <select
-                        name="category"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-                        onChange={(e) => handleCategoryChange(e.target.value)}
-                        value={currentCategory || ""}
+                {/* Custom Category Dropdown */}
+                <div className="relative sm:w-64">
+                    <button
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-full px-4 py-3 text-left bg-white border border-gray-300 rounded-lg shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                     >
-                        <option value="">Semua Kategori</option>
-                        {categories.map((category) => (
-                            <option key={category.id} value={category.slug}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
-                    {/* Custom dropdown arrow */}
-                    <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                            className="w-4 h-4 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
+                        <div className="flex items-center justify-between">
+                            <span className="text-gray-700 font-medium truncate">
+                                {getCurrentCategoryName()}
+                            </span>
+                            <svg
+                                className={`w-5 h-5 text-gray-400 transition-transform ${
+                                    isDropdownOpen ? "rotate-180" : ""
+                                }`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 9l-7 7-7-7"
+                                />
+                            </svg>
+                        </div>
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {isDropdownOpen && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setIsDropdownOpen(false)}
                             />
-                        </svg>
-                    </div>
+                            <div className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                <div className="py-2">
+                                    <button
+                                        onClick={() => handleCategoryChange("")}
+                                        className={`w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors ${
+                                            !currentCategory
+                                                ? "bg-blue-50 text-blue-700 font-medium"
+                                                : "text-gray-700"
+                                        }`}
+                                    >
+                                        Semua Kategori
+                                    </button>
+                                    {categories.map((category) => (
+                                        <button
+                                            key={category.id}
+                                            onClick={() =>
+                                                handleCategoryChange(
+                                                    category.slug
+                                                )
+                                            }
+                                            className={`w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors ${
+                                                currentCategory ===
+                                                category.slug
+                                                    ? "bg-blue-50 text-blue-700 font-medium"
+                                                    : "text-gray-700"
+                                            }`}
+                                        >
+                                            {category.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

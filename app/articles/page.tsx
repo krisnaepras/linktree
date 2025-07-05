@@ -8,8 +8,6 @@ type ArticleCategory = {
     id: string;
     name: string;
     slug: string;
-    icon: string | null;
-    color: string | null;
 };
 
 type Article = {
@@ -73,9 +71,7 @@ async function getArticles(
                     select: {
                         id: true,
                         name: true,
-                        slug: true,
-                        icon: true,
-                        color: true
+                        slug: true
                     }
                 }
             },
@@ -99,6 +95,11 @@ async function getArticles(
 
 async function getCategories() {
     return await prisma.articleCategory.findMany({
+        select: {
+            id: true,
+            name: true,
+            slug: true
+        },
         orderBy: { name: "asc" }
     });
 }
@@ -119,9 +120,7 @@ async function getFeaturedArticles() {
                 select: {
                     id: true,
                     name: true,
-                    slug: true,
-                    icon: true,
-                    color: true
+                    slug: true
                 }
             }
         },
@@ -237,41 +236,28 @@ export default async function ArticlesPage({ searchParams }: Props) {
                 />
 
                 {/* Category Pills - Hidden on Mobile */}
-                <div className="hidden sm:flex flex-wrap gap-2 mb-8">
+                <div className="hidden sm:flex flex-wrap gap-3 mb-8">
                     <Link
                         href="/articles"
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                             !categorySlug
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                ? "bg-blue-600 text-white shadow-md"
+                                : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-gray-300"
                         }`}
                     >
-                        Semua
+                        <span>Semua</span>
                     </Link>
                     {categories.map((category) => (
                         <Link
                             key={category.id}
                             href={`/articles?category=${category.slug}`}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                                 categorySlug === category.slug
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                    ? "bg-blue-600 text-white shadow-md"
+                                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-gray-300"
                             }`}
                         >
-                            {category.icon && (
-                                <span className="text-lg">
-                                    {category.icon.startsWith("/") ? (
-                                        <img
-                                            src={category.icon}
-                                            alt={category.name}
-                                            className="w-4 h-4"
-                                        />
-                                    ) : (
-                                        category.icon
-                                    )}
-                                </span>
-                            )}
-                            {category.name}
+                            <span>{category.name}</span>
                         </Link>
                     ))}
                 </div>
@@ -315,28 +301,6 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                                 <div className="flex items-center gap-4 mb-3">
                                                     {article.category && (
                                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                            {article.category
-                                                                .icon && (
-                                                                <span className="mr-1">
-                                                                    {article.category.icon.startsWith(
-                                                                        "/"
-                                                                    ) ? (
-                                                                        <img
-                                                                            src={
-                                                                                article
-                                                                                    .category
-                                                                                    .icon
-                                                                            }
-                                                                            alt=""
-                                                                            className="w-3 h-3"
-                                                                        />
-                                                                    ) : (
-                                                                        article
-                                                                            .category
-                                                                            .icon
-                                                                    )}
-                                                                </span>
-                                                            )}
                                                             {
                                                                 article.category
                                                                     .name
@@ -470,28 +434,6 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                             <div className="flex items-center gap-4 mb-3">
                                                 {article.category && (
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                        {article.category
-                                                            .icon && (
-                                                            <span className="mr-1">
-                                                                {article.category.icon.startsWith(
-                                                                    "/"
-                                                                ) ? (
-                                                                    <img
-                                                                        src={
-                                                                            article
-                                                                                .category
-                                                                                .icon
-                                                                        }
-                                                                        alt=""
-                                                                        className="w-3 h-3"
-                                                                    />
-                                                                ) : (
-                                                                    article
-                                                                        .category
-                                                                        .icon
-                                                                )}
-                                                            </span>
-                                                        )}
                                                         {article.category.name}
                                                     </span>
                                                 )}

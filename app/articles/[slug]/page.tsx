@@ -4,6 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import ShareButtons from "@/components/ShareButtons";
 import ViewTracker from "@/components/ViewTracker";
+import ReadingProgress from "@/components/ReadingProgress";
+import TableOfContents from "@/components/TableOfContents";
+import ScrollToTop from "@/components/ScrollToTop";
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -36,28 +39,70 @@ async function getArticle(slug: string) {
 
 async function getRelatedArticles(
     categoryId: string | null,
-    currentArticleId: string
+    currentArticleId: string,
+    tags: string[] = []
 ) {
-    if (!categoryId) return [];
+    // First try to get articles from same category
+    let relatedArticles: any[] = [];
 
-    return await prisma.article.findMany({
-        where: {
-            categoryId,
-            status: "PUBLISHED",
-            id: { not: currentArticleId }
-        },
-        include: {
-            author: {
-                select: {
-                    name: true
+    if (categoryId) {
+        relatedArticles = await prisma.article.findMany({
+            where: {
+                categoryId,
+                status: "PUBLISHED",
+                id: { not: currentArticleId }
+            },
+            include: {
+                author: {
+                    select: {
+                        name: true
+                    }
+                },
+                category: {
+                    select: {
+                        name: true,
+                        color: true
+                    }
                 }
-            }
-        },
-        orderBy: {
-            publishedAt: "desc"
-        },
-        take: 3
-    });
+            },
+            orderBy: {
+                publishedAt: "desc"
+            },
+            take: 3
+        });
+    }
+
+    // If we don't have enough articles, get popular articles
+    if (relatedArticles.length < 3) {
+        const additionalArticles = await prisma.article.findMany({
+            where: {
+                status: "PUBLISHED",
+                id: { not: currentArticleId },
+                ...(categoryId && { categoryId: { not: categoryId } })
+            },
+            include: {
+                author: {
+                    select: {
+                        name: true
+                    }
+                },
+                category: {
+                    select: {
+                        name: true,
+                        color: true
+                    }
+                }
+            },
+            orderBy: {
+                viewCount: "desc"
+            },
+            take: 3 - relatedArticles.length
+        });
+
+        relatedArticles = [...relatedArticles, ...additionalArticles];
+    }
+
+    return relatedArticles;
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -84,17 +129,36 @@ export default async function ArticlePage({ params }: Props) {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <header className="bg-white shadow-sm">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    {/* Breadcrumb Navigation */}
-                    <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
-                        <Link
-                            href="/"
-                            className="hover:text-blue-600 transition-colors"
-                        >
+            <ReadingProgress />
+            <TableOfContents content={article.content} />
+            <ScrollToTop />
+            {/* Header - Thin Navbar */}
+            <header className="bg-white shadow-sm border-b">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                    <div className="flex items-center justify-between">
+                        {/* Breadcrumb Navigation */}
+                        <nav className="flex items-center space-x-2 text-sm text-gray-600">
+                            <Link
+                                href="/"
+                                className="hover:text-blue-600 transition-colors"
+                            >
+                                <svg
+                                    className="w-4 h-4 inline mr-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                    />
+                                </svg>
+                                Beranda
+                            </Link>
                             <svg
-                                className="w-4 h-4 inline mr-1"
+                                className="w-4 h-4 text-gray-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -103,68 +167,54 @@ export default async function ArticlePage({ params }: Props) {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                    d="M9 5l7 7-7 7"
                                 />
                             </svg>
-                            Beranda
-                        </Link>
-                        <svg
-                            className="w-4 h-4 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                            />
-                        </svg>
+                            <Link
+                                href="/articles"
+                                className="hover:text-blue-600 transition-colors"
+                            >
+                                Artikel
+                            </Link>
+                            <svg
+                                className="w-4 h-4 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                            <span className="text-gray-900 font-medium truncate max-w-xs">
+                                {article.title}
+                            </span>
+                        </nav>
+
+                        {/* Back to Articles Button */}
                         <Link
                             href="/articles"
-                            className="hover:text-blue-600 transition-colors"
+                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
                         >
-                            Artikel
+                            <svg
+                                className="w-4 h-4 mr-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+                            Kembali ke Artikel
                         </Link>
-                        <svg
-                            className="w-4 h-4 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                            />
-                        </svg>
-                        <span className="text-gray-900 font-medium truncate max-w-md">
-                            {article.title}
-                        </span>
-                    </nav>
-
-                    {/* Back Button */}
-                    <Link
-                        href="/articles"
-                        className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                        <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                        Kembali ke Artikel
-                    </Link>
+                    </div>
                 </div>
             </header>
 
@@ -184,47 +234,86 @@ export default async function ArticlePage({ params }: Props) {
                         </div>
                     )}
 
-                    <div className="p-8">
+                    <div className="p-6 sm:p-8">
                         {/* Article Meta */}
-                        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-6">
-                            {article.category && (
-                                <div className="flex items-center">
-                                    {article.category.icon && (
-                                        <span className="mr-1 text-lg">
-                                            {article.category.icon}
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                            <div className="flex items-center space-x-4 text-sm text-gray-600">
+                                {article.category && (
+                                    <div className="flex items-center">
+                                        {article.category.icon && (
+                                            <span className="mr-1 text-lg">
+                                                {article.category.icon}
+                                            </span>
+                                        )}
+                                        <span className="font-medium">
+                                            {article.category.name}
                                         </span>
-                                    )}
-                                    <span className="font-medium">
-                                        {article.category.name}
-                                    </span>
+                                    </div>
+                                )}
+                                <span>•</span>
+                                <span>Oleh {article.author.name}</span>
+                            </div>
+                            <div className="flex items-center space-x-4 text-sm text-gray-500">
+                                <div className="flex items-center">
+                                    <svg
+                                        className="w-4 h-4 mr-1"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                        />
+                                    </svg>
+                                    {article.viewCount} views
                                 </div>
-                            )}
-                            <span>•</span>
-                            <span>Oleh {article.author.name}</span>
-                            <span>•</span>
-                            <span>
-                                {article.publishedAt
-                                    ? formatDate(article.publishedAt)
-                                    : formatDate(article.createdAt)}
-                            </span>
-                            {article.readingTime && (
-                                <>
-                                    <span>•</span>
-                                    <span>
-                                        {article.readingTime} menit baca
-                                    </span>
-                                </>
-                            )}
+                                <span>•</span>
+                                <span>
+                                    {article.publishedAt
+                                        ? formatDate(article.publishedAt)
+                                        : formatDate(article.createdAt)}
+                                </span>
+                                {article.readingTime && (
+                                    <>
+                                        <span>•</span>
+                                        <div className="flex items-center">
+                                            <svg
+                                                className="w-4 h-4 mr-1"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                            {article.readingTime} menit baca
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
 
                         {/* Title */}
-                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
                             {article.title}
                         </h1>
 
                         {/* Excerpt */}
                         {article.excerpt && (
-                            <div className="text-xl text-gray-600 mb-8 leading-relaxed">
+                            <div className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
                                 {article.excerpt}
                             </div>
                         )}
@@ -279,7 +368,7 @@ export default async function ArticlePage({ params }: Props) {
                             {relatedArticles.map((relatedArticle) => (
                                 <article
                                     key={relatedArticle.id}
-                                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow h-full flex flex-col"
                                 >
                                     {relatedArticle.featuredImage && (
                                         <div className="aspect-video w-full">
@@ -294,8 +383,8 @@ export default async function ArticlePage({ params }: Props) {
                                             />
                                         </div>
                                     )}
-                                    <div className="p-4">
-                                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                    <div className="p-4 flex-1 flex flex-col">
+                                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 flex-shrink-0">
                                             <Link
                                                 href={`/articles/${relatedArticle.slug}`}
                                                 className="hover:text-blue-600"
@@ -304,11 +393,11 @@ export default async function ArticlePage({ params }: Props) {
                                             </Link>
                                         </h3>
                                         {relatedArticle.excerpt && (
-                                            <p className="text-sm text-gray-600 line-clamp-3 mb-2">
+                                            <p className="text-sm text-gray-600 line-clamp-3 mb-2 flex-1">
                                                 {relatedArticle.excerpt}
                                             </p>
                                         )}
-                                        <div className="text-xs text-gray-500">
+                                        <div className="text-xs text-gray-500 mt-auto">
                                             Oleh {relatedArticle.author.name}
                                         </div>
                                     </div>
@@ -319,11 +408,11 @@ export default async function ArticlePage({ params }: Props) {
                 )}
 
                 {/* CTA */}
-                <section className="mt-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white text-center">
-                    <h2 className="text-2xl font-bold mb-4">
+                <section className="mt-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 sm:p-8 text-white text-center">
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4">
                         Punya UMKM juga?
                     </h2>
-                    <p className="text-lg opacity-90 mb-6">
+                    <p className="text-base sm:text-lg opacity-90 mb-6">
                         Buat LinkUMKM Anda sendiri dan jangkau lebih banyak
                         pelanggan!
                     </p>

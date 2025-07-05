@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import ArticleFilters from "@/components/ArticleFilters";
+import ScrollToTop from "@/components/ScrollToTop";
 
 type ArticleCategory = {
     id: string;
@@ -158,17 +159,34 @@ export default async function ArticlesPage({ searchParams }: Props) {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <header className="bg-white shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    {/* Breadcrumb Navigation */}
-                    <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
-                        <Link
-                            href="/"
-                            className="hover:text-blue-600 transition-colors"
-                        >
+            <ScrollToTop />
+            {/* Header - Thin Navbar */}
+            <header className="bg-white shadow-sm border-b">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                    <div className="flex items-center justify-between">
+                        {/* Breadcrumb Navigation */}
+                        <nav className="flex items-center space-x-2 text-sm text-gray-600">
+                            <Link
+                                href="/"
+                                className="hover:text-blue-600 transition-colors"
+                            >
+                                <svg
+                                    className="w-4 h-4 inline mr-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                    />
+                                </svg>
+                                Beranda
+                            </Link>
                             <svg
-                                className="w-4 h-4 inline mr-1"
+                                className="w-4 h-4 text-gray-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -177,38 +195,34 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                    d="M9 5l7 7-7 7"
                                 />
                             </svg>
-                            Beranda
-                        </Link>
-                        <svg
-                            className="w-4 h-4 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                            />
-                        </svg>
-                        <span className="text-gray-900 font-medium">
-                            Artikel
-                        </span>
-                    </nav>
+                            <span className="text-gray-900 font-medium">
+                                Artikel
+                            </span>
+                        </nav>
 
-                    {/* Page Title */}
-                    <div className="text-center">
-                        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                            Artikel & Berita
-                        </h1>
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            Temukan berbagai artikel menarik seputar bisnis,
-                            teknologi, dan pengembangan UMKM
-                        </p>
+                        {/* Back to Homepage Button */}
+                        <Link
+                            href="/"
+                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
+                        >
+                            <svg
+                                className="w-4 h-4 mr-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+                            Kembali ke Beranda
+                        </Link>
                     </div>
                 </div>
             </header>
@@ -222,8 +236,8 @@ export default async function ArticlesPage({ searchParams }: Props) {
                     currentSearch={search}
                 />
 
-                {/* Category Pills */}
-                <div className="flex flex-wrap gap-2 mb-8">
+                {/* Category Pills - Hidden on Mobile */}
+                <div className="hidden sm:flex flex-wrap gap-2 mb-8">
                     <Link
                         href="/articles"
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
@@ -268,82 +282,118 @@ export default async function ArticlesPage({ searchParams }: Props) {
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">
                             Artikel Unggulan
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {featuredArticles.map((article) => (
-                                <Link
-                                    key={article.id}
-                                    href={`/articles/${article.slug}`}
-                                    className="group"
-                                >
-                                    <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                                        {article.featuredImage && (
-                                            <div className="aspect-w-16 aspect-h-9">
-                                                <Image
-                                                    src={article.featuredImage}
-                                                    alt={article.title}
-                                                    width={400}
-                                                    height={225}
-                                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                                                />
-                                            </div>
-                                        )}
-                                        <div className="p-6">
-                                            <div className="flex items-center gap-4 mb-3">
-                                                {article.category && (
-                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                        {article.category
-                                                            .icon && (
-                                                            <span className="mr-1">
-                                                                {article.category.icon.startsWith(
-                                                                    "/"
-                                                                ) ? (
-                                                                    <img
-                                                                        src={
-                                                                            article
-                                                                                .category
-                                                                                .icon
-                                                                        }
-                                                                        alt=""
-                                                                        className="w-3 h-3"
-                                                                    />
-                                                                ) : (
-                                                                    article
-                                                                        .category
-                                                                        .icon
-                                                                )}
-                                                            </span>
-                                                        )}
-                                                        {article.category.name}
-                                                    </span>
-                                                )}
-                                                <span className="text-sm text-gray-500">
-                                                    {getReadingTime(
-                                                        article.readingTime
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                                                {article.title}
-                                            </h3>
-                                            {article.excerpt && (
-                                                <p className="text-gray-600 mb-4 line-clamp-3">
-                                                    {article.excerpt}
-                                                </p>
+                        <div className="relative">
+                            <div className="flex overflow-x-auto pb-4 space-x-6 scrollbar-hide">
+                                {featuredArticles.map((article) => (
+                                    <Link
+                                        key={article.id}
+                                        href={`/articles/${article.slug}`}
+                                        className="group flex-shrink-0 w-80"
+                                    >
+                                        <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full">
+                                            {article.featuredImage && (
+                                                <div className="aspect-w-16 aspect-h-9">
+                                                    <Image
+                                                        src={
+                                                            article.featuredImage
+                                                        }
+                                                        alt={article.title}
+                                                        width={400}
+                                                        height={225}
+                                                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                </div>
                                             )}
-                                            <div className="flex items-center justify-between text-sm text-gray-500">
-                                                <span>
-                                                    Oleh {article.author.name}
-                                                </span>
-                                                <span>
-                                                    {formatDate(
-                                                        article.publishedAt
+                                            <div className="p-6">
+                                                <div className="flex items-center gap-4 mb-3">
+                                                    {article.category && (
+                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            {article.category
+                                                                .icon && (
+                                                                <span className="mr-1">
+                                                                    {article.category.icon.startsWith(
+                                                                        "/"
+                                                                    ) ? (
+                                                                        <img
+                                                                            src={
+                                                                                article
+                                                                                    .category
+                                                                                    .icon
+                                                                            }
+                                                                            alt=""
+                                                                            className="w-3 h-3"
+                                                                        />
+                                                                    ) : (
+                                                                        article
+                                                                            .category
+                                                                            .icon
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                            {
+                                                                article.category
+                                                                    .name
+                                                            }
+                                                        </span>
                                                     )}
-                                                </span>
+                                                    <span className="text-sm text-gray-500">
+                                                        {getReadingTime(
+                                                            article.readingTime
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                                    {article.title}
+                                                </h3>
+                                                {article.excerpt && (
+                                                    <p className="text-gray-600 mb-4 line-clamp-3">
+                                                        {article.excerpt}
+                                                    </p>
+                                                )}
+                                                <div className="flex items-center justify-between text-sm text-gray-500">
+                                                    <span>
+                                                        Oleh{" "}
+                                                        {article.author.name}
+                                                    </span>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="flex items-center">
+                                                            <svg
+                                                                className="w-4 h-4 mr-1"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    strokeWidth={
+                                                                        2
+                                                                    }
+                                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                                                />
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    strokeWidth={
+                                                                        2
+                                                                    }
+                                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                                                />
+                                                            </svg>
+                                                            {article.viewCount}
+                                                        </div>
+                                                        <span>
+                                                            {formatDate(
+                                                                article.publishedAt
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </article>
-                                </Link>
-                            ))}
+                                        </article>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </section>
                 )}
@@ -358,11 +408,10 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                           (c) => c.slug === categorySlug
                                       )?.name
                                   }`
+                                : search
+                                ? `Hasil Pencarian: "${search}"`
                                 : "Semua Artikel"}
                         </h2>
-                        <div className="text-sm text-gray-500">
-                            {pagination.total} artikel ditemukan
-                        </div>
                     </div>
 
                     {articles.length === 0 ? (
@@ -398,7 +447,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                     href={`/articles/${article.slug}`}
                                     className="group"
                                 >
-                                    <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                                    <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
                                         {article.featuredImage && (
                                             <div className="aspect-w-16 aspect-h-9">
                                                 <Image
@@ -410,7 +459,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                                 />
                                             </div>
                                         )}
-                                        <div className="p-6">
+                                        <div className="p-6 flex-1 flex flex-col">
                                             <div className="flex items-center gap-4 mb-3">
                                                 {article.category && (
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -445,23 +494,47 @@ export default async function ArticlesPage({ searchParams }: Props) {
                                                     )}
                                                 </span>
                                             </div>
-                                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 flex-shrink-0">
                                                 {article.title}
                                             </h3>
                                             {article.excerpt && (
-                                                <p className="text-gray-600 mb-4 line-clamp-3">
+                                                <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
                                                     {article.excerpt}
                                                 </p>
                                             )}
-                                            <div className="flex items-center justify-between text-sm text-gray-500">
+                                            <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
                                                 <span>
                                                     Oleh {article.author.name}
                                                 </span>
-                                                <span>
-                                                    {formatDate(
-                                                        article.publishedAt
-                                                    )}
-                                                </span>
+                                                <div className="flex items-center space-x-3">
+                                                    <div className="flex items-center">
+                                                        <svg
+                                                            className="w-4 h-4 mr-1"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                                            />
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                                            />
+                                                        </svg>
+                                                        {article.viewCount}
+                                                    </div>
+                                                    <span>
+                                                        {formatDate(
+                                                            article.publishedAt
+                                                        )}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </article>

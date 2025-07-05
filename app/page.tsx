@@ -19,7 +19,6 @@ type Article = {
     category: {
         name: string;
         slug: string;
-        color: string | null;
     } | null;
     _count: {
         views: number;
@@ -43,8 +42,7 @@ async function getFeaturedArticles(): Promise<Article[]> {
                 category: {
                     select: {
                         name: true,
-                        slug: true,
-                        color: true
+                        slug: true
                     }
                 },
                 _count: {

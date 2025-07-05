@@ -24,6 +24,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   linktrees Linktree[]
+  articles  Article[]
 
   @@map("users")
 }
@@ -100,8 +101,68 @@ model LinkClick {
   @@map("link_clicks")
 }
 
+model Article {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  content       String   @db.Text
+  excerpt       String?
+  featuredImage String?  @map("featured_image")
+  authorId      String   @map("author_id")
+  categoryId    String?  @map("category_id")
+  status        ArticleStatus @default(DRAFT)
+  metaTitle     String?  @map("meta_title")
+  metaDescription String? @map("meta_description")
+  tags          String[]
+  readingTime   Int?     @map("reading_time")
+  viewCount     Int      @default(0) @map("view_count")
+  isFeatured    Boolean  @default(false) @map("is_featured")
+  publishedAt   DateTime? @map("published_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  views    ArticleView[]
+
+  @@map("articles")
+}
+
+model ArticleCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  color       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  articles Article[]
+
+  @@map("article_categories")
+}
+
+model ArticleView {
+  id        String   @id @default(cuid())
+  articleId String   @map("article_id")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("article_views")
+}
+
 enum Role {
   USER
   ADMIN
   SUPERADMIN
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }

@@ -1,7 +1,76 @@
 import Image from "next/image";
 import Link from "next/link";
+import ArticleCard from "@/components/ArticleCard";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+// Article type
+type Article = {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    featuredImage: string | null;
+    publishedAt: string | null;
+    readingTime: number | null;
+    isFeatured: boolean;
+    author: {
+        name: string;
+    };
+    category: {
+        name: string;
+        slug: string;
+        color: string | null;
+    } | null;
+    _count: {
+        views: number;
+    };
+};
+
+// Get featured articles directly from database
+async function getFeaturedArticles(): Promise<Article[]> {
+    try {
+        const articles = await prisma.article.findMany({
+            where: {
+                status: "PUBLISHED",
+                isFeatured: true
+            },
+            include: {
+                author: {
+                    select: {
+                        name: true
+                    }
+                },
+                category: {
+                    select: {
+                        name: true,
+                        slug: true,
+                        color: true
+                    }
+                },
+                _count: {
+                    select: {
+                        views: true
+                    }
+                }
+            },
+            orderBy: {
+                publishedAt: "desc"
+            },
+            take: 3
+        });
+
+        return articles.map((article) => ({
+            ...article,
+            publishedAt: article.publishedAt?.toISOString() || null
+        }));
+    } catch (error) {
+        console.error("Error fetching featured articles:", error);
+        return [];
+    }
+}
+
+export default async function Home() {
+    const featuredArticles = await getFeaturedArticles();
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
             {/* Header with Logos */}
@@ -159,6 +228,32 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+
+                {/* Featured Articles Section */}
+                {featuredArticles.length > 0 && (
+                    <section className="bg-white rounded-3xl shadow-xl p-8 sm:p-12 mb-16">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+                                Artikel Terbaru
+                            </h2>
+                            <Link
+                                href="/articles"
+                                className="text-blue-600 hover:text-blue-700 font-semibold text-lg hover:underline transition-colors duration-200"
+                            >
+                                Lihat Semua →
+                            </Link>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {featuredArticles.map((article: Article) => (
+                                <ArticleCard
+                                    key={article.id}
+                                    article={article}
+                                />
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* Call to Action */}
                 <section className="text-center bg-gradient-to-r from-blue-600 to-green-600 rounded-3xl p-8 sm:p-12 text-white">

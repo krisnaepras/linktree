@@ -109,3 +109,295 @@ html {
     background-size: 400% 400%;
     animation: gradient-shift 15s ease infinite;
 }
+
+/* RichTextEditor styles - Fix text color */
+.ProseMirror {
+    color: #111827 !important;
+    outline: none !important;
+}
+
+.ProseMirror p {
+    color: #111827 !important;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+    color: #111827 !important;
+}
+
+.ProseMirror li {
+    color: #111827 !important;
+}
+
+.ProseMirror strong {
+    color: #111827 !important;
+}
+
+.ProseMirror em {
+    color: #111827 !important;
+}
+
+.ProseMirror u {
+    color: #111827 !important;
+}
+
+.ProseMirror s {
+    color: #111827 !important;
+}
+
+.ProseMirror blockquote {
+    color: #374151 !important;
+}
+
+.ProseMirror code {
+    color: #111827 !important;
+}
+
+.ProseMirror pre {
+    color: #111827 !important;
+}
+
+/* Specific targeting for our rich text editor */
+.rich-text-editor .ProseMirror {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+}
+
+.rich-text-editor .ProseMirror * {
+    color: inherit !important;
+}
+
+.rich-text-editor .ProseMirror p:empty:first-child::before {
+    content: attr(data-placeholder);
+    color: #9ca3af !important;
+    pointer-events: none;
+    height: 0;
+}
+
+/* Override any prose styles that might make text light */
+.rich-text-editor .prose {
+    color: #111827 !important;
+}
+
+.rich-text-editor .prose * {
+    color: #111827 !important;
+}
+
+/* Global fix for input and textarea text color in admin pages */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+}
+
+/* Placeholder text color */
+input::placeholder,
+textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Option text color for select dropdowns */
+option {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+}
+
+/* Admin pages specific fixes */
+[data-page="admin"] input,
+[data-page="admin"] textarea,
+[data-page="admin"] select,
+.admin-layout input,
+.admin-layout textarea,
+.admin-layout select {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+}
+
+/* Force text color for all form elements inside admin layout */
+.admin-layout .bg-white input,
+.admin-layout .bg-white textarea,
+.admin-layout .bg-white select {
+    color: #111827 !important;
+}
+
+/* Ensure admin form text is always visible */
+.admin-layout form input,
+.admin-layout form textarea,
+.admin-layout form select {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+}
+
+/* RichTextEditor Toolbar Styling */
+.rich-text-editor button {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
+
+.rich-text-editor button:hover {
+    background-color: #f3f4f6 !important;
+}
+
+.rich-text-editor button[data-active="true"],
+.rich-text-editor button.active {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+}
+
+/* Ensure button text and icons are visible */
+.rich-text-editor button span,
+.rich-text-editor button strong,
+.rich-text-editor button em,
+.rich-text-editor button u,
+.rich-text-editor button s {
+    color: inherit !important;
+}
+
+/* Toolbar background */
+.rich-text-editor .toolbar {
+    background-color: #f9fafb !important;
+    border-bottom: 1px solid #d1d5db !important;
+}
+
+/* Rich Text Editor Toolbar Responsiveness */
+.rich-text-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rich-text-toolbar-group {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #d1d5db;
+}
+
+.rich-text-toolbar-group-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    padding: 0.25rem 0.5rem;
+    background-color: #f9fafb;
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+    border-right: 1px solid #d1d5db;
+}
+
+.rich-text-toolbar-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #374151;
+}
+
+.rich-text-toolbar-button:hover {
+    background-color: #f3f4f6;
+}
+
+.rich-text-toolbar-button.active {
+    background-color: #2563eb;
+    color: white;
+}
+
+.rich-text-toolbar-button svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .rich-text-toolbar {
+        gap: 0.25rem;
+    }
+
+    .rich-text-toolbar-group {
+        padding: 0.125rem;
+    }
+
+    .rich-text-toolbar-group-label {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.25rem;
+    }
+
+    .rich-text-toolbar-button {
+        padding: 0.125rem 0.375rem;
+        font-size: 0.75rem;
+    }
+
+    .rich-text-toolbar-button svg {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+}
+
+/* Global prose styling to ensure text visibility everywhere */
+.prose {
+    color: #111827 !important;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+    color: #111827 !important;
+}
+
+.prose p {
+    color: #374151 !important;
+}
+
+.prose li {
+    color: #374151 !important;
+}
+
+.prose strong {
+    color: #111827 !important;
+}
+
+.prose a {
+    color: #2563eb !important;
+}
+
+.prose blockquote {
+    color: #6b7280 !important;
+}
+
+.prose code {
+    color: #111827 !important;
+}
+
+/* Ensure all child elements inherit the correct colors */
+.prose * {
+    color: inherit;
+}

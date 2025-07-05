@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -38,7 +38,12 @@ type DetailLinktree = {
     category: Category;
 };
 
-export default function EditLinkPage({ params }: { params: { id: string } }) {
+export default function EditLinkPage({
+    params
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    const { id } = use(params);
     const { data: session, status } = useSession();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
@@ -70,14 +75,14 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
         if (status === "authenticated") {
             fetchData();
         }
-    }, [status, router, params.id]);
+    }, [status, router, id]);
 
     const fetchData = async () => {
         try {
             // Fetch categories and link data in parallel
             const [categoriesResponse, linkResponse] = await Promise.all([
                 fetch("/api/categories"),
-                fetch(`/api/links/${params.id}`)
+                fetch(`/api/links/${id}`)
             ]);
 
             if (categoriesResponse.ok) {
@@ -111,7 +116,7 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
         setError("");
 
         try {
-            const response = await fetch(`/api/links/${params.id}`, {
+            const response = await fetch(`/api/links/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -151,7 +156,7 @@ export default function EditLinkPage({ params }: { params: { id: string } }) {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`/api/links/${params.id}`, {
+            const response = await fetch(`/api/links/${id}`, {
                 method: "DELETE"
             });
 

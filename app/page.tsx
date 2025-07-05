@@ -70,74 +70,57 @@ async function getFeaturedArticles(): Promise<Article[]> {
 export default async function Home() {
     const featuredArticles = await getFeaturedArticles();
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 relative overflow-hidden">
-            {/* Modern Background Pattern */}
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 relative overflow-hidden">
+            {/* Clean Modern Background */}
             <div className="absolute inset-0 pointer-events-none">
-                {/* Geometric Grid Pattern */}
-                <div className="absolute inset-0 opacity-5">
+                {/* Subtle Dot Pattern */}
+                <div className="absolute inset-0 opacity-30">
                     <div
                         className="absolute inset-0"
                         style={{
-                            backgroundImage: `
-                            linear-gradient(45deg, #3b82f6 1px, transparent 1px),
-                            linear-gradient(-45deg, #10b981 1px, transparent 1px)
-                        `,
-                            backgroundSize: "60px 60px"
+                            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.15) 1px, transparent 0)`,
+                            backgroundSize: "32px 32px"
                         }}
                     ></div>
                 </div>
 
-                {/* Animated Gradient Orbs */}
-                <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-300/30 to-purple-300/30 rounded-full blur-3xl animate-float"></div>
-                <div className="absolute top-32 right-0 w-80 h-80 bg-gradient-to-br from-green-300/30 to-blue-300/30 rounded-full blur-3xl animate-float-delay-1"></div>
-                <div className="absolute bottom-0 left-32 w-72 h-72 bg-gradient-to-br from-orange-300/30 to-pink-300/30 rounded-full blur-3xl animate-float-delay-2"></div>
-                <div className="absolute bottom-32 right-32 w-64 h-64 bg-gradient-to-br from-purple-300/30 to-indigo-300/30 rounded-full blur-3xl animate-float-delay-3"></div>
+                {/* Minimal Geometric Shapes */}
+                <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-blue-100/40 to-green-100/40 rounded-full blur-2xl animate-float"></div>
+                <div className="absolute bottom-20 left-20 w-40 h-40 bg-gradient-to-br from-green-100/30 to-blue-100/30 rounded-full blur-3xl animate-float-delay-1"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-purple-100/20 to-pink-100/20 rounded-full blur-xl animate-float-delay-2"></div>
 
-                {/* Floating Geometric Shapes */}
-                <div className="absolute top-20 left-10 w-8 h-8 bg-blue-400/20 rotate-45 animate-float"></div>
-                <div className="absolute top-40 right-20 w-6 h-6 bg-green-400/20 rounded-full animate-pulse animation-delay-1000"></div>
-                <div className="absolute bottom-40 left-20 w-10 h-10 bg-orange-400/20 rotate-12 animate-float-delay-1"></div>
-                <div className="absolute bottom-20 right-10 w-4 h-4 bg-purple-400/20 rounded-full animate-pulse animation-delay-1500"></div>
+                {/* Clean Lines */}
+                <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-200/50 to-transparent"></div>
+                <div className="absolute top-2/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-green-200/50 to-transparent"></div>
 
-                {/* Subtle Lines */}
-                <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent opacity-30"></div>
-                <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-green-200 to-transparent opacity-30"></div>
-
-                {/* Animated Particles */}
-                <div className="absolute top-16 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-pulse opacity-40"></div>
-                <div className="absolute top-24 right-1/4 w-1 h-1 bg-green-400 rounded-full animate-pulse animation-delay-800 opacity-40"></div>
-                <div className="absolute bottom-16 left-1/3 w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse animation-delay-1200 opacity-40"></div>
-                <div className="absolute bottom-24 right-1/3 w-2 h-2 bg-purple-400 rounded-full animate-pulse animation-delay-1600 opacity-40"></div>
-
-                {/* Modern Mesh Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-green-500/5"></div>
-                <div className="absolute inset-0 bg-gradient-to-tl from-purple-500/5 via-transparent to-orange-500/5"></div>
+                {/* Subtle Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-blue-50/30"></div>
             </div>
 
             {/* Header with Auth Buttons */}
-            <header className="w-full px-4 py-6 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm border-b border-gray-100 animate-fade-in-up relative">
+            <header className="w-full px-4 py-6 sm:px-6 lg:px-8 bg-white/90 backdrop-blur-md border-b border-gray-200/50 animate-fade-in-up relative">
                 {/* Header background decoration */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-white/50 to-green-50/30 -z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-50/50 via-white/80 to-blue-50/50 -z-10"></div>
 
                 <div className="flex items-center justify-between relative">
                     {/* Brand Name */}
                     <div className="flex items-center">
-                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300 cursor-pointer">
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors duration-300 cursor-pointer">
                             LinkUMKM Bongkaran
                         </h1>
                     </div>
 
                     {/* Auth Buttons */}
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                         <Link
                             href="/login"
-                            className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base px-6 py-2.5 rounded-full hover:bg-blue-50 border border-blue-600 hover:border-blue-700 transition-all duration-200 hover:scale-105 transform glass-effect"
+                            className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base px-6 py-2.5 rounded-full hover:bg-blue-50/80 border border-blue-600/80 hover:border-blue-700 transition-all duration-200 hover:scale-105 transform backdrop-blur-sm"
                         >
                             Masuk
                         </Link>
                         <Link
                             href="/register"
-                            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-sm sm:text-base px-6 py-2.5 rounded-full transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 hover:-translate-y-0.5"
+                            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-sm sm:text-base px-6 py-2.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 hover:-translate-y-0.5"
                         >
                             Daftar
                         </Link>
@@ -185,17 +168,17 @@ export default async function Home() {
                 </div>
 
                 {/* Features Section */}
-                <section className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-600 hover:shadow-2xl transition-shadow duration-500 border border-white/20">
+                <section className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-600 hover:shadow-xl transition-shadow duration-500 border border-white/50">
                     {/* Section background decoration */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/50 to-green-50/30 rounded-3xl -z-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-50/40 via-white/60 to-blue-50/40 rounded-3xl -z-10"></div>
 
-                    <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 animate-fade-in-up animation-delay-800">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-in-up animation-delay-800">
                         Mengapa Memilih LinkUMKM Bongkaran?
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="text-center group hover:transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-1000 p-6 rounded-2xl hover:bg-white/50 backdrop-blur-sm">
-                            <div className="bg-gradient-to-br from-green-100 to-green-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-green-200 group-hover:to-green-300 transition-all duration-300 animate-bounce-slow shadow-lg">
+                        <div className="text-center group hover:transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-1000 p-6 rounded-2xl hover:bg-white/70 backdrop-blur-sm">
+                            <div className="bg-gradient-to-br from-green-100 to-green-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-green-200 group-hover:to-green-300 transition-all duration-300 animate-bounce-slow shadow-sm">
                                 <svg
                                     className="w-8 h-8 text-green-600 group-hover:scale-110 transition-transform duration-300"
                                     fill="none"
@@ -210,7 +193,7 @@ export default async function Home() {
                                     />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors duration-300">
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-green-600 transition-colors duration-300">
                                 Mudah Digunakan
                             </h3>
                             <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
@@ -220,8 +203,8 @@ export default async function Home() {
                             </p>
                         </div>
 
-                        <div className="text-center group hover:transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-1200 p-6 rounded-2xl hover:bg-white/50 backdrop-blur-sm">
-                            <div className="bg-gradient-to-br from-blue-100 to-blue-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 animate-bounce-slow animation-delay-200 shadow-lg">
+                        <div className="text-center group hover:transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-1200 p-6 rounded-2xl hover:bg-white/70 backdrop-blur-sm">
+                            <div className="bg-gradient-to-br from-blue-100 to-blue-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 animate-bounce-slow animation-delay-200 shadow-sm">
                                 <svg
                                     className="w-8 h-8 text-blue-600 group-hover:scale-110 transition-transform duration-300"
                                     fill="none"
@@ -236,7 +219,7 @@ export default async function Home() {
                                     />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
                                 Semua Tautan dalam Satu Tempat
                             </h3>
                             <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
@@ -246,8 +229,8 @@ export default async function Home() {
                             </p>
                         </div>
 
-                        <div className="text-center group hover:transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-1400 p-6 rounded-2xl hover:bg-white/50 backdrop-blur-sm">
-                            <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-orange-200 group-hover:to-orange-300 transition-all duration-300 animate-bounce-slow animation-delay-400 shadow-lg">
+                        <div className="text-center group hover:transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-1400 p-6 rounded-2xl hover:bg-white/70 backdrop-blur-sm">
+                            <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-orange-200 group-hover:to-orange-300 transition-all duration-300 animate-bounce-slow animation-delay-400 shadow-sm">
                                 <svg
                                     className="w-8 h-8 text-orange-600 group-hover:scale-110 transition-transform duration-300"
                                     fill="none"
@@ -262,7 +245,7 @@ export default async function Home() {
                                     />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-300">
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors duration-300">
                                 Gratis & Terpercaya
                             </h3>
                             <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
@@ -275,17 +258,17 @@ export default async function Home() {
 
                 {/* Featured Articles Section */}
                 {featuredArticles.length > 0 && (
-                    <section className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-1600 hover:shadow-2xl transition-shadow duration-500 border border-white/20">
+                    <section className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-1600 hover:shadow-xl transition-shadow duration-500 border border-white/50">
                         {/* Section background decoration */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-white/50 to-pink-50/30 rounded-3xl -z-10"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/60 to-slate-50/30 rounded-3xl -z-10"></div>
 
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 animate-fade-in-left animation-delay-1800">
+                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 animate-fade-in-left animation-delay-1800">
                                 Artikel Terbaru
                             </h2>
                             <Link
                                 href="/articles"
-                                className="text-blue-600 hover:text-blue-700 font-semibold text-lg hover:underline transition-all duration-200 animate-fade-in-right animation-delay-1800 hover:transform hover:scale-105 glass-effect px-4 py-2 rounded-full"
+                                className="text-blue-600 hover:text-blue-700 font-semibold text-lg hover:underline transition-all duration-200 animate-fade-in-right animation-delay-1800 hover:transform hover:scale-105 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-200/50 hover:border-blue-300"
                             >
                                 Lihat Semua →
                             </Link>
@@ -296,14 +279,14 @@ export default async function Home() {
                                 (article: Article, index: number) => (
                                     <div
                                         key={article.id}
-                                        className={`animate-fade-in-up hover:transform hover:scale-105 transition-all duration-300 hover:shadow-lg rounded-2xl p-1 bg-gradient-to-br from-blue-100/50 to-green-100/50`}
+                                        className={`animate-fade-in-up hover:transform hover:scale-105 transition-all duration-300 hover:shadow-md rounded-2xl p-1 bg-gradient-to-br from-blue-100/30 to-green-100/30`}
                                         style={{
                                             animationDelay: `${
                                                 2000 + index * 200
                                             }ms`
                                         }}
                                     >
-                                        <div className="rounded-xl overflow-hidden bg-white/90 backdrop-blur-sm">
+                                        <div className="rounded-xl overflow-hidden bg-white/95 backdrop-blur-sm">
                                             <ArticleCard
                                                 article={article}
                                                 variant="homepage"

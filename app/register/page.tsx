@@ -70,28 +70,31 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center px-4 py-8">
+            <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                        Daftar Akun
+                    <div className="w-20 h-20 bg-gradient-to-r from-sky-500 to-teal-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">L</span>
+                    </div>
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                        Bergabung dengan Kami
                     </h1>
-                    <p className="text-gray-600">
+                    <p className="text-slate-600">
                         Buat akun LinkUMKM Bongkaran Anda
                     </p>
                 </div>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
                         {error}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div>
                         <label
                             htmlFor="name"
-                            className="block text-sm font-medium text-gray-700 mb-1"
+                            className="block text-sm font-semibold text-slate-700 mb-2"
                         >
                             Nama Lengkap
                         </label>
@@ -100,10 +103,10 @@ export default function RegisterPage() {
                             id="name"
                             {...register("name")}
                             placeholder="Masukkan nama lengkap"
-                            className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all duration-300 hover:border-slate-400"
                         />
                         {errors.name && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="mt-2 text-sm text-red-600">
                                 {errors.name.message}
                             </p>
                         )}
@@ -112,7 +115,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 mb-1"
+                            className="block text-sm font-semibold text-slate-700 mb-2"
                         >
                             Email
                         </label>
@@ -121,10 +124,10 @@ export default function RegisterPage() {
                             id="email"
                             {...register("email")}
                             placeholder="contoh@email.com"
-                            className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all duration-300 hover:border-slate-400"
                         />
                         {errors.email && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="mt-2 text-sm text-red-600">
                                 {errors.email.message}
                             </p>
                         )}
@@ -133,7 +136,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-gray-700 mb-1"
+                            className="block text-sm font-semibold text-slate-700 mb-2"
                         >
                             Password
                         </label>
@@ -142,10 +145,10 @@ export default function RegisterPage() {
                             id="password"
                             {...register("password")}
                             placeholder="Minimal 6 karakter"
-                            className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all duration-300 hover:border-slate-400"
                         />
                         {errors.password && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="mt-2 text-sm text-red-600">
                                 {errors.password.message}
                             </p>
                         )}
@@ -154,7 +157,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="confirmPassword"
-                            className="block text-sm font-medium text-gray-700 mb-1"
+                            className="block text-sm font-semibold text-slate-700 mb-2"
                         >
                             Konfirmasi Password
                         </label>
@@ -163,10 +166,10 @@ export default function RegisterPage() {
                             id="confirmPassword"
                             {...register("confirmPassword")}
                             placeholder="Ulangi password"
-                            className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all duration-300 hover:border-slate-400"
                         />
                         {errors.confirmPassword && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="mt-2 text-sm text-red-600">
                                 {errors.confirmPassword.message}
                             </p>
                         )}
@@ -175,30 +178,69 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                        className="w-full bg-gradient-to-r from-sky-600 to-teal-600 hover:from-sky-700 hover:to-teal-700 text-white font-semibold py-4 px-4 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] mt-6"
                     >
-                        {isLoading ? "Mendaftar..." : "Daftar Akun"}
+                        {isLoading ? (
+                            <span className="flex items-center justify-center">
+                                <svg
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                    ></path>
+                                </svg>
+                                Mendaftar...
+                            </span>
+                        ) : (
+                            "Daftar Akun"
+                        )}
                     </button>
                 </form>
 
-                <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-600">
+                <div className="mt-8 text-center">
+                    <p className="text-slate-600">
                         Sudah punya akun?{" "}
                         <Link
                             href="/login"
-                            className="text-blue-600 hover:text-blue-700 font-medium"
+                            className="text-sky-600 hover:text-sky-700 font-semibold transition-colors duration-300"
                         >
                             Masuk di sini
                         </Link>
                     </p>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+                <div className="mt-6 text-center">
                     <Link
                         href="/"
-                        className="text-sm text-gray-600 hover:text-gray-700"
+                        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors duration-300"
                     >
-                        ← Kembali ke Beranda
+                        <svg
+                            className="w-4 h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                            />
+                        </svg>
+                        Kembali ke Beranda
                     </Link>
                 </div>
             </div>

@@ -74,25 +74,28 @@ function LoginForm() {
         }
     };
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center px-4">
+            <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                        Masuk
+                    <div className="w-20 h-20 bg-gradient-to-r from-sky-500 to-teal-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">L</span>
+                    </div>
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                        Selamat Datang Kembali
                     </h1>
-                    <p className="text-gray-600">
+                    <p className="text-slate-600">
                         Masuk ke akun LinkUMKM Bongkaran Anda
                     </p>
                 </div>
 
                 {successMessage && (
-                    <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                    <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
                         {successMessage}
                     </div>
                 )}
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
                         {error}
                     </div>
                 )}
@@ -101,7 +104,7 @@ function LoginForm() {
                     <div>
                         <label
                             htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 mb-2"
+                            className="block text-sm font-semibold text-slate-700 mb-3"
                         >
                             Email
                         </label>
@@ -109,11 +112,11 @@ function LoginForm() {
                             {...register("email")}
                             type="email"
                             id="email"
-                            className="w-full px-4 py-3 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors"
+                            className="w-full px-4 py-4 border border-slate-300 rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all duration-300 hover:border-slate-400"
                             placeholder="nama@email.com"
                         />
                         {errors.email && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="mt-2 text-sm text-red-600">
                                 {errors.email.message}
                             </p>
                         )}
@@ -122,7 +125,7 @@ function LoginForm() {
                     <div>
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-gray-700 mb-2"
+                            className="block text-sm font-semibold text-slate-700 mb-3"
                         >
                             Password
                         </label>
@@ -130,11 +133,11 @@ function LoginForm() {
                             {...register("password")}
                             type="password"
                             id="password"
-                            className="w-full px-4 py-3 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors"
+                            className="w-full px-4 py-4 border border-slate-300 rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all duration-300 hover:border-slate-400"
                             placeholder="Password Anda"
                         />
                         {errors.password && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="mt-2 text-sm text-red-600">
                                 {errors.password.message}
                             </p>
                         )}
@@ -143,18 +146,44 @@ function LoginForm() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-gradient-to-r from-sky-600 to-teal-600 hover:from-sky-700 hover:to-teal-700 text-white font-semibold py-4 px-4 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                     >
-                        {isLoading ? "Masuk..." : "Masuk"}
+                        {isLoading ? (
+                            <span className="flex items-center justify-center">
+                                <svg
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                    ></path>
+                                </svg>
+                                Masuk...
+                            </span>
+                        ) : (
+                            "Masuk"
+                        )}
                     </button>
                 </form>
 
-                <div className="text-center mt-6">
-                    <p className="text-gray-600">
+                <div className="text-center mt-8">
+                    <p className="text-slate-600">
                         Belum punya akun?{" "}
                         <Link
                             href="/register"
-                            className="text-blue-600 hover:text-blue-700 font-semibold"
+                            className="text-sky-600 hover:text-sky-700 font-semibold transition-colors duration-300"
                         >
                             Daftar sekarang
                         </Link>
@@ -164,9 +193,22 @@ function LoginForm() {
                 <div className="text-center mt-6">
                     <Link
                         href="/"
-                        className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors duration-300"
                     >
-                        ← Kembali ke beranda
+                        <svg
+                            className="w-4 h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                            />
+                        </svg>
+                        Kembali ke beranda
                     </Link>
                 </div>
             </div>

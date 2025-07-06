@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ArticleCard from "@/components/ArticleCard";
 import { prisma } from "@/lib/prisma";
+import { Icon } from "@iconify/react";
 
 // Article type
 type Article = {
@@ -391,23 +392,100 @@ export default async function Home() {
                                 Kontak
                             </h3>
                             <ul className="space-y-2 text-sm text-gray-400">
-                                <li className="hover:text-gray-300 transition-colors duration-300">
-                                    📍 Kelurahan Bongkaran
+                                <li className="flex items-center space-x-2 hover:text-gray-300 transition-colors duration-300">
+                                    <Icon
+                                        icon="mdi:map-marker"
+                                        className="w-4 h-4 text-blue-400"
+                                    />
+                                    <span>
+                                        Jl. Coklat No. 5, Surabaya, Jawa Timur,
+                                        Indonesia
+                                    </span>
                                 </li>
-                                <li className="hover:text-gray-300 transition-colors duration-300">
-                                    🏙️ Kota Surabaya
+                                <li className="flex items-center space-x-2 hover:text-gray-300 transition-colors duration-300">
+                                    <Icon
+                                        icon="mdi:email"
+                                        className="w-4 h-4 text-blue-400"
+                                    />
+                                    <span>kel_bongkaran@gmail.com</span>
                                 </li>
-                                <li className="hover:text-gray-300 transition-colors duration-300">
-                                    🌏 Jawa Timur, Indonesia
+                                <li className="flex items-center space-x-2 hover:text-gray-300 transition-colors duration-300">
+                                    <Icon
+                                        icon="mdi:phone"
+                                        className="w-4 h-4 text-blue-400"
+                                    />
+                                    <span>(031) 3572437</span>
                                 </li>
-                                <li className="hover:text-gray-300 transition-colors duration-300">
-                                    📧 info@linkumkm-bongkaran.id
+                            </ul>
+                        </div>
+
+                        {/* Social Media */}
+                        <div className="md:col-span-1 animate-fade-in-up animation-delay-4000">
+                            <h3 className="text-lg font-semibold mb-4 hover:text-blue-400 transition-colors duration-300">
+                                Media Sosial
+                            </h3>
+                            <ul className="space-y-2 text-sm">
+                                <li>
+                                    <a
+                                        href="https://pemerintahan.surabaya.go.id/kelurahan_bongkaran/pariwisata#"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center space-x-2 text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300"
+                                    >
+                                        <Icon
+                                            icon="mdi:facebook"
+                                            className="w-4 h-4 text-blue-600"
+                                        />
+                                        <span>Facebook</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://instagram.com/@kelurahanbongkaran"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center space-x-2 text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300"
+                                    >
+                                        <Icon
+                                            icon="mdi:instagram"
+                                            className="w-4 h-4 text-pink-500"
+                                        />
+                                        <span>Instagram</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://tiktok.com/@kelurahanbongkaran"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center space-x-2 text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300"
+                                    >
+                                        <Icon
+                                            icon="ic:baseline-tiktok"
+                                            className="w-4 h-4 text-black"
+                                        />
+                                        <span>TikTok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://pemerintahan.surabaya.go.id/kelurahan_bongkaran/pariwisata#"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center space-x-2 text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300"
+                                    >
+                                        <Icon
+                                            icon="mdi:twitter"
+                                            className="w-4 h-4 text-blue-400"
+                                        />
+                                        <span>Twitter</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
 
                         {/* Partner Logos */}
-                        <div className="md:col-span-1 animate-fade-in-up animation-delay-4000">
+                        <div className="md:col-span-1 animate-fade-in-up animation-delay-4200">
                             <h3 className="text-lg font-semibold mb-4 hover:text-blue-400 transition-colors duration-300">
                                 Partner
                             </h3>

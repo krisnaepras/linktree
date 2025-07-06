@@ -40,7 +40,7 @@ async function seedCategories() {
 
         for (const category of defaultCategories) {
             const response = await fetch(
-                "http://localhost:3001/api/admin/article-categories",
+                "http://localhost:3000/api/admin/article-categories",
                 {
                     method: "POST",
                     headers: {

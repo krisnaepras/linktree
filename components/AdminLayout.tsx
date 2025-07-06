@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { signOut } from "next-auth/react";
+import { Icon } from "@iconify/react";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -120,7 +121,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 />
             )}
 
-            {/* Sidebar - Fixed Position */}
+            {/* Sidebar - Modern & Clean */}
             <div
                 className={`fixed inset-y-0 left-0 z-50 transform transition-all duration-300 ease-in-out lg:static lg:transform-none ${
                     sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -129,15 +130,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 } w-72 lg:translate-x-0`}
             >
                 {/* Sidebar Content */}
-                <div className="h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl flex flex-col relative overflow-hidden">
-                    {/* Decorative background elements */}
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl -translate-y-20 translate-x-20"></div>
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-emerald-500/10 to-blue-500/10 rounded-full blur-3xl translate-y-16 -translate-x-16"></div>
-                    <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-2xl"></div>
-
+                <div className="h-full bg-white shadow-xl border-r border-slate-200 flex flex-col relative overflow-hidden">
                     {/* Header */}
                     <div
-                        className={`flex items-center px-6 py-5 relative z-10 ${
+                        className={`flex items-center px-6 py-6 border-b border-slate-200 bg-gradient-to-r from-sky-500 to-teal-500 ${
                             desktopSidebarCollapsed
                                 ? "lg:justify-center lg:px-3"
                                 : "justify-between"
@@ -155,15 +151,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 onClick={() =>
                                     setDesktopSidebarCollapsed(false)
                                 }
-                                className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                                className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
                                 title="Expand Sidebar"
                             >
-                                <Image
-                                    src="/images/logos/logo_surabaya.png"
-                                    alt="Logo Surabaya"
-                                    width={28}
-                                    height={28}
-                                    className="object-contain"
+                                <Icon
+                                    icon="material-symbols:dashboard"
+                                    className="w-6 h-6 text-white"
                                 />
                             </button>
                         </div>
@@ -174,13 +167,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 desktopSidebarCollapsed ? "lg:hidden" : ""
                             }`}
                         >
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                                <Image
-                                    src="/images/logos/logo_surabaya.png"
-                                    alt="Logo Surabaya"
-                                    width={24}
-                                    height={24}
-                                    className="object-contain"
+                            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                                <Icon
+                                    icon="material-symbols:dashboard"
+                                    className="w-6 h-6 text-white"
                                 />
                             </div>
                             <div>
@@ -189,67 +179,49 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                         ? "Super Admin"
                                         : "Admin Panel"}
                                 </h1>
-                                <p className="text-xs text-slate-300">
-                                    Linktree Management
+                                <p className="text-xs text-white/80">
+                                    LinkUMKM Management
                                 </p>
                             </div>
                         </div>
 
-                        {/* Desktop toggle button - only show when expanded */}
+                        {/* Desktop toggle button */}
                         <button
                             onClick={() =>
                                 setDesktopSidebarCollapsed(
                                     !desktopSidebarCollapsed
                                 )
                             }
-                            className={`hidden lg:flex items-center justify-center w-8 h-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 ${
+                            className={`hidden lg:flex items-center justify-center w-8 h-8 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200 ${
                                 desktopSidebarCollapsed ? "lg:hidden" : ""
                             }`}
                             title="Collapse Sidebar (Ctrl/Cmd + B)"
                         >
-                            <svg
+                            <Icon
+                                icon="material-symbols:chevron-left"
                                 className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M15 19l-7-7 7-7"
-                                />
-                            </svg>
+                            />
                         </button>
 
                         {/* Mobile close button */}
                         <button
                             onClick={() => setSidebarOpen(false)}
-                            className="lg:hidden text-slate-400 hover:text-white hover:bg-white/10 rounded-lg p-1 transition-all duration-200"
+                            className="lg:hidden text-white/70 hover:text-white hover:bg-white/20 rounded-lg p-1 transition-all duration-200"
                         >
-                            <svg
+                            <Icon
+                                icon="material-symbols:close"
                                 className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            />
                         </button>
                     </div>
 
-                    {/* Navigation */}
-                    <nav className="flex-1 overflow-y-auto py-6 relative z-10">
+                    {/* Navigation - Clean & Modern */}
+                    <nav className="flex-1 overflow-y-auto py-4">
                         <div className="px-4 space-y-2">
                             {/* Dashboard */}
                             <Link
                                 href={isSuperAdmin ? "/superadmin" : "/admin"}
-                                className={`flex items-center px-4 py-3 text-slate-300 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200 group ${
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-sky-50 hover:text-sky-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-sky-200 ${
                                     desktopSidebarCollapsed
                                         ? "lg:justify-center lg:px-3"
                                         : ""
@@ -259,19 +231,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 }
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
-                                    <svg
+                                    <Icon
+                                        icon="material-symbols:dashboard-outline"
                                         className="w-5 h-5 flex-shrink-0"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v0"
-                                        />
-                                    </svg>
+                                    />
                                 </div>
                                 <span
                                     className={`ml-3 font-medium transition-all duration-300 ${
@@ -291,7 +254,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                         ? "/superadmin/users"
                                         : "/admin/users"
                                 }
-                                className={`flex items-center px-4 py-3 text-slate-300 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200 group ${
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-emerald-200 ${
                                     desktopSidebarCollapsed
                                         ? "lg:justify-center lg:px-3"
                                         : ""
@@ -303,21 +266,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 }
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
-                                    <svg
+                                    <Icon
+                                        icon="material-symbols:people-outline"
                                         className="w-5 h-5 flex-shrink-0"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"
-                                        />
-                                        <circle cx="9" cy="7" r="4" />
-                                        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                                    </svg>
+                                    />
                                 </div>
                                 <span
                                     className={`ml-3 font-medium transition-all duration-300 ${
@@ -337,7 +289,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                         ? "/superadmin/categories"
                                         : "/admin/categories"
                                 }
-                                className={`flex items-center px-4 py-3 text-slate-300 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200 group ${
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-teal-50 hover:text-teal-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-teal-200 ${
                                     desktopSidebarCollapsed
                                         ? "lg:justify-center lg:px-3"
                                         : ""
@@ -349,19 +301,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 }
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
-                                    <svg
+                                    <Icon
+                                        icon="material-symbols:category-outline"
                                         className="w-5 h-5 flex-shrink-0"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                                        />
-                                    </svg>
+                                    />
                                 </div>
                                 <span
                                     className={`ml-3 font-medium transition-all duration-300 ${
@@ -377,7 +320,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             {/* Articles */}
                             <Link
                                 href="/admin/articles"
-                                className={`flex items-center px-4 py-3 text-slate-300 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200 group ${
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-blue-50 hover:text-blue-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-blue-200 ${
                                     desktopSidebarCollapsed
                                         ? "lg:justify-center lg:px-3"
                                         : ""
@@ -389,19 +332,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 }
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
-                                    <svg
+                                    <Icon
+                                        icon="material-symbols:article-outline"
                                         className="w-5 h-5 flex-shrink-0"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                        />
-                                    </svg>
+                                    />
                                 </div>
                                 <span
                                     className={`ml-3 font-medium transition-all duration-300 ${
@@ -417,7 +351,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             {/* Article Categories */}
                             <Link
                                 href="/admin/article-categories"
-                                className={`flex items-center px-4 py-3 text-slate-300 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200 group ${
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-purple-50 hover:text-purple-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-purple-200 ${
                                     desktopSidebarCollapsed
                                         ? "lg:justify-center lg:px-3"
                                         : ""
@@ -429,19 +363,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 }
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
-                                    <svg
+                                    <Icon
+                                        icon="material-symbols:folder-special-outline"
                                         className="w-5 h-5 flex-shrink-0"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                                        />
-                                    </svg>
+                                    />
                                 </div>
                                 <span
                                     className={`ml-3 font-medium transition-all duration-300 ${
@@ -453,11 +378,43 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     Kategori Artikel
                                 </span>
                             </Link>
+
+                            {/* Divider */}
+                            <div className="my-4 border-t border-slate-200"></div>
+
+                            {/* Analytics */}
+                            <Link
+                                href="/admin/analytics"
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-orange-50 hover:text-orange-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-orange-200 ${
+                                    desktopSidebarCollapsed
+                                        ? "lg:justify-center lg:px-3"
+                                        : ""
+                                }`}
+                                title={
+                                    desktopSidebarCollapsed ? "Analytics" : ""
+                                }
+                            >
+                                <div className="w-6 h-6 flex items-center justify-center">
+                                    <Icon
+                                        icon="material-symbols:analytics-outline"
+                                        className="w-5 h-5 flex-shrink-0"
+                                    />
+                                </div>
+                                <span
+                                    className={`ml-3 font-medium transition-all duration-300 ${
+                                        desktopSidebarCollapsed
+                                            ? "lg:opacity-0 lg:w-0 lg:overflow-hidden"
+                                            : ""
+                                    }`}
+                                >
+                                    Analytics
+                                </span>
+                            </Link>
                         </div>
                     </nav>
 
                     {/* User Info */}
-                    <div className="p-4 relative z-10">
+                    <div className="p-4 relative z-10 bg-gradient-to-r from-slate-50 to-slate-100 border-t border-slate-200">
                         <div
                             className={`flex items-center ${
                                 desktopSidebarCollapsed
@@ -473,16 +430,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 }`}
                             >
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-sky-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
                                         {session.user.name
                                             ?.charAt(0)
                                             .toUpperCase()}
                                     </div>
                                     <div>
-                                        <p className="text-sm font-medium text-white truncate">
+                                        <p className="text-sm font-medium text-slate-800 truncate">
                                             {session.user.name}
                                         </p>
-                                        <p className="text-xs text-slate-300 truncate">
+                                        <p className="text-xs text-slate-500 truncate">
                                             {session.user.email}
                                         </p>
                                     </div>
@@ -491,8 +448,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     <span
                                         className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                                             isSuperAdmin
-                                                ? "bg-purple-500/20 text-purple-200 border border-purple-400/30"
-                                                : "bg-blue-500/20 text-blue-200 border border-blue-400/30"
+                                                ? "bg-purple-100 text-purple-700 border border-purple-200"
+                                                : "bg-sky-100 text-sky-700 border border-sky-200"
                                         }`}
                                     >
                                         {isSuperAdmin ? "Super Admin" : "Admin"}
@@ -500,29 +457,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 </div>
                             </div>
 
-                            {/* Logout button - hidden when collapsed */}
+                            {/* Logout button - always visible */}
                             <button
                                 onClick={handleSignOut}
-                                className={`text-slate-400 hover:text-white hover:bg-white/10 rounded-lg p-2 transition-all duration-200 flex-shrink-0 ${
+                                className={`text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg p-2 transition-all duration-200 flex-shrink-0 ${
                                     desktopSidebarCollapsed
-                                        ? "lg:hidden ml-3"
+                                        ? "lg:mx-auto"
                                         : "ml-3"
                                 }`}
                                 title="Keluar"
                             >
-                                <svg
+                                <Icon
+                                    icon="material-symbols:logout"
                                     className="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                    />
-                                </svg>
+                                />
                             </button>
                         </div>
                     </div>
@@ -539,19 +487,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             onClick={() => setSidebarOpen(true)}
                             className="lg:hidden text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg p-2 transition-all duration-200"
                         >
-                            <svg
+                            <Icon
+                                icon="material-symbols:menu"
                                 className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            </svg>
+                            />
                         </button>
 
                         {/* Mobile title */}
@@ -570,7 +509,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                         {session.user.email}
                                     </p>
                                 </div>
-                                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-sm font-bold">
+                                <div className="w-8 h-8 bg-gradient-to-br from-sky-500 to-teal-500 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg">
                                     {session.user.name?.charAt(0).toUpperCase()}
                                 </div>
                             </div>

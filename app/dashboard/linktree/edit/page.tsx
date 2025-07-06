@@ -172,8 +172,14 @@ export default function EditLinktreePage() {
 
     if (status === "loading" || isFetching) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-sky-500 to-teal-500 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-xl font-bold text-white">L</span>
+                    </div>
+                    <div className="w-8 h-8 border-2 border-sky-200 border-t-sky-600 rounded-full animate-spin mx-auto mb-2"></div>
+                    <p className="text-slate-600 font-medium">Memuat...</p>
+                </div>
             </div>
         );
     }
@@ -184,15 +190,43 @@ export default function EditLinktreePage() {
 
     if (!linktree) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-gray-600 mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-r from-slate-100 to-slate-200 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                        <svg
+                            className="w-8 h-8 text-slate-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                            />
+                        </svg>
+                    </div>
+                    <p className="text-slate-600 mb-4 font-medium">
                         Linktree tidak ditemukan
                     </p>
                     <Link
                         href="/dashboard"
-                        className="text-blue-600 hover:text-blue-700"
+                        className="inline-flex items-center text-sky-600 hover:text-sky-700 font-medium bg-sky-50 hover:bg-sky-100 px-4 py-2 rounded-xl border border-sky-200"
                     >
+                        <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                            />
+                        </svg>
                         Kembali ke Dashboard
                     </Link>
                 </div>
@@ -201,25 +235,45 @@ export default function EditLinktreePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-slate-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-4">
                             <Link
                                 href="/dashboard"
-                                className="text-blue-600 hover:text-blue-700"
+                                className="inline-flex items-center text-sky-600 hover:text-sky-700 font-medium bg-sky-50 hover:bg-sky-100 px-3 py-2 rounded-xl border border-sky-200"
                             >
-                                ← Kembali
+                                <svg
+                                    className="w-4 h-4 mr-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                                    />
+                                </svg>
+                                Kembali
                             </Link>
-                            <h1 className="text-xl font-semibold text-gray-900">
+                            <h1 className="text-xl font-semibold text-slate-800">
                                 Edit Linktree
                             </h1>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <span className="text-sm text-gray-600">
-                                Halo, {session?.user?.name}!
+                            <div className="w-8 h-8 bg-gradient-to-r from-sky-500 to-teal-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-semibold text-sm">
+                                    {session?.user?.name
+                                        ?.charAt(0)
+                                        .toUpperCase()}
+                                </span>
+                            </div>
+                            <span className="text-sm text-slate-600 font-medium hidden sm:block">
+                                {session?.user?.name}
                             </span>
                         </div>
                     </div>
@@ -228,19 +282,19 @@ export default function EditLinktreePage() {
 
             {/* Main Content */}
             <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200">
                     <div className="mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        <h2 className="text-2xl font-bold text-slate-800 mb-2">
                             Edit Linktree UMKM Anda
                         </h2>
-                        <p className="text-gray-600">
+                        <p className="text-slate-600">
                             Perbarui informasi dasar untuk halaman linktree UMKM
                             Anda
                         </p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
                             {error}
                         </div>
                     )}
@@ -253,7 +307,7 @@ export default function EditLinktreePage() {
                         <div>
                             <label
                                 htmlFor="title"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 Judul Linktree *
                             </label>
@@ -262,7 +316,7 @@ export default function EditLinktreePage() {
                                 id="title"
                                 {...register("title")}
                                 placeholder="Contoh: Warung Makan Ibu Sari"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             {errors.title && (
                                 <p className="mt-1 text-sm text-red-600">
@@ -275,7 +329,7 @@ export default function EditLinktreePage() {
                         <div>
                             <label
                                 htmlFor="slug"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 URL Slug *
                             </label>
@@ -288,14 +342,14 @@ export default function EditLinktreePage() {
                                     {errors.slug.message}
                                 </p>
                             )}
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-slate-500">
                                 URL unik untuk halaman linktree Anda
                             </p>
                         </div>
 
                         {/* Photo */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-slate-700 mb-2">
                                 Foto Profil
                             </label>
 
@@ -312,9 +366,11 @@ export default function EditLinktreePage() {
                                             setSelectedFile(null);
                                             setPreviewUrl(null);
                                         }}
-                                        className="mr-2"
+                                        className="mr-2 h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300"
                                     />
-                                    URL Gambar
+                                    <span className="text-sm text-slate-700 font-medium">
+                                        URL Gambar
+                                    </span>
                                 </label>
                                 <label className="flex items-center">
                                     <input
@@ -325,9 +381,11 @@ export default function EditLinktreePage() {
                                         onChange={(e) => {
                                             setPhotoMethod("upload");
                                         }}
-                                        className="mr-2"
+                                        className="mr-2 h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300"
                                     />
-                                    Upload File
+                                    <span className="text-sm text-slate-700 font-medium">
+                                        Upload File
+                                    </span>
                                 </label>
                             </div>
 
@@ -338,9 +396,9 @@ export default function EditLinktreePage() {
                                         id="photo"
                                         {...register("photo")}
                                         placeholder="https://example.com/foto-umkm.jpg"
-                                        className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                        className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                                     />
-                                    <p className="mt-1 text-sm text-gray-500">
+                                    <p className="mt-1 text-sm text-slate-500">
                                         Masukkan URL gambar yang akan
                                         ditampilkan sebagai foto profil
                                     </p>
@@ -351,9 +409,9 @@ export default function EditLinktreePage() {
                                         type="file"
                                         accept="image/*"
                                         onChange={handleFileChange}
-                                        className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                        className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                                     />
-                                    <p className="mt-1 text-sm text-gray-500">
+                                    <p className="mt-1 text-sm text-slate-500">
                                         Format: JPG, PNG, GIF, WebP. Maksimal
                                         2MB
                                     </p>
@@ -361,7 +419,7 @@ export default function EditLinktreePage() {
                                     {/* Preview */}
                                     {previewUrl && (
                                         <div className="mt-3">
-                                            <p className="text-sm text-gray-600 mb-2">
+                                            <p className="text-sm text-slate-600 mb-2">
                                                 Preview:
                                             </p>
                                             <Image
@@ -369,7 +427,7 @@ export default function EditLinktreePage() {
                                                 alt="Preview"
                                                 width={120}
                                                 height={120}
-                                                className="rounded-full object-cover border-4 border-white shadow-lg"
+                                                className="rounded-xl object-cover border border-slate-200 shadow-sm"
                                             />
                                         </div>
                                     )}
@@ -390,16 +448,16 @@ export default function EditLinktreePage() {
                                     type="checkbox"
                                     id="isActive"
                                     {...register("isActive")}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded"
                                 />
                                 <label
                                     htmlFor="isActive"
-                                    className="ml-2 block text-sm text-gray-700"
+                                    className="ml-2 block text-sm text-slate-700 font-medium"
                                 >
                                     Aktifkan halaman linktree
                                 </label>
                             </div>
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-slate-500">
                                 Jika dicentang, halaman linktree akan dapat
                                 diakses publik
                             </p>
@@ -409,14 +467,14 @@ export default function EditLinktreePage() {
                         <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                             <Link
                                 href="/dashboard"
-                                className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-center"
+                                className="w-full sm:w-auto px-6 py-3 border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 font-medium text-center"
                             >
                                 Batal
                             </Link>
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-600 hover:to-teal-600 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg hover:shadow-xl"
                             >
                                 {isLoading
                                     ? "Menyimpan..."

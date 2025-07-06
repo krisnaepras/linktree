@@ -267,7 +267,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
                                     <Icon
-                                        icon="material-symbols:people-outline"
+                                        icon="ph:users"
                                         className="w-5 h-5 flex-shrink-0"
                                     />
                                 </div>
@@ -351,7 +351,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             {/* Article Categories */}
                             <Link
                                 href="/admin/article-categories"
-                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-purple-50 hover:text-purple-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-purple-200 ${
+                                className={`flex items-center px-4 py-3 text-slate-600 hover:bg-gray-50 hover:text-gray-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-gray-200 ${
                                     desktopSidebarCollapsed
                                         ? "lg:justify-center lg:px-3"
                                         : ""
@@ -364,7 +364,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             >
                                 <div className="w-6 h-6 flex items-center justify-center">
                                     <Icon
-                                        icon="material-symbols:folder-special-outline"
+                                        icon="ph:folder"
                                         className="w-5 h-5 flex-shrink-0"
                                     />
                                 </div>

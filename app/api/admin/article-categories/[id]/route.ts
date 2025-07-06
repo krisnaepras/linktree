@@ -6,9 +6,7 @@ import { z } from "zod";
 
 const categorySchema = z.object({
     name: z.string().min(1, "Name is required").max(50, "Name too long"),
-    description: z.string().optional(),
-    icon: z.string().optional(),
-    color: z.string().optional()
+    description: z.string().optional()
 });
 
 // GET /api/admin/article-categories/[id] - Get single article category
@@ -137,9 +135,7 @@ export async function PUT(
             data: {
                 name: validatedData.name,
                 slug,
-                description: validatedData.description || null,
-                icon: validatedData.icon || null,
-                color: validatedData.color || null
+                description: validatedData.description || null
             }
         });
 

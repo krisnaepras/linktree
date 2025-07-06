@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Icon } from "@iconify/react";
 import AdminLayout from "@/components/AdminLayout";
 import Swal from "sweetalert2";
 import Image from "next/image";
@@ -163,19 +164,7 @@ function CategoryModal({
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-600 transition-colors"
                     >
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <Icon icon="ph:x" className="w-6 h-6" />
                     </button>
                 </div>
 
@@ -297,26 +286,10 @@ function CategoryModal({
                         >
                             {isLoading ? (
                                 <span className="flex items-center">
-                                    <svg
+                                    <Icon
+                                        icon="ph:spinner"
                                         className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                        ></circle>
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                        ></path>
-                                    </svg>
+                                    />
                                     Menyimpan...
                                 </span>
                             ) : category ? (
@@ -362,19 +335,7 @@ function CategoryDetailModal({
                             onClick={onClose}
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                         >
-                            <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            <Icon icon="ph:x" className="w-6 h-6" />
                         </button>
                     </div>
                 </div>
@@ -849,53 +810,20 @@ export default function AdminCategoriesPage() {
     const getSortIcon = (column: "name" | "createdAt" | "detailLinktrees") => {
         if (sortBy !== column) {
             return (
-                <svg
+                <Icon
+                    icon="ph:arrows-up-down"
                     className="w-4 h-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                </svg>
+                />
             );
         }
 
         if (sortOrder === "asc") {
             return (
-                <svg
-                    className="w-4 h-4 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 15l7-7 7 7"
-                    />
-                </svg>
+                <Icon icon="ph:caret-up" className="w-4 h-4 text-blue-600" />
             );
         } else {
             return (
-                <svg
-                    className="w-4 h-4 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                    />
-                </svg>
+                <Icon icon="ph:caret-down" className="w-4 h-4 text-blue-600" />
             );
         }
     };
@@ -935,19 +863,10 @@ export default function AdminCategoriesPage() {
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3">
                             <div className="relative">
-                                <svg
+                                <Icon
+                                    icon="ph:magnifying-glass"
                                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
-                                </svg>
+                                />
                                 <input
                                     type="text"
                                     placeholder="Cari kategori..."
@@ -962,19 +881,7 @@ export default function AdminCategoriesPage() {
                                 onClick={handleCreateCategory}
                                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                <svg
-                                    className="w-4 h-4 mr-2"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                    />
-                                </svg>
+                                <Icon icon="ph:plus" className="w-4 h-4 mr-2" />
                                 Tambah Kategori
                             </button>
                         </div>
@@ -1093,19 +1000,10 @@ export default function AdminCategoriesPage() {
                                                             </span>
                                                         )
                                                     ) : (
-                                                        <svg
+                                                        <Icon
+                                                            icon="ph:tag"
                                                             className="w-4 h-4 text-gray-400"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                                strokeWidth={2}
-                                                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                                                            />
-                                                        </svg>
+                                                        />
                                                     )}
                                                 </div>
                                             </div>
@@ -1140,25 +1038,10 @@ export default function AdminCategoriesPage() {
                                                     className="inline-flex items-center px-3 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                                     title="Lihat detail kategori"
                                                 >
-                                                    <svg
+                                                    <Icon
+                                                        icon="ph:eye"
                                                         className="w-4 h-4 mr-1"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                        />
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                        />
-                                                    </svg>
+                                                    />
                                                     Detail
                                                 </button>
                                                 <button
@@ -1170,19 +1053,10 @@ export default function AdminCategoriesPage() {
                                                     className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                                     title="Edit kategori"
                                                 >
-                                                    <svg
+                                                    <Icon
+                                                        icon="ph:pencil"
                                                         className="w-4 h-4 mr-1"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                                        />
-                                                    </svg>
+                                                    />
                                                     Edit
                                                 </button>
                                                 <button
@@ -1208,19 +1082,10 @@ export default function AdminCategoriesPage() {
                                                             : "Hapus kategori"
                                                     }
                                                 >
-                                                    <svg
+                                                    <Icon
+                                                        icon="ph:trash"
                                                         className="w-4 h-4 mr-1"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                                        />
-                                                    </svg>
+                                                    />
                                                     Hapus
                                                 </button>
                                             </div>
@@ -1326,19 +1191,10 @@ export default function AdminCategoriesPage() {
                                         onClick={handleCreateCategory}
                                         className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                     >
-                                        <svg
+                                        <Icon
+                                            icon="ph:plus"
                                             className="w-4 h-4 mr-2"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                            />
-                                        </svg>
+                                        />
                                         Tambah Kategori Pertama
                                     </button>
                                 </div>

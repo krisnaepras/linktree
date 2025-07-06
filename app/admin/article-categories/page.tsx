@@ -6,16 +6,9 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Icon } from "@iconify/react";
 import AdminLayout from "@/components/AdminLayout";
 import Swal from "sweetalert2";
-import {
-    PlusIcon,
-    PencilIcon,
-    TrashIcon,
-    TagIcon,
-    EyeIcon,
-    XMarkIcon
-} from "@heroicons/react/24/outline";
 
 const categorySchema = z.object({
     name: z
@@ -25,9 +18,7 @@ const categorySchema = z.object({
     description: z
         .string()
         .max(200, "Deskripsi maksimal 200 karakter")
-        .optional(),
-    icon: z.string().optional(),
-    color: z.string().optional()
+        .optional()
 });
 
 type CategoryFormData = z.infer<typeof categorySchema>;
@@ -37,25 +28,12 @@ type ArticleCategory = {
     name: string;
     slug: string;
     description: string | null;
-    icon: string | null;
-    color: string | null;
     createdAt: string;
     updatedAt: string;
     _count: {
         articles: number;
     };
 };
-
-const colorOptions = [
-    { name: "Biru", value: "#3B82F6", preview: "bg-blue-500" },
-    { name: "Ungu", value: "#8B5CF6", preview: "bg-purple-500" },
-    { name: "Kuning", value: "#F59E0B", preview: "bg-yellow-500" },
-    { name: "Hijau", value: "#10B981", preview: "bg-green-500" },
-    { name: "Merah", value: "#EF4444", preview: "bg-red-500" },
-    { name: "Pink", value: "#EC4899", preview: "bg-pink-500" },
-    { name: "Indigo", value: "#6366F1", preview: "bg-indigo-500" },
-    { name: "Teal", value: "#14B8A6", preview: "bg-teal-500" }
-];
 
 export default function ArticleCategoriesPage() {
     const { data: session } = useSession();
@@ -66,19 +44,19 @@ export default function ArticleCategoriesPage() {
     const [editingCategory, setEditingCategory] =
         useState<ArticleCategory | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [sortBy, setSortBy] = useState<"name" | "articles" | "createdAt">(
+        "name"
+    );
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
-        watch,
-        setValue
+        formState: { errors }
     } = useForm<CategoryFormData>({
         resolver: zodResolver(categorySchema)
     });
-
-    const watchedColor = watch("color");
 
     // Fetch categories
     const fetchCategories = async () => {
@@ -211,9 +189,7 @@ export default function ArticleCategoriesPage() {
         setEditingCategory(category);
         reset({
             name: category.name,
-            description: category.description || "",
-            icon: category.icon || "",
-            color: category.color || ""
+            description: category.description || ""
         });
         setShowModal(true);
     };
@@ -223,11 +199,65 @@ export default function ArticleCategoriesPage() {
         setEditingCategory(null);
         reset({
             name: "",
-            description: "",
-            icon: "",
-            color: ""
+            description: ""
         });
         setShowModal(true);
+    };
+
+    // Sort categories
+    const sortedCategories = [...categories].sort((a, b) => {
+        let aValue: string | number;
+        let bValue: string | number;
+
+        switch (sortBy) {
+            case "name":
+                aValue = a.name.toLowerCase();
+                bValue = b.name.toLowerCase();
+                break;
+            case "articles":
+                aValue = a._count.articles;
+                bValue = a._count.articles;
+                break;
+            case "createdAt":
+                aValue = new Date(a.createdAt).getTime();
+                bValue = new Date(b.createdAt).getTime();
+                break;
+            default:
+                return 0;
+        }
+
+        if (sortOrder === "asc") {
+            return aValue > bValue ? 1 : -1;
+        } else {
+            return aValue < bValue ? 1 : -1;
+        }
+    });
+
+    // Handle sort column click
+    const handleSort = (column: "name" | "articles" | "createdAt") => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortBy(column);
+            setSortOrder("asc");
+        }
+    };
+
+    // Get sort icon
+    const getSortIcon = (column: "name" | "articles" | "createdAt") => {
+        if (sortBy !== column) {
+            return (
+                <Icon
+                    icon="ph:arrows-up-down"
+                    className="w-4 h-4 text-gray-400"
+                />
+            );
+        }
+        return sortOrder === "asc" ? (
+            <Icon icon="ph:caret-up" className="w-4 h-4 text-blue-600" />
+        ) : (
+            <Icon icon="ph:caret-down" className="w-4 h-4 text-blue-600" />
+        );
     };
 
     if (!session?.user) {
@@ -249,10 +279,9 @@ export default function ArticleCategoriesPage() {
                     </div>
                     <button
                         onClick={handleCreate}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-sm hover:shadow-md"
                     >
-                        <PlusIcon className="h-5 w-5" />
-                        Tambah Kategori
+                        + Tambah Kategori
                     </button>
                 </div>
 
@@ -267,7 +296,11 @@ export default function ArticleCategoriesPage() {
                         </div>
                     ) : categories.length === 0 ? (
                         <div className="p-8 text-center">
-                            <TagIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                            <div className="w-12 h-12 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span className="text-gray-500 font-semibold">
+                                    📁
+                                </span>
+                            </div>
                             <p className="text-gray-600">
                                 Belum ada kategori artikel
                             </p>
@@ -278,16 +311,40 @@ export default function ArticleCategoriesPage() {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Kategori
+                                            <button
+                                                onClick={() =>
+                                                    handleSort("name")
+                                                }
+                                                className="flex items-center gap-2 w-full text-left"
+                                            >
+                                                Kategori
+                                                {getSortIcon("name")}
+                                            </button>
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Deskripsi
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Artikel
+                                            <button
+                                                onClick={() =>
+                                                    handleSort("articles")
+                                                }
+                                                className="flex items-center gap-2 w-full text-left"
+                                            >
+                                                Artikel
+                                                {getSortIcon("articles")}
+                                            </button>
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Dibuat
+                                            <button
+                                                onClick={() =>
+                                                    handleSort("createdAt")
+                                                }
+                                                className="flex items-center gap-2 w-full text-left"
+                                            >
+                                                Dibuat
+                                                {getSortIcon("createdAt")}
+                                            </button>
                                         </th>
                                         <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi
@@ -295,33 +352,19 @@ export default function ArticleCategoriesPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {categories.map((category) => (
+                                    {sortedCategories.map((category) => (
                                         <tr
                                             key={category.id}
                                             className="hover:bg-gray-50"
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="flex items-center">
-                                                    <div className="flex items-center gap-3">
-                                                        <div
-                                                            className="w-4 h-4 rounded-full"
-                                                            style={{
-                                                                backgroundColor:
-                                                                    category.color ||
-                                                                    "#6B7280"
-                                                            }}
-                                                        />
-                                                        <span className="text-xl">
-                                                            {category.icon ||
-                                                                "📂"}
-                                                        </span>
-                                                        <div>
-                                                            <div className="text-sm font-medium text-gray-900">
-                                                                {category.name}
-                                                            </div>
-                                                            <div className="text-sm text-gray-500">
-                                                                {category.slug}
-                                                            </div>
+                                                    <div>
+                                                        <div className="text-sm font-medium text-gray-900">
+                                                            {category.name}
+                                                        </div>
+                                                        <div className="text-sm text-gray-500">
+                                                            {category.slug}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -333,7 +376,7 @@ export default function ArticleCategoriesPage() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                     {category._count.articles}{" "}
                                                     artikel
                                                 </span>
@@ -349,10 +392,10 @@ export default function ArticleCategoriesPage() {
                                                         onClick={() =>
                                                             handleEdit(category)
                                                         }
-                                                        className="text-blue-600 hover:text-blue-900 p-1 rounded"
+                                                        className="text-blue-600 hover:text-blue-900 px-2 py-1 rounded text-sm"
                                                         title="Edit kategori"
                                                     >
-                                                        <PencilIcon className="h-4 w-4" />
+                                                        Edit
                                                     </button>
                                                     <button
                                                         onClick={() =>
@@ -360,10 +403,10 @@ export default function ArticleCategoriesPage() {
                                                                 category
                                                             )
                                                         }
-                                                        className="text-red-600 hover:text-red-900 p-1 rounded"
+                                                        className="text-red-600 hover:text-red-900 px-2 py-1 rounded text-sm"
                                                         title="Hapus kategori"
                                                     >
-                                                        <TrashIcon className="h-4 w-4" />
+                                                        Hapus
                                                     </button>
                                                 </div>
                                             </td>
@@ -375,121 +418,177 @@ export default function ArticleCategoriesPage() {
                     )}
                 </div>
 
-                {/* Modal for Create/Edit Category */}
+                {/* Enhanced Modal for Create/Edit Category */}
                 {showModal && (
-                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
-                        <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+                        <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden transform animate-in zoom-in-95 duration-200">
                             <form onSubmit={handleSubmit(onSubmit)}>
-                                <div className="px-6 py-4 border-b border-gray-200">
+                                {/* Enhanced Header */}
+                                <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                                     <div className="flex justify-between items-center">
-                                        <h3 className="text-lg font-medium text-gray-900">
-                                            {editingCategory
-                                                ? "Edit Kategori"
-                                                : "Tambah Kategori"}
-                                        </h3>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-gray-900">
+                                                {editingCategory
+                                                    ? "Edit Kategori Artikel"
+                                                    : "Tambah Kategori Artikel"}
+                                            </h3>
+                                            <p className="text-sm text-gray-600 mt-1">
+                                                {editingCategory
+                                                    ? "Perbarui informasi kategori artikel"
+                                                    : "Buat kategori artikel baru untuk mengorganisir konten"}
+                                            </p>
+                                        </div>
                                         <button
                                             type="button"
                                             onClick={() => setShowModal(false)}
-                                            className="text-gray-400 hover:text-gray-600"
+                                            className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-all duration-200"
+                                            title="Tutup"
                                         >
-                                            <XMarkIcon className="h-6 w-6" />
+                                            <svg
+                                                className="w-5 h-5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            </svg>
                                         </button>
                                     </div>
                                 </div>
 
-                                <div className="p-6 space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Nama Kategori *
+                                {/* Enhanced Form Content */}
+                                <div className="p-6 space-y-6">
+                                    {/* Name Field with Enhanced Design */}
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-semibold text-gray-800">
+                                            Nama Kategori
+                                            <span className="text-red-500 ml-1">
+                                                *
+                                            </span>
                                         </label>
                                         <input
                                             type="text"
                                             {...register("name")}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                                            placeholder="Masukkan nama kategori"
+                                            className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl font-medium text-gray-900 placeholder-gray-400 transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none ${
+                                                errors.name
+                                                    ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-100"
+                                                    : "border-gray-200 hover:border-gray-300"
+                                            }`}
+                                            placeholder="Contoh: Teknologi, Bisnis, Edukasi"
                                         />
                                         {errors.name && (
-                                            <p className="mt-1 text-sm text-red-600">
-                                                {errors.name.message}
-                                            </p>
+                                            <div className="flex items-center gap-2 mt-2 text-red-600">
+                                                <svg
+                                                    className="w-4 h-4 flex-shrink-0"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 20 20"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                                <span className="text-sm font-medium">
+                                                    {errors.name.message}
+                                                </span>
+                                            </div>
                                         )}
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Maksimal 50 karakter. Gunakan nama
+                                            yang jelas dan mudah dipahami.
+                                        </p>
                                     </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    {/* Description Field with Enhanced Design */}
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-semibold text-gray-800">
                                             Deskripsi
+                                            <span className="text-gray-400 text-xs ml-1">
+                                                (Opsional)
+                                            </span>
                                         </label>
                                         <textarea
                                             {...register("description")}
-                                            rows={3}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                                            placeholder="Masukkan deskripsi kategori"
+                                            rows={4}
+                                            className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl font-medium text-gray-900 placeholder-gray-400 transition-all duration-200 resize-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none ${
+                                                errors.description
+                                                    ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-100"
+                                                    : "border-gray-200 hover:border-gray-300"
+                                            }`}
+                                            placeholder="Jelaskan kategori ini untuk membantu penulis memilih kategori yang tepat untuk artikel mereka..."
                                         />
                                         {errors.description && (
-                                            <p className="mt-1 text-sm text-red-600">
-                                                {errors.description.message}
-                                            </p>
+                                            <div className="flex items-center gap-2 mt-2 text-red-600">
+                                                <svg
+                                                    className="w-4 h-4 flex-shrink-0"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 20 20"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                                <span className="text-sm font-medium">
+                                                    {errors.description.message}
+                                                </span>
+                                            </div>
                                         )}
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Icon (Emoji)
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register("icon")}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                                            placeholder="Contoh: 💼, 💻, 📰"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Warna
-                                        </label>
-                                        <div className="grid grid-cols-4 gap-2">
-                                            {colorOptions.map((color) => (
-                                                <button
-                                                    key={color.value}
-                                                    type="button"
-                                                    onClick={() =>
-                                                        setValue(
-                                                            "color",
-                                                            color.value
-                                                        )
-                                                    }
-                                                    className={`h-10 w-full rounded-lg border-2 transition-all ${
-                                                        watchedColor ===
-                                                        color.value
-                                                            ? "border-gray-900 ring-2 ring-gray-900 ring-offset-2"
-                                                            : "border-gray-300 hover:border-gray-400"
-                                                    } ${color.preview}`}
-                                                    title={color.name}
-                                                />
-                                            ))}
-                                        </div>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Maksimal 200 karakter. Deskripsi
+                                            akan membantu dalam mengorganisir
+                                            artikel.
+                                        </p>
                                     </div>
                                 </div>
 
-                                <div className="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end gap-3">
+                                {/* Enhanced Footer */}
+                                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row justify-end gap-3">
                                     <button
                                         type="button"
                                         onClick={() => setShowModal(false)}
-                                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-gray-700 bg-white border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 transition-all duration-200"
                                     >
                                         Batal
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                                        className="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 border-2 border-transparent rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
                                     >
+                                        {isSubmitting && (
+                                            <svg
+                                                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    stroke="currentColor"
+                                                    strokeWidth="4"
+                                                ></circle>
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                                ></path>
+                                            </svg>
+                                        )}
                                         {isSubmitting
                                             ? "Menyimpan..."
                                             : editingCategory
-                                            ? "Perbarui"
-                                            : "Simpan"}
+                                            ? "Perbarui Kategori"
+                                            : "Buat Kategori"}
                                     </button>
                                 </div>
                             </form>

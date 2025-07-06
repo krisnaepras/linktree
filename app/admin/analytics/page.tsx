@@ -80,7 +80,7 @@ export default function Analytics() {
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex items-center">
                         <Icon
-                            icon="material-symbols:error-outline"
+                            icon="ph:warning"
                             className="w-5 h-5 text-red-600 mr-2"
                         />
                         <p className="text-red-700">{error}</p>
@@ -98,7 +98,7 @@ export default function Analytics() {
                     <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
                             <Icon
-                                icon="material-symbols:analytics-outline"
+                                icon="ph:chart-bar"
                                 className="w-6 h-6 text-white"
                             />
                         </div>
@@ -129,7 +129,7 @@ export default function Analytics() {
                                     </div>
                                     <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                         <Icon
-                                            icon="material-symbols:people-outline"
+                                            icon="ph:users"
                                             className="w-6 h-6 text-blue-600"
                                         />
                                     </div>
@@ -148,7 +148,7 @@ export default function Analytics() {
                                     </div>
                                     <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                                         <Icon
-                                            icon="material-symbols:link"
+                                            icon="ph:link"
                                             className="w-6 h-6 text-green-600"
                                         />
                                     </div>
@@ -167,7 +167,7 @@ export default function Analytics() {
                                     </div>
                                     <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                                         <Icon
-                                            icon="material-symbols:visibility-outline"
+                                            icon="ph:eye"
                                             className="w-6 h-6 text-purple-600"
                                         />
                                     </div>
@@ -186,7 +186,7 @@ export default function Analytics() {
                                     </div>
                                     <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                                         <Icon
-                                            icon="material-symbols:article-outline"
+                                            icon="ph:article"
                                             className="w-6 h-6 text-orange-600"
                                         />
                                     </div>

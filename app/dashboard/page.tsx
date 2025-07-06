@@ -183,10 +183,15 @@ export default function DashboardPage() {
 
     if (status === "loading" || loading) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading...</p>
+                    <div className="w-16 h-16 bg-gradient-to-r from-sky-500 to-teal-500 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-xl font-bold text-white">L</span>
+                    </div>
+                    <div className="w-8 h-8 border-2 border-sky-200 border-t-sky-600 rounded-full animate-spin mx-auto mb-2"></div>
+                    <p className="text-slate-600 font-medium">
+                        Memuat dashboard...
+                    </p>
                 </div>
             </div>
         );
@@ -197,35 +202,43 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-slate-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-4">
-                            {/* Logo Surabaya */}
-                            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                                <Image
-                                    src="/images/logos/logo_surabaya.png"
-                                    alt="Logo Surabaya"
-                                    width={24}
-                                    height={24}
-                                    className="rounded-sm"
-                                />
+                            {/* Logo Brand */}
+                            <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-teal-500 rounded-xl flex items-center justify-center">
+                                <span className="text-lg font-bold text-white">
+                                    L
+                                </span>
                             </div>
-                            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-                                LinkUMKM Dashboard
-                            </h1>
+                            <div>
+                                <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
+                                    LinkUMKM Dashboard
+                                </h1>
+                                <p className="text-xs text-slate-500 hidden sm:block">
+                                    Kelola UMKM Bongkaran
+                                </p>
+                            </div>
                         </div>
 
                         {/* User Dropdown */}
                         <div className="relative user-dropdown">
                             <button
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                                className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none"
+                                className="flex items-center space-x-3 text-slate-700 hover:text-slate-900 focus:outline-none bg-white/50 hover:bg-white/80 rounded-xl px-3 py-2 border border-slate-200"
                             >
-                                <span className="text-sm font-medium">
-                                    Halo, {session.user.name}!
+                                <div className="w-8 h-8 bg-gradient-to-r from-sky-500 to-teal-500 rounded-lg flex items-center justify-center">
+                                    <span className="text-white font-semibold text-sm">
+                                        {session.user.name
+                                            ?.charAt(0)
+                                            .toUpperCase()}
+                                    </span>
+                                </div>
+                                <span className="text-sm font-medium hidden sm:block">
+                                    {session.user.name}
                                 </span>
                                 <svg
                                     className={`w-4 h-4 transition-transform ${
@@ -246,12 +259,12 @@ export default function DashboardPage() {
 
                             {/* Dropdown Menu */}
                             {dropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                                <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200 z-50">
                                     <div className="py-1">
                                         {session.user.role === "ADMIN" && (
                                             <Link
                                                 href="/admin"
-                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                className="block px-4 py-2 text-sm text-slate-700 hover:bg-sky-50 hover:text-sky-700 rounded-lg mx-1"
                                                 onClick={() =>
                                                     setDropdownOpen(false)
                                                 }
@@ -283,7 +296,7 @@ export default function DashboardPage() {
                                         {session.user.role === "SUPERADMIN" && (
                                             <Link
                                                 href="/superadmin"
-                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                className="block px-4 py-2 text-sm text-slate-700 hover:bg-sky-50 hover:text-sky-700 rounded-lg mx-1"
                                                 onClick={() =>
                                                     setDropdownOpen(false)
                                                 }
@@ -308,7 +321,7 @@ export default function DashboardPage() {
                                         )}
                                         <Link
                                             href="/dashboard/profile"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            className="block px-4 py-2 text-sm text-slate-700 hover:bg-sky-50 hover:text-sky-700 rounded-lg mx-1"
                                             onClick={() =>
                                                 setDropdownOpen(false)
                                             }
@@ -330,10 +343,10 @@ export default function DashboardPage() {
                                                 <span>Profil</span>
                                             </div>
                                         </Link>
-                                        <hr className="my-1 border-gray-200" />
+                                        <hr className="my-1 border-slate-200" />
                                         <button
                                             onClick={handleSignOut}
-                                            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                                            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg mx-1"
                                         >
                                             <div className="flex items-center space-x-2">
                                                 <svg
@@ -363,10 +376,10 @@ export default function DashboardPage() {
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-3xl font-bold text-slate-800 mb-2">
                         Halo, {session.user.name}!
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-slate-600">
                         Kelola linktree UMKM Anda dengan mudah
                     </p>
                 </div>
@@ -374,11 +387,11 @@ export default function DashboardPage() {
                 {/* Statistics Cards */}
                 {linktree && (
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200 hover:shadow-md">
                             <div className="flex items-center">
-                                <div className="p-2 bg-blue-100 rounded-lg">
+                                <div className="p-3 bg-gradient-to-r from-sky-100 to-sky-200 rounded-xl">
                                     <svg
-                                        className="w-6 h-6 text-blue-600"
+                                        className="w-6 h-6 text-sky-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -392,21 +405,21 @@ export default function DashboardPage() {
                                     </svg>
                                 </div>
                                 <div className="ml-4">
-                                    <p className="text-sm font-medium text-gray-600">
+                                    <p className="text-sm font-medium text-slate-600">
                                         Total Link
                                     </p>
-                                    <p className="text-2xl font-bold text-gray-900">
+                                    <p className="text-2xl font-bold text-slate-800">
                                         {stats.totalLinks}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200 hover:shadow-md">
                             <div className="flex items-center">
-                                <div className="p-2 bg-green-100 rounded-lg">
+                                <div className="p-3 bg-gradient-to-r from-emerald-100 to-emerald-200 rounded-xl">
                                     <svg
-                                        className="w-6 h-6 text-green-600"
+                                        className="w-6 h-6 text-emerald-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -420,21 +433,21 @@ export default function DashboardPage() {
                                     </svg>
                                 </div>
                                 <div className="ml-4">
-                                    <p className="text-sm font-medium text-gray-600">
+                                    <p className="text-sm font-medium text-slate-600">
                                         Link Tampil
                                     </p>
-                                    <p className="text-2xl font-bold text-gray-900">
+                                    <p className="text-2xl font-bold text-slate-800">
                                         {stats.visibleLinks}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200 hover:shadow-md">
                             <div className="flex items-center">
-                                <div className="p-2 bg-yellow-100 rounded-lg">
+                                <div className="p-3 bg-gradient-to-r from-slate-100 to-slate-200 rounded-xl">
                                     <svg
-                                        className="w-6 h-6 text-yellow-600"
+                                        className="w-6 h-6 text-slate-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -448,29 +461,29 @@ export default function DashboardPage() {
                                     </svg>
                                 </div>
                                 <div className="ml-4">
-                                    <p className="text-sm font-medium text-gray-600">
+                                    <p className="text-sm font-medium text-slate-600">
                                         Link Tersembunyi
                                     </p>
-                                    <p className="text-2xl font-bold text-gray-900">
+                                    <p className="text-2xl font-bold text-slate-800">
                                         {stats.hiddenLinks}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200 hover:shadow-md">
                             <div className="flex items-center">
                                 <div
-                                    className={`p-2 rounded-lg ${
+                                    className={`p-3 rounded-xl ${
                                         stats.activeLinktree
-                                            ? "bg-green-100"
-                                            : "bg-red-100"
+                                            ? "bg-gradient-to-r from-emerald-100 to-emerald-200"
+                                            : "bg-gradient-to-r from-red-100 to-red-200"
                                     }`}
                                 >
                                     <svg
                                         className={`w-6 h-6 ${
                                             stats.activeLinktree
-                                                ? "text-green-600"
+                                                ? "text-emerald-600"
                                                 : "text-red-600"
                                         }`}
                                         fill="none"
@@ -486,13 +499,13 @@ export default function DashboardPage() {
                                     </svg>
                                 </div>
                                 <div className="ml-4">
-                                    <p className="text-sm font-medium text-gray-600">
+                                    <p className="text-sm font-medium text-slate-600">
                                         Status
                                     </p>
                                     <p
                                         className={`text-2xl font-bold ${
                                             stats.activeLinktree
-                                                ? "text-green-600"
+                                                ? "text-emerald-600"
                                                 : "text-red-600"
                                         }`}
                                     >
@@ -508,33 +521,35 @@ export default function DashboardPage() {
 
                 {!linktree ? (
                     // No Linktree Created Yet
-                    <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-8 text-center border border-slate-200">
                         <div className="max-w-md mx-auto">
                             <div className="mb-6">
-                                <svg
-                                    className="mx-auto h-16 w-16 text-gray-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={1}
-                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                                    />
-                                </svg>
+                                <div className="w-16 h-16 bg-gradient-to-r from-sky-100 to-teal-100 rounded-2xl mx-auto flex items-center justify-center">
+                                    <svg
+                                        className="w-8 h-8 text-sky-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
-                            <h3 className="text-xl font-medium text-gray-900 mb-4">
+                            <h3 className="text-xl font-semibold text-slate-800 mb-4">
                                 Buat Linktree Pertama Anda
                             </h3>
-                            <p className="text-gray-600 mb-6">
+                            <p className="text-slate-600 mb-6">
                                 Anda belum memiliki linktree. Mulai dengan
                                 membuat linktree pertama untuk UMKM Anda.
                             </p>
                             <Link
                                 href="/dashboard/linktree/create"
-                                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-600 hover:to-teal-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl"
                             >
                                 Buat Linktree Baru
                             </Link>
@@ -545,17 +560,17 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 space-y-6">
                             {/* Linktree Info Card */}
-                            <div className="bg-white rounded-lg shadow-md p-6">
+                            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-xl font-semibold text-gray-900">
+                                    <h3 className="text-xl font-semibold text-slate-800">
                                         Linktree Anda
                                     </h3>
                                     <div className="flex items-center space-x-3">
                                         <span
-                                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                                                 linktree.isActive
-                                                    ? "bg-green-100 text-green-800"
-                                                    : "bg-red-100 text-red-800"
+                                                    ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                                                    : "bg-red-100 text-red-700 border border-red-200"
                                             }`}
                                         >
                                             {linktree.isActive
@@ -564,7 +579,7 @@ export default function DashboardPage() {
                                         </span>
                                         <Link
                                             href={`/dashboard/linktree/edit`}
-                                            className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                            className="inline-flex items-center px-3 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-sm font-medium rounded-lg border border-sky-200"
                                         >
                                             Edit
                                         </Link>
@@ -578,11 +593,11 @@ export default function DashboardPage() {
                                             alt="Linktree Photo"
                                             width={64}
                                             height={64}
-                                            className="rounded-lg object-cover"
+                                            className="rounded-xl object-cover border border-slate-200"
                                         />
                                     )}
                                     <div>
-                                        <h4 className="text-lg font-medium text-gray-900">
+                                        <h4 className="text-lg font-medium text-slate-800">
                                             {linktree.title}
                                         </h4>
                                         <div className="mt-2 mb-2">
@@ -591,7 +606,7 @@ export default function DashboardPage() {
                                         <Link
                                             href={`/${linktree.slug}`}
                                             target="_blank"
-                                            className="text-sm text-blue-600 hover:text-blue-700"
+                                            className="inline-flex items-center text-sm text-sky-600 hover:text-sky-700 font-medium"
                                         >
                                             Lihat Halaman Publik →
                                         </Link>
@@ -600,15 +615,15 @@ export default function DashboardPage() {
                             </div>
 
                             {/* Links Management */}
-                            <div className="bg-white rounded-lg shadow-md p-6">
+                            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200">
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                                    <h3 className="text-xl font-semibold text-gray-900">
+                                    <h3 className="text-xl font-semibold text-slate-800">
                                         Daftar Link (
                                         {linktree.detailLinktrees.length})
                                     </h3>
                                     <Link
                                         href="/dashboard/links/create"
-                                        className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                                        className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-600 hover:to-teal-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl"
                                     >
                                         <svg
                                             className="w-4 h-4 mr-2"
@@ -629,29 +644,46 @@ export default function DashboardPage() {
 
                                 {linktree.detailLinktrees.length === 0 ? (
                                     <div className="text-center py-8">
-                                        <p className="text-gray-600">
+                                        <div className="w-16 h-16 bg-gradient-to-r from-slate-100 to-slate-200 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                                            <svg
+                                                className="w-8 h-8 text-slate-500"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={1.5}
+                                                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <p className="text-slate-600">
                                             Belum ada link. Tambahkan link
                                             pertama Anda!
                                         </p>
                                     </div>
                                 ) : (
                                     <div>
-                                        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                            <div className="flex items-center space-x-2">
-                                                <svg
-                                                    className="w-5 h-5 text-blue-600"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                    />
-                                                </svg>
-                                                <p className="text-sm text-blue-800">
+                                        <div className="mb-4 p-4 bg-gradient-to-r from-sky-50 to-teal-50 border border-sky-200 rounded-xl">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center">
+                                                    <svg
+                                                        className="w-5 h-5 text-sky-600"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <p className="text-sm text-sky-700 font-medium">
                                                     Drag & drop untuk mengubah
                                                     urutan link
                                                 </p>

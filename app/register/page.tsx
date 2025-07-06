@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +29,7 @@ export default function RegisterPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
+    const { data: session, status } = useSession();
 
     const {
         register,
@@ -36,6 +38,47 @@ export default function RegisterPage() {
     } = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema)
     });
+
+    // Auto-redirect if user is already authenticated
+    useEffect(() => {
+        if (status === "loading") return;
+
+        if (session?.user?.role) {
+            const role = session.user.role;
+            let redirectPath = "/dashboard";
+
+            if (role === "SUPERADMIN") {
+                redirectPath = "/superadmin";
+            } else if (role === "ADMIN") {
+                redirectPath = "/admin";
+            } else {
+                redirectPath = "/dashboard";
+            }
+
+            router.push(redirectPath);
+        }
+    }, [session, status, router]);
+
+    // Show loading state while checking authentication
+    if (status === "loading") {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center px-4">
+                <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
+                        <p className="text-slate-600">
+                            Memeriksa status login...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Don't render register form if user is already authenticated
+    if (session?.user) {
+        return null;
+    }
 
     const onSubmit = async (data: RegisterFormData) => {
         setIsLoading(true);

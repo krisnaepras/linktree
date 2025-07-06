@@ -37,6 +37,19 @@ export async function GET() {
                     select: {
                         articles: true
                     }
+                },
+                articles: {
+                    select: {
+                        id: true,
+                        title: true,
+                        status: true,
+                        viewCount: true,
+                        publishedAt: true
+                    },
+                    orderBy: {
+                        createdAt: "desc"
+                    },
+                    take: 3 // Get latest 3 articles for preview
                 }
             },
             orderBy: {

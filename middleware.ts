@@ -5,6 +5,39 @@ export default withAuth(
         const { token } = req.nextauth;
         const { pathname } = req.nextUrl;
 
+        // Handle root path redirect for authenticated users
+        if (pathname === "/" && token?.role) {
+            if (token.role === "SUPERADMIN") {
+                return Response.redirect(new URL("/superadmin", req.url));
+            }
+            if (token.role === "ADMIN") {
+                return Response.redirect(new URL("/admin", req.url));
+            }
+            return Response.redirect(new URL("/dashboard", req.url));
+        }
+
+        // Handle login page redirect for authenticated users
+        if (pathname === "/login" && token?.role) {
+            if (token.role === "SUPERADMIN") {
+                return Response.redirect(new URL("/superadmin", req.url));
+            }
+            if (token.role === "ADMIN") {
+                return Response.redirect(new URL("/admin", req.url));
+            }
+            return Response.redirect(new URL("/dashboard", req.url));
+        }
+
+        // Handle register page redirect for authenticated users
+        if (pathname === "/register" && token?.role) {
+            if (token.role === "SUPERADMIN") {
+                return Response.redirect(new URL("/superadmin", req.url));
+            }
+            if (token.role === "ADMIN") {
+                return Response.redirect(new URL("/admin", req.url));
+            }
+            return Response.redirect(new URL("/dashboard", req.url));
+        }
+
         // Redirect ADMIN and SUPERADMIN away from user dashboard
         if (pathname.startsWith("/dashboard")) {
             if (token?.role === "ADMIN") {
@@ -32,21 +65,32 @@ export default withAuth(
     {
         callbacks: {
             authorized: ({ token, req }) => {
+                const { pathname } = req.nextUrl;
+
+                // Allow access to root, login, and register pages
+                if (
+                    pathname === "/" ||
+                    pathname === "/login" ||
+                    pathname === "/register"
+                ) {
+                    return true;
+                }
+
                 // For dashboard routes, allow all authenticated users
                 // The middleware function will handle role-based redirects
-                if (req.nextUrl.pathname.startsWith("/dashboard")) {
+                if (pathname.startsWith("/dashboard")) {
                     return !!token;
                 }
 
                 // Protect admin routes
-                if (req.nextUrl.pathname.startsWith("/admin")) {
+                if (pathname.startsWith("/admin")) {
                     return (
                         !!token && ["ADMIN", "SUPERADMIN"].includes(token.role)
                     );
                 }
 
                 // Protect superadmin routes
-                if (req.nextUrl.pathname.startsWith("/superadmin")) {
+                if (pathname.startsWith("/superadmin")) {
                     return !!token && token.role === "SUPERADMIN";
                 }
 
@@ -58,6 +102,9 @@ export default withAuth(
 
 export const config = {
     matcher: [
+        "/",
+        "/login",
+        "/register",
         "/dashboard/:path*",
         "/admin/:path*",
         "/superadmin/:path*",

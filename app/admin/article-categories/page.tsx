@@ -33,6 +33,13 @@ type ArticleCategory = {
     _count: {
         articles: number;
     };
+    articles?: {
+        id: string;
+        title: string;
+        status: string;
+        viewCount: number;
+        publishedAt: string | null;
+    }[];
 };
 
 export default function ArticleCategoriesPage() {
@@ -50,6 +57,13 @@ export default function ArticleCategoriesPage() {
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [itemsPerPage] = useState(10); // Default items per page
     const [currentPage, setCurrentPage] = useState(1);
+
+    // Detail modal state
+    const [showDetailModal, setShowDetailModal] = useState(false);
+    const [detailCategory, setDetailCategory] =
+        useState<ArticleCategory | null>(null);
+    const [detailArticles, setDetailArticles] = useState<any[]>([]);
+    const [loadingDetail, setLoadingDetail] = useState(false);
 
     const {
         register,
@@ -206,6 +220,34 @@ export default function ArticleCategoriesPage() {
         setShowModal(true);
     };
 
+    // Handle detail category
+    const handleDetail = async (category: ArticleCategory) => {
+        setDetailCategory(category);
+        setShowDetailModal(true);
+        setLoadingDetail(true);
+
+        try {
+            const response = await fetch(
+                `/api/admin/article-categories/${category.id}/articles`
+            );
+            if (response.ok) {
+                const data = await response.json();
+                setDetailArticles(data);
+            } else {
+                throw new Error("Failed to fetch articles");
+            }
+        } catch (error) {
+            console.error("Error fetching articles:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Gagal mengambil data artikel",
+                icon: "error"
+            });
+        } finally {
+            setLoadingDetail(false);
+        }
+    };
+
     // Handle sort column click
     const handleSort = (column: "name" | "articles" | "createdAt") => {
         if (sortBy === column) {
@@ -245,7 +287,7 @@ export default function ArticleCategoriesPage() {
                 break;
             case "articles":
                 aValue = a._count.articles;
-                bValue = a._count.articles;
+                bValue = b._count.articles;
                 break;
             case "createdAt":
                 aValue = new Date(a.createdAt).getTime();
@@ -364,9 +406,6 @@ export default function ArticleCategoriesPage() {
                                             </button>
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Deskripsi
-                                        </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             <button
                                                 onClick={() =>
                                                     handleSort("articles")
@@ -376,6 +415,9 @@ export default function ArticleCategoriesPage() {
                                                 Artikel
                                                 {getSortIcon("articles")}
                                             </button>
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Status & Aktivitas
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             <button
@@ -401,42 +443,182 @@ export default function ArticleCategoriesPage() {
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="flex items-center">
-                                                    <div>
+                                                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                                        <Icon
+                                                            icon="ph:folder-simple"
+                                                            className="w-5 h-5 text-white"
+                                                        />
+                                                    </div>
+                                                    <div className="ml-3">
                                                         <div className="text-sm font-medium text-gray-900">
                                                             {category.name}
                                                         </div>
                                                         <div className="text-sm text-gray-500">
-                                                            {category.slug}
+                                                            /{category.slug}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-gray-900 max-w-xs truncate">
-                                                    {category.description ||
-                                                        "-"}
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center">
+                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            <Icon
+                                                                icon="ph:article"
+                                                                className="w-3 h-3 mr-1"
+                                                            />
+                                                            {
+                                                                category._count
+                                                                    .articles
+                                                            }{" "}
+                                                            artikel
+                                                        </span>
+                                                    </div>
+                                                    {category.articles &&
+                                                        category.articles
+                                                            .length > 0 && (
+                                                            <div className="text-xs text-gray-500">
+                                                                Artikel terbaru:{" "}
+                                                                {category.articles[0].title.substring(
+                                                                    0,
+                                                                    30
+                                                                )}
+                                                                ...
+                                                            </div>
+                                                        )}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                    {category._count.articles}{" "}
-                                                    artikel
-                                                </span>
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        {category._count
+                                                            .articles > 0 ? (
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                                                <Icon
+                                                                    icon="ph:check-circle"
+                                                                    className="w-3 h-3 mr-1"
+                                                                />
+                                                                Aktif
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                                                <Icon
+                                                                    icon="ph:circle-dashed"
+                                                                    className="w-3 h-3 mr-1"
+                                                                />
+                                                                Kosong
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    {category.articles &&
+                                                        category.articles
+                                                            .length > 0 && (
+                                                            <div className="text-xs text-gray-500">
+                                                                {
+                                                                    category.articles.filter(
+                                                                        (a) =>
+                                                                            a.status ===
+                                                                            "PUBLISHED"
+                                                                    ).length
+                                                                }{" "}
+                                                                published
+                                                                {category.articles.filter(
+                                                                    (a) =>
+                                                                        a.status ===
+                                                                        "DRAFT"
+                                                                ).length >
+                                                                    0 && (
+                                                                    <span className="ml-1">
+                                                                        •{" "}
+                                                                        {
+                                                                            category.articles.filter(
+                                                                                (
+                                                                                    a
+                                                                                ) =>
+                                                                                    a.status ===
+                                                                                    "DRAFT"
+                                                                            )
+                                                                                .length
+                                                                        }{" "}
+                                                                        draft
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                </div>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {new Date(
-                                                    category.createdAt
-                                                ).toLocaleDateString("id-ID")}
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm text-gray-900">
+                                                        {new Date(
+                                                            category.createdAt
+                                                        ).toLocaleDateString(
+                                                            "id-ID",
+                                                            {
+                                                                day: "2-digit",
+                                                                month: "short",
+                                                                year: "numeric"
+                                                            }
+                                                        )}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500">
+                                                        {new Date(
+                                                            category.createdAt
+                                                        ).toLocaleTimeString(
+                                                            "id-ID",
+                                                            {
+                                                                hour: "2-digit",
+                                                                minute: "2-digit"
+                                                            }
+                                                        )}
+                                                    </div>
+                                                    {category.updatedAt !==
+                                                        category.createdAt && (
+                                                        <div className="text-xs text-gray-400">
+                                                            Diperbarui:{" "}
+                                                            {new Date(
+                                                                category.updatedAt
+                                                            ).toLocaleDateString(
+                                                                "id-ID",
+                                                                {
+                                                                    day: "2-digit",
+                                                                    month: "short"
+                                                                }
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div className="flex items-center gap-2 justify-end">
+                                                    {/* Detail Button */}
+                                                    <button
+                                                        onClick={() =>
+                                                            handleDetail(
+                                                                category
+                                                            )
+                                                        }
+                                                        className="inline-flex items-center px-3 py-1.5 border border-emerald-300 shadow-sm text-xs font-medium rounded-md text-emerald-700 bg-white hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                                                        title="Lihat artikel dalam kategori"
+                                                    >
+                                                        <Icon
+                                                            icon="ph:eye"
+                                                            className="w-4 h-4 mr-1"
+                                                        />
+                                                        Detail
+                                                    </button>
+
                                                     <button
                                                         onClick={() =>
                                                             handleEdit(category)
                                                         }
-                                                        className="text-blue-600 hover:text-blue-900 px-2 py-1 rounded text-sm"
+                                                        className="inline-flex items-center px-3 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                                         title="Edit kategori"
                                                     >
+                                                        <Icon
+                                                            icon="ph:pencil"
+                                                            className="w-4 h-4 mr-1"
+                                                        />
                                                         Edit
                                                     </button>
                                                     <button
@@ -445,9 +627,13 @@ export default function ArticleCategoriesPage() {
                                                                 category
                                                             )
                                                         }
-                                                        className="text-red-600 hover:text-red-900 px-2 py-1 rounded text-sm"
+                                                        className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                                         title="Hapus kategori"
                                                     >
+                                                        <Icon
+                                                            icon="ph:trash"
+                                                            className="w-4 h-4 mr-1"
+                                                        />
                                                         Hapus
                                                     </button>
                                                 </div>
@@ -704,6 +890,202 @@ export default function ArticleCategoriesPage() {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* Detail Modal - Show Articles in Category */}
+                {showDetailModal && detailCategory && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+                        <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform animate-in zoom-in-95 duration-200">
+                            {/* Header */}
+                            <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-green-50">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-gray-900">
+                                            Artikel dalam Kategori:{" "}
+                                            {detailCategory.name}
+                                        </h3>
+                                        <p className="text-sm text-gray-600 mt-1">
+                                            {detailCategory.description ||
+                                                "Daftar artikel yang termasuk dalam kategori ini"}
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowDetailModal(false)
+                                        }
+                                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-all duration-200"
+                                        title="Tutup"
+                                    >
+                                        <svg
+                                            className="w-5 h-5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M6 18L18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                                {loadingDetail ? (
+                                    <div className="flex items-center justify-center py-12">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+                                        <p className="ml-4 text-gray-600">
+                                            Memuat artikel...
+                                        </p>
+                                    </div>
+                                ) : detailArticles.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                            <Icon
+                                                icon="ph:article"
+                                                className="w-8 h-8 text-gray-400"
+                                            />
+                                        </div>
+                                        <p className="text-gray-500 text-lg">
+                                            Belum ada artikel dalam kategori ini
+                                        </p>
+                                        <p className="text-gray-400 text-sm mt-2">
+                                            Artikel akan muncul di sini ketika
+                                            sudah ditambahkan ke kategori ini
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {detailArticles.map((article) => (
+                                            <div
+                                                key={article.id}
+                                                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <div className="flex-1">
+                                                        <h4 className="font-semibold text-gray-900 mb-2">
+                                                            {article.title}
+                                                        </h4>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-500">
+                                                            <span
+                                                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                                                    article.status ===
+                                                                    "PUBLISHED"
+                                                                        ? "bg-green-100 text-green-800"
+                                                                        : "bg-yellow-100 text-yellow-800"
+                                                                }`}
+                                                            >
+                                                                <Icon
+                                                                    icon={
+                                                                        article.status ===
+                                                                        "PUBLISHED"
+                                                                            ? "ph:check-circle"
+                                                                            : "ph:clock"
+                                                                    }
+                                                                    className="w-3 h-3 mr-1"
+                                                                />
+                                                                {article.status ===
+                                                                "PUBLISHED"
+                                                                    ? "Dipublikasi"
+                                                                    : "Draft"}
+                                                            </span>
+                                                            <span className="flex items-center">
+                                                                <Icon
+                                                                    icon="ph:eye"
+                                                                    className="w-3 h-3 mr-1"
+                                                                />
+                                                                {article.viewCount ||
+                                                                    0}{" "}
+                                                                views
+                                                            </span>
+                                                            {article.publishedAt && (
+                                                                <span className="flex items-center">
+                                                                    <Icon
+                                                                        icon="ph:calendar"
+                                                                        className="w-3 h-3 mr-1"
+                                                                    />
+                                                                    {new Date(
+                                                                        article.publishedAt
+                                                                    ).toLocaleDateString(
+                                                                        "id-ID",
+                                                                        {
+                                                                            day: "2-digit",
+                                                                            month: "short",
+                                                                            year: "numeric"
+                                                                        }
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        {article.excerpt && (
+                                                            <p className="text-gray-600 text-sm mt-2 line-clamp-2">
+                                                                {
+                                                                    article.excerpt
+                                                                }
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-2 ml-4">
+                                                        <button
+                                                            onClick={() =>
+                                                                window.open(
+                                                                    `/articles/${article.slug}`,
+                                                                    "_blank"
+                                                                )
+                                                            }
+                                                            className="inline-flex items-center px-3 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50"
+                                                            title="Lihat artikel"
+                                                        >
+                                                            <Icon
+                                                                icon="ph:eye"
+                                                                className="w-4 h-4 mr-1"
+                                                            />
+                                                            Lihat
+                                                        </button>
+                                                        <button
+                                                            onClick={() =>
+                                                                window.open(
+                                                                    `/admin/articles/${article.id}`,
+                                                                    "_blank"
+                                                                )
+                                                            }
+                                                            className="inline-flex items-center px-3 py-1.5 border border-emerald-300 shadow-sm text-xs font-medium rounded-md text-emerald-700 bg-white hover:bg-emerald-50"
+                                                            title="Edit artikel"
+                                                        >
+                                                            <Icon
+                                                                icon="ph:pencil"
+                                                                className="w-4 h-4 mr-1"
+                                                            />
+                                                            Edit
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Footer */}
+                            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                                <div className="text-sm text-gray-600">
+                                    Total {detailArticles.length} artikel dalam
+                                    kategori ini
+                                </div>
+                                <button
+                                    onClick={() => setShowDetailModal(false)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                                    Tutup
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}

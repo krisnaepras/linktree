@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ArticleCard from "@/components/ArticleCard";
+import HomePageRedirect from "@/components/HomePageRedirect";
 import { prisma } from "@/lib/prisma";
 import { Icon } from "@iconify/react";
 
@@ -72,6 +73,9 @@ export default async function Home() {
     const featuredArticles = await getFeaturedArticles();
     return (
         <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 relative overflow-hidden">
+            {/* Auto-redirect authenticated users */}
+            <HomePageRedirect />
+
             {/* Clean Modern Background */}
             <div className="absolute inset-0 pointer-events-none">
                 {/* Subtle Dot Pattern */}

@@ -35,10 +35,18 @@ export async function GET() {
             totalCategories,
             totalLinktrees,
             totalLinks,
+            totalArticles,
+            totalArticleCategories,
+            totalViews,
+            totalClicks,
             recentUsers,
             recentLinktrees,
+            recentArticles,
             popularCategories,
-            monthlyStats,
+            topLinktrees,
+            topArticles,
+            monthlyUserStats,
+            monthlyLinktreeStats,
             dailyStats
         ] = await Promise.all([
             // Total users
@@ -68,6 +76,18 @@ export async function GET() {
             // Total links
             prisma.detailLinktree.count(),
 
+            // Total articles
+            prisma.article.count(),
+
+            // Total article categories
+            prisma.articleCategory.count(),
+
+            // Total views across all linktrees
+            prisma.linktreeView.count(),
+
+            // Total clicks across all links
+            prisma.linkClick.count(),
+
             // Recent users (last 7 days)
             prisma.user.count({
                 where: {
@@ -79,6 +99,15 @@ export async function GET() {
 
             // Recent linktrees (last 7 days)
             prisma.linktree.count({
+                where: {
+                    createdAt: {
+                        gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+                    }
+                }
+            }),
+
+            // Recent articles (last 7 days)
+            prisma.article.count({
                 where: {
                     createdAt: {
                         gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -106,7 +135,59 @@ export async function GET() {
                 take: 5
             }),
 
-            // Monthly statistics (last 6 months)
+            // Top linktrees by views
+            prisma.linktree.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    slug: true,
+                    user: {
+                        select: {
+                            name: true,
+                            email: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            views: true,
+                            detailLinktrees: true
+                        }
+                    }
+                },
+                orderBy: {
+                    views: {
+                        _count: "desc"
+                    }
+                },
+                take: 5
+            }),
+
+            // Top articles by views
+            prisma.article.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    slug: true,
+                    viewCount: true,
+                    author: {
+                        select: {
+                            name: true,
+                            email: true
+                        }
+                    },
+                    category: {
+                        select: {
+                            name: true
+                        }
+                    }
+                },
+                orderBy: {
+                    viewCount: "desc"
+                },
+                take: 5
+            }),
+
+            // Monthly user statistics (last 6 months)
             prisma.user.groupBy({
                 by: ["createdAt"],
                 where: {
@@ -119,8 +200,21 @@ export async function GET() {
                 }
             }),
 
+            // Monthly linktree statistics (last 6 months)
+            prisma.linktree.groupBy({
+                by: ["createdAt"],
+                where: {
+                    createdAt: {
+                        gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
+                    }
+                },
+                _count: {
+                    id: true
+                }
+            }),
+
             // Daily statistics (last 7 days)
-            prisma.user.groupBy({
+            prisma.linktreeView.groupBy({
                 by: ["createdAt"],
                 where: {
                     createdAt: {
@@ -170,14 +264,22 @@ export async function GET() {
                 totalCategories,
                 totalLinktrees,
                 totalLinks,
+                totalArticles,
+                totalArticleCategories,
+                totalViews,
+                totalClicks,
                 recentUsers,
                 recentLinktrees,
+                recentArticles,
                 userGrowthRate: Math.round(userGrowthRate * 100) / 100
             },
             popularCategories,
+            topLinktrees,
+            topArticles,
             trends: {
-                monthly: monthlyStats,
-                daily: dailyStats
+                monthlyUsers: monthlyUserStats,
+                monthlyLinktrees: monthlyLinktreeStats,
+                dailyViews: dailyStats
             },
             ratios: {
                 linktreesPerUser:
@@ -191,6 +293,14 @@ export async function GET() {
                 activeUsersPercentage:
                     totalUsers > 0
                         ? Math.round((totalLinktrees / totalUsers) * 100)
+                        : 0,
+                clickThroughRate:
+                    totalViews > 0
+                        ? Math.round((totalClicks / totalViews) * 100) / 100
+                        : 0,
+                averageClicksPerLink:
+                    totalLinks > 0
+                        ? Math.round((totalClicks / totalLinks) * 100) / 100
                         : 0
             }
         };

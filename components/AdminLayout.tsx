@@ -90,7 +90,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
     if (status === "loading") {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
         );
@@ -111,7 +111,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
 
     return (
-        <div className="admin-layout h-screen bg-gray-50 flex overflow-hidden">
+        <div className="admin-layout h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex overflow-hidden">
             {/* Mobile sidebar overlay */}
             {sidebarOpen && (
                 <div
@@ -582,7 +582,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 </header>
 
                 {/* Page Content */}
-                <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+                <main className="flex-1 overflow-y-auto bg-gradient-to-br from-sky-50 via-white to-teal-50 p-6">
                     {children}
                 </main>
             </div>

@@ -52,19 +52,9 @@ export default function SuperAdminDashboard() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [loading, setLoading] = useState(true);
-    const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
         fetchDashboardData();
-    }, []);
-
-    // Real-time clock update
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(interval);
     }, []);
 
     const fetchDashboardData = async () => {
@@ -133,51 +123,51 @@ export default function SuperAdminDashboard() {
     return (
         <AdminLayout>
             <div className="space-y-8">
-                {/* Header - Enhanced with harmonious colors */}
-                <div className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded-xl p-6 text-white shadow-xl">
+                {/* Header - Enhanced */}
+                <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-xl p-6 text-white">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-3xl font-bold">
                                 Super Admin Dashboard
                             </h1>
-                            <p className="mt-2 text-slate-200">
+                            <p className="mt-2 text-blue-100">
                                 Selamat datang, {session?.user?.name} - Kelola
                                 semua sistem dengan kontrol penuh
                             </p>
                             <div className="mt-4 flex items-center space-x-6 text-sm">
                                 <div className="flex items-center">
-                                    <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2"></div>
+                                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
                                     <span>Sistem Aktif</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <div className="w-2 h-2 bg-amber-400 rounded-full mr-2"></div>
+                                    <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
                                     <span>Database Terhubung</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <div className="w-2 h-2 bg-cyan-400 rounded-full mr-2"></div>
+                                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
                                     <span>Auto-Backup Aktif</span>
                                 </div>
                             </div>
                         </div>
                         <div className="text-right">
                             <div className="text-2xl font-bold">
-                                {currentTime.toLocaleDateString("id-ID", {
+                                {new Date().toLocaleDateString("id-ID", {
                                     weekday: "long",
                                     year: "numeric",
                                     month: "long",
                                     day: "numeric"
                                 })}
                             </div>
-                            <div className="text-slate-300 text-sm mt-1">
-                                {currentTime.toLocaleTimeString("id-ID")}
+                            <div className="text-blue-200 text-sm mt-1">
+                                {new Date().toLocaleTimeString("id-ID")}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Enhanced Stats Cards with harmonious colors */}
+                {/* Enhanced Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {/* Total Users - Harmonious Blue */}
+                    {/* Total Users - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -188,12 +178,12 @@ export default function SuperAdminDashboard() {
                                     {stats.overview.totalUsers.toLocaleString()}
                                 </p>
                                 <div className="flex items-center mt-2">
-                                    <span className="text-sm text-emerald-600 font-medium">
+                                    <span className="text-sm text-green-600 font-medium">
                                         +{stats.overview.recentUsers} minggu ini
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-sky-500 to-sky-600 rounded-xl">
+                            <div className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
                                 <Icon
                                     icon="ph:users"
                                     className="w-8 h-8 text-white"
@@ -206,8 +196,8 @@ export default function SuperAdminDashboard() {
                                     <div
                                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                             stats.overview.userGrowthRate > 0
-                                                ? "bg-emerald-100 text-emerald-800"
-                                                : "bg-rose-100 text-rose-800"
+                                                ? "bg-green-100 text-green-800"
+                                                : "bg-red-100 text-red-800"
                                         }`}
                                     >
                                         {stats.overview.userGrowthRate > 0
@@ -226,7 +216,7 @@ export default function SuperAdminDashboard() {
                         )}
                     </div>
 
-                    {/* Total Categories - Harmonious Emerald */}
+                    {/* Total Categories - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -242,7 +232,7 @@ export default function SuperAdminDashboard() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl">
+                            <div className="p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-xl">
                                 <Icon
                                     icon="ph:folder"
                                     className="w-8 h-8 text-white"
@@ -251,7 +241,7 @@ export default function SuperAdminDashboard() {
                         </div>
                     </div>
 
-                    {/* Total Linktrees - Harmonious Violet */}
+                    {/* Total Linktrees - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -262,13 +252,13 @@ export default function SuperAdminDashboard() {
                                     {stats.overview.totalLinktrees.toLocaleString()}
                                 </p>
                                 <div className="flex items-center mt-2">
-                                    <span className="text-sm text-violet-600 font-medium">
+                                    <span className="text-sm text-purple-600 font-medium">
                                         +{stats.overview.recentLinktrees} minggu
                                         ini
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl">
+                            <div className="p-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
                                 <Icon
                                     icon="ph:link"
                                     className="w-8 h-8 text-white"
@@ -277,7 +267,7 @@ export default function SuperAdminDashboard() {
                         </div>
                     </div>
 
-                    {/* Total Links - Harmonious Amber */}
+                    {/* Total Links - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -288,12 +278,12 @@ export default function SuperAdminDashboard() {
                                     {stats.overview.totalLinks.toLocaleString()}
                                 </p>
                                 <div className="flex items-center mt-2">
-                                    <span className="text-sm text-amber-600 font-medium">
+                                    <span className="text-sm text-orange-600 font-medium">
                                         Semua link aktif
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl">
+                            <div className="p-4 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
                                 <Icon
                                     icon="ph:article"
                                     className="w-8 h-8 text-white"
@@ -303,7 +293,7 @@ export default function SuperAdminDashboard() {
                     </div>
                 </div>
 
-                {/* User Role Distribution with harmonious colors */}
+                {/* User Role Distribution */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -312,7 +302,7 @@ export default function SuperAdminDashboard() {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-emerald-500 rounded-full mr-3"></div>
+                                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                                     <span className="text-sm text-gray-600">
                                         Regular Users
                                     </span>
@@ -323,7 +313,7 @@ export default function SuperAdminDashboard() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-sky-500 rounded-full mr-3"></div>
+                                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                                     <span className="text-sm text-gray-600">
                                         Admins
                                     </span>
@@ -334,7 +324,7 @@ export default function SuperAdminDashboard() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-violet-500 rounded-full mr-3"></div>
+                                    <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
                                     <span className="text-sm text-gray-600">
                                         Super Admins
                                     </span>
@@ -385,7 +375,7 @@ export default function SuperAdminDashboard() {
                         <div className="space-y-3">
                             <a
                                 href="/superadmin/users"
-                                className="flex items-center p-3 text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
+                                className="flex items-center p-3 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             >
                                 <Icon
                                     icon="ph:users"
@@ -397,7 +387,7 @@ export default function SuperAdminDashboard() {
                             </a>
                             <a
                                 href="/superadmin/categories"
-                                className="flex items-center p-3 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                                className="flex items-center p-3 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                             >
                                 <Icon
                                     icon="ph:folder"
@@ -409,7 +399,7 @@ export default function SuperAdminDashboard() {
                             </a>
                             <a
                                 href="/superadmin/articles"
-                                className="flex items-center p-3 text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                                className="flex items-center p-3 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                             >
                                 <Icon
                                     icon="ph:article"
@@ -421,7 +411,7 @@ export default function SuperAdminDashboard() {
                             </a>
                             <a
                                 href="/superadmin/system-cleanup"
-                                className="flex items-center p-3 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                                className="flex items-center p-3 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                             >
                                 <Icon
                                     icon="material-symbols:cleaning-services-outline"
@@ -433,7 +423,7 @@ export default function SuperAdminDashboard() {
                             </a>
                             <button
                                 onClick={fetchDashboardData}
-                                className="flex items-center p-3 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors w-full text-left"
+                                className="flex items-center p-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors w-full text-left"
                             >
                                 <Icon
                                     icon="ph:arrow-clockwise"

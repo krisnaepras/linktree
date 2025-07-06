@@ -19,19 +19,14 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        // Get basic analytics data
-        const [
-            totalUsers,
-            totalLinktrees,
-            totalArticles,
-            totalViews,
-            topLinktrees,
-            topArticles
-        ] = await Promise.all([
+        // Get analytics data
+        const promises = [
+            // Base analytics data
             prisma.user.count(),
             prisma.linktree.count(),
             prisma.article.count(),
             prisma.linktreeView.count(),
+            // Top 5 linktrees by views
             prisma.linktree.findMany({
                 select: {
                     id: true,
@@ -55,6 +50,109 @@ export async function GET(request: NextRequest) {
                 },
                 take: 5
             }),
+            // Top 5 articles by views
+            prisma.article.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    slug: true,
+                    viewCount: true,
+                    author: {
+                        select: {
+                            name: true
+                        }
+                    }
+                },
+                orderBy: {
+                    viewCount: "desc"
+                },
+                take: 5
+            })
+        ];
+
+        // Add SuperAdmin specific queries
+        if (userRole === "SUPERADMIN") {
+            promises.push(
+                // User role distribution
+                prisma.user.groupBy({
+                    by: ['role'],
+                    _count: {
+                        id: true
+                    }
+                }),
+                // Categories count
+                prisma.category.count(),
+                // Links count
+                prisma.link.count(),
+                // Top categories
+                prisma.category.findMany({
+                    select: {
+                        name: true,
+                        _count: {
+                            select: {
+                                detailLinktrees: true
+                            }
+                        }
+                    },
+                    orderBy: {
+                        detailLinktrees: {
+                            _count: "desc"
+                        }
+                    },
+                    take: 6
+                })
+            );
+        }
+
+        const results = await Promise.all(promises);
+        
+        const [
+            totalUsers,
+            totalLinktrees,
+            totalArticles,
+            totalViews,
+            topLinktrees,
+            topArticles,
+            ...superAdminData
+        ] = results;
+            // Total users
+            prisma.user.count(),
+
+            // Total linktrees
+            prisma.linktree.count(),
+
+            // Total articles
+            prisma.article.count(),
+
+            // Total views (sum of all linktree views)
+            prisma.linktreeView.count(),
+
+            // Top 5 linktrees by views
+            prisma.linktree.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    slug: true,
+                    user: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            views: true
+                        }
+                    }
+                },
+                orderBy: {
+                    views: {
+                        _count: "desc"
+                    }
+                },
+                take: 5
+            }),
+
+            // Top 5 articles by views
             prisma.article.findMany({
                 select: {
                     id: true,
@@ -74,7 +172,7 @@ export async function GET(request: NextRequest) {
             })
         ]);
 
-        // Get recent activity
+        // Get recent activity (last 10 activities)
         const recentLinktrees = await prisma.linktree.findMany({
             select: {
                 id: true,
@@ -109,7 +207,7 @@ export async function GET(request: NextRequest) {
             take: 5
         });
 
-        // Combine recent activity
+        // Combine and sort recent activity
         const recentActivity = [
             ...recentLinktrees.map((linktree) => ({
                 type: "New Linktree",
@@ -151,56 +249,19 @@ export async function GET(request: NextRequest) {
 
         // Add SuperAdmin specific data
         if (userRole === "SUPERADMIN") {
-            const [
-                userRoleDistribution,
-                categoriesCount,
-                linksCount,
-                topCategoriesData
-            ] = await Promise.all([
-                prisma.user.groupBy({
-                    by: ["role"],
-                    _count: {
-                        id: true
-                    }
-                }),
-                prisma.category.count(),
-                prisma.detailLinktree.count(),
-                prisma.category.findMany({
-                    select: {
-                        name: true,
-                        _count: {
-                            select: {
-                                detailLinktrees: true
-                            }
-                        }
-                    },
-                    orderBy: {
-                        detailLinktrees: {
-                            _count: "desc"
-                        }
-                    },
-                    take: 6
-                })
-            ]);
+            const [userRoleDistribution, categoriesCount, linksCount, topCategoriesData] = [
+                totalUsers, totalLinktrees, totalArticles, totalViews, topLinktrees, topArticles
+            ].slice(6) as any[];
 
             // Process user role distribution
-            const userRoles = userRoleDistribution.reduce(
-                (acc: any, role: any) => {
-                    acc[role.role] = role._count.id;
-                    return acc;
-                },
-                {}
-            );
-
-            const totalRegularUsers = userRoles.USER || 0;
-            const totalAdmins = userRoles.ADMIN || 0;
-            const totalSuperAdmins = userRoles.SUPERADMIN || 0;
+            const userRoles = userRoleDistribution.reduce((acc: any, role: any) => {
+                acc[role.role] = role._count.id;
+                return acc;
+            }, {});
 
             // Calculate averages
-            const averageLinksPerLinktree =
-                totalLinktrees > 0 ? linksCount / totalLinktrees : 0;
-            const averageViewsPerLinktree =
-                totalLinktrees > 0 ? totalViews / totalLinktrees : 0;
+            const averageLinksPerLinktree = totalLinktrees > 0 ? linksCount / totalLinktrees : 0;
+            const averageViewsPerLinktree = totalLinktrees > 0 ? totalViews / totalLinktrees : 0;
 
             // Process top categories
             const topCategories = topCategoriesData.map((category: any) => ({
@@ -208,10 +269,11 @@ export async function GET(request: NextRequest) {
                 count: category._count.detailLinktrees
             }));
 
-            const userGrowthRate =
-                totalUsers > 0
-                    ? Math.round((totalRegularUsers / totalUsers) * 100)
-                    : 0;
+            // Calculate user growth rate (simplified - you might want to make this more sophisticated)
+            const totalRegularUsers = userRoles.USER || 0;
+            const totalAdmins = userRoles.ADMIN || 0;
+            const totalSuperAdmins = userRoles.SUPERADMIN || 0;
+            const userGrowthRate = totalUsers > 0 ? Math.round((totalRegularUsers / totalUsers) * 100) : 0;
 
             const analyticsData = {
                 ...baseAnalyticsData,
@@ -220,7 +282,7 @@ export async function GET(request: NextRequest) {
                     totalAdmins,
                     totalSuperAdmins,
                     userGrowthRate,
-                    monthlyGrowth: []
+                    monthlyGrowth: [] // Could be enhanced with actual monthly data
                 },
                 systemStats: {
                     totalCategories: categoriesCount,

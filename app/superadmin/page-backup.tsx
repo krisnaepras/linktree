@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import AdminLayout from "@/components/AdminLayout";
-import { Icon } from "@iconify/react";
 
 type User = {
     id: string;
@@ -52,19 +51,9 @@ export default function SuperAdminDashboard() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [loading, setLoading] = useState(true);
-    const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
         fetchDashboardData();
-    }, []);
-
-    // Real-time clock update
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(interval);
     }, []);
 
     const fetchDashboardData = async () => {
@@ -133,51 +122,50 @@ export default function SuperAdminDashboard() {
     return (
         <AdminLayout>
             <div className="space-y-8">
-                {/* Header - Enhanced with harmonious colors */}
-                <div className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded-xl p-6 text-white shadow-xl">
+                {/* Header - Enhanced */}
+                <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-xl p-6 text-white">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-3xl font-bold">
                                 Super Admin Dashboard
                             </h1>
-                            <p className="mt-2 text-slate-200">
-                                Selamat datang, {session?.user?.name} - Kelola
-                                semua sistem dengan kontrol penuh
+                            <p className="mt-2 text-blue-100">
+                                Selamat datang, {session?.user?.name} - Kelola semua sistem dengan kontrol penuh
                             </p>
                             <div className="mt-4 flex items-center space-x-6 text-sm">
                                 <div className="flex items-center">
-                                    <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2"></div>
+                                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
                                     <span>Sistem Aktif</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <div className="w-2 h-2 bg-amber-400 rounded-full mr-2"></div>
+                                    <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
                                     <span>Database Terhubung</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <div className="w-2 h-2 bg-cyan-400 rounded-full mr-2"></div>
+                                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
                                     <span>Auto-Backup Aktif</span>
                                 </div>
                             </div>
                         </div>
                         <div className="text-right">
                             <div className="text-2xl font-bold">
-                                {currentTime.toLocaleDateString("id-ID", {
-                                    weekday: "long",
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric"
+                                {new Date().toLocaleDateString('id-ID', { 
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
                                 })}
                             </div>
-                            <div className="text-slate-300 text-sm mt-1">
-                                {currentTime.toLocaleTimeString("id-ID")}
+                            <div className="text-blue-200 text-sm mt-1">
+                                {new Date().toLocaleTimeString('id-ID')}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Enhanced Stats Cards with harmonious colors */}
+                {/* Enhanced Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {/* Total Users - Harmonious Blue */}
+                    {/* Total Users - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -188,35 +176,39 @@ export default function SuperAdminDashboard() {
                                     {stats.overview.totalUsers.toLocaleString()}
                                 </p>
                                 <div className="flex items-center mt-2">
-                                    <span className="text-sm text-emerald-600 font-medium">
+                                    <span className="text-sm text-green-600 font-medium">
                                         +{stats.overview.recentUsers} minggu ini
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-sky-500 to-sky-600 rounded-xl">
-                                <Icon
-                                    icon="ph:users"
+                            <div className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
+                                <svg
                                     className="w-8 h-8 text-white"
-                                />
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"
+                                    />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                </svg>
                             </div>
                         </div>
                         {stats.overview.userGrowthRate !== 0 && (
                             <div className="mt-4 pt-4 border-t border-gray-100">
                                 <div className="flex items-center">
-                                    <div
-                                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                            stats.overview.userGrowthRate > 0
-                                                ? "bg-emerald-100 text-emerald-800"
-                                                : "bg-rose-100 text-rose-800"
-                                        }`}
-                                    >
-                                        {stats.overview.userGrowthRate > 0
-                                            ? "↗"
-                                            : "↘"}
-                                        {Math.abs(
-                                            stats.overview.userGrowthRate
-                                        )}
-                                        %
+                                    <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                        stats.overview.userGrowthRate > 0
+                                            ? "bg-green-100 text-green-800"
+                                            : "bg-red-100 text-red-800"
+                                    }`}>
+                                        {stats.overview.userGrowthRate > 0 ? "↗" : "↘"}
+                                        {Math.abs(stats.overview.userGrowthRate)}%
                                     </div>
                                     <span className="text-sm text-gray-500 ml-2">
                                         vs minggu lalu
@@ -226,7 +218,7 @@ export default function SuperAdminDashboard() {
                         )}
                     </div>
 
-                    {/* Total Categories - Harmonious Emerald */}
+                    {/* Total Categories - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -242,16 +234,25 @@ export default function SuperAdminDashboard() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl">
-                                <Icon
-                                    icon="ph:folder"
+                            <div className="p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-xl">
+                                <svg
                                     className="w-8 h-8 text-white"
-                                />
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                    />
+                                </svg>
                             </div>
                         </div>
                     </div>
 
-                    {/* Total Linktrees - Harmonious Violet */}
+                    {/* Total Linktrees - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -262,22 +263,30 @@ export default function SuperAdminDashboard() {
                                     {stats.overview.totalLinktrees.toLocaleString()}
                                 </p>
                                 <div className="flex items-center mt-2">
-                                    <span className="text-sm text-violet-600 font-medium">
-                                        +{stats.overview.recentLinktrees} minggu
-                                        ini
+                                    <span className="text-sm text-purple-600 font-medium">
+                                        +{stats.overview.recentLinktrees} minggu ini
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl">
-                                <Icon
-                                    icon="ph:link"
+                            <div className="p-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
+                                <svg
                                     className="w-8 h-8 text-white"
-                                />
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                    />
+                                </svg>
                             </div>
                         </div>
                     </div>
 
-                    {/* Total Links - Harmonious Amber */}
+                    {/* Total Links - Enhanced */}
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -288,31 +297,126 @@ export default function SuperAdminDashboard() {
                                     {stats.overview.totalLinks.toLocaleString()}
                                 </p>
                                 <div className="flex items-center mt-2">
-                                    <span className="text-sm text-amber-600 font-medium">
+                                    <span className="text-sm text-orange-600 font-medium">
                                         Semua link aktif
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl">
-                                <Icon
-                                    icon="ph:article"
+                            <div className="p-4 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
+                                <svg
                                     className="w-8 h-8 text-white"
-                                />
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                    Kategori aktif
+                                </p>
+                            </div>
+                            <div className="p-3 bg-green-100 rounded-full">
+                                <svg
+                                    className="w-6 h-6 text-green-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Total Linktrees */}
+                    <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-purple-500">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-gray-600">
+                                    Total Linktrees
+                                </p>
+                                <p className="text-3xl font-bold text-gray-900">
+                                    {stats.overview.totalLinktrees}
+                                </p>
+                                <p className="text-sm text-gray-500 mt-1">
+                                    +{stats.overview.recentLinktrees} minggu ini
+                                </p>
+                            </div>
+                            <div className="p-3 bg-purple-100 rounded-full">
+                                <svg
+                                    className="w-6 h-6 text-purple-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Total Links */}
+                    <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-gray-600">
+                                    Total Links
+                                </p>
+                                <p className="text-3xl font-bold text-gray-900">
+                                    {stats.overview.totalLinks}
+                                </p>
+                                <p className="text-sm text-gray-500 mt-1">
+                                    Semua link aktif
+                                </p>
+                            </div>
+                            <div className="p-3 bg-orange-100 rounded-full">
+                                <svg
+                                    className="w-6 h-6 text-orange-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                    />
+                                </svg>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* User Role Distribution with harmonious colors */}
+                {/* Secondary Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    {/* User Types */}
+                    <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Distribusi Pengguna
                         </h3>
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-emerald-500 rounded-full mr-3"></div>
+                                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                                     <span className="text-sm text-gray-600">
                                         Regular Users
                                     </span>
@@ -323,7 +427,7 @@ export default function SuperAdminDashboard() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-sky-500 rounded-full mr-3"></div>
+                                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                                     <span className="text-sm text-gray-600">
                                         Admins
                                     </span>
@@ -334,7 +438,7 @@ export default function SuperAdminDashboard() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className="w-3 h-3 bg-violet-500 rounded-full mr-3"></div>
+                                    <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
                                     <span className="text-sm text-gray-600">
                                         Super Admins
                                     </span>
@@ -346,11 +450,12 @@ export default function SuperAdminDashboard() {
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    {/* Activity Ratios */}
+                    <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                            Statistik Aktivitas
+                            Aktivitas Pengguna
                         </h3>
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-600">
                                     Linktrees per User
@@ -378,150 +483,119 @@ export default function SuperAdminDashboard() {
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    {/* Quick Actions */}
+                    <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                            Aksi Cepat SuperAdmin
+                            Aksi Cepat
                         </h3>
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             <a
                                 href="/superadmin/users"
-                                className="flex items-center p-3 text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
+                                className="block w-full px-4 py-2 text-left text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             >
-                                <Icon
-                                    icon="ph:users"
-                                    className="w-5 h-5 mr-3"
-                                />
-                                <span className="text-sm font-medium">
-                                    Kelola Pengguna
-                                </span>
+                                👥 Kelola Pengguna
                             </a>
                             <a
                                 href="/superadmin/categories"
-                                className="flex items-center p-3 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                                className="block w-full px-4 py-2 text-left text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                             >
-                                <Icon
-                                    icon="ph:folder"
-                                    className="w-5 h-5 mr-3"
-                                />
-                                <span className="text-sm font-medium">
-                                    Kelola Kategori
-                                </span>
+                                🏷️ Kelola Kategori
                             </a>
                             <a
                                 href="/superadmin/articles"
-                                className="flex items-center p-3 text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                                className="block w-full px-4 py-2 text-left text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                             >
-                                <Icon
-                                    icon="ph:article"
-                                    className="w-5 h-5 mr-3"
-                                />
-                                <span className="text-sm font-medium">
-                                    Kelola Artikel
-                                </span>
-                            </a>
-                            <a
-                                href="/superadmin/system-cleanup"
-                                className="flex items-center p-3 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
-                            >
-                                <Icon
-                                    icon="material-symbols:cleaning-services-outline"
-                                    className="w-5 h-5 mr-3"
-                                />
-                                <span className="text-sm font-medium">
-                                    System Cleanup
-                                </span>
+                                📝 Kelola Artikel
                             </a>
                             <button
                                 onClick={fetchDashboardData}
-                                className="flex items-center p-3 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors w-full text-left"
+                                className="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
                             >
-                                <Icon
-                                    icon="ph:arrow-clockwise"
-                                    className="w-5 h-5 mr-3"
-                                />
-                                <span className="text-sm font-medium">
-                                    Refresh Data
-                                </span>
+                                🔄 Refresh Data
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Recent Activity */}
+                {/* Lists */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Recent Users */}
-                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                        <div className="flex items-center justify-between mb-6">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-gray-900">
-                                Pengguna Terbaru
+                                Pengguna & Admin Terbaru
                             </h3>
                             <a
                                 href="/superadmin/users"
-                                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                                className="text-sm text-blue-600 hover:text-blue-700"
                             >
                                 Lihat Semua
                             </a>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             {users.slice(0, 5).map((user) => (
                                 <div
                                     key={user.id}
                                     className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                                 >
                                     <div className="flex items-center">
-                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
-                                            <span className="text-sm font-medium text-white">
+                                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mr-3">
+                                            <span className="text-sm font-medium text-gray-600">
                                                 {user.name
                                                     .charAt(0)
                                                     .toUpperCase()}
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-gray-900">
+                                            <p className="font-medium text-gray-900">
                                                 {user.name}
                                             </p>
-                                            <p className="text-xs text-gray-500">
-                                                {user._count.linktrees}{" "}
-                                                linktree(s)
+                                            <p className="text-sm text-gray-600">
+                                                {user.email}
                                             </p>
                                         </div>
                                     </div>
-                                    <span
-                                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                            user.role === "SUPERADMIN"
-                                                ? "bg-purple-100 text-purple-800"
+                                    <div className="text-right">
+                                        <span
+                                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                                user.role === "SUPERADMIN"
+                                                    ? "bg-purple-100 text-purple-800"
+                                                    : user.role === "ADMIN"
+                                                    ? "bg-blue-100 text-blue-800"
+                                                    : "bg-green-100 text-green-800"
+                                            }`}
+                                        >
+                                            {user.role === "SUPERADMIN"
+                                                ? "Super Admin"
                                                 : user.role === "ADMIN"
-                                                ? "bg-blue-100 text-blue-800"
-                                                : "bg-green-100 text-green-800"
-                                        }`}
-                                    >
-                                        {user.role === "SUPERADMIN"
-                                            ? "Super Admin"
-                                            : user.role === "ADMIN"
-                                            ? "Admin"
-                                            : "User"}
-                                    </span>
+                                                ? "Admin"
+                                                : "User"}
+                                        </span>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {user._count.linktrees} linktree(s)
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
 
                     {/* Popular Categories */}
-                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                        <div className="flex items-center justify-between mb-6">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-gray-900">
                                 Kategori Populer
                             </h3>
                             <a
                                 href="/superadmin/categories"
-                                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                                className="text-sm text-blue-600 hover:text-blue-700"
                             >
                                 Lihat Semua
                             </a>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             {stats.popularCategories.map((category, index) => (
                                 <div
                                     key={category.id}
@@ -544,29 +618,31 @@ export default function SuperAdminDashboard() {
                                                         className="w-8 h-8 object-cover rounded-lg"
                                                     />
                                                 ) : (
-                                                    <span className="text-lg">
+                                                    <span className="text-2xl">
                                                         {category.icon}
                                                     </span>
                                                 )
                                             ) : (
-                                                <Icon
-                                                    icon="ph:folder"
-                                                    className="w-6 h-6 text-gray-400"
-                                                />
+                                                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                                    <span className="text-gray-400 text-lg">
+                                                        📄
+                                                    </span>
+                                                </div>
                                             )}
                                         </div>
                                         <div className="ml-3">
-                                            <h4 className="font-medium text-gray-900 text-sm">
+                                            <p className="font-medium text-gray-900">
                                                 {category.name}
-                                            </h4>
-                                            <p className="text-xs text-gray-500">
-                                                {
-                                                    category._count
-                                                        .detailLinktrees
-                                                }{" "}
-                                                link
                                             </p>
                                         </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-medium text-gray-900">
+                                            {category._count.detailLinktrees}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            links
+                                        </p>
                                     </div>
                                 </div>
                             ))}

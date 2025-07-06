@@ -476,7 +476,7 @@ export default function AdminArticlesPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {article.author.name}
-                                        </td>{" "}
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {article.viewCount}
                                         </td>

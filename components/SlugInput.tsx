@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 interface SlugInputProps {
     placeholder?: string;
     className?: string;
@@ -13,27 +11,14 @@ export default function SlugInput({
     className,
     register
 }: SlugInputProps) {
-    const [currentHost, setCurrentHost] = useState("");
-
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            setCurrentHost(window.location.host);
-        }
-    }, []);
-
     return (
-        <div className="flex">
-            <span className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-lg">
-                {currentHost || "yoursite.com"}/
-            </span>
-            <input
-                type="text"
-                placeholder={placeholder}
-                className={`flex-1 px-3 py-2 border border-gray-400 rounded-r-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white ${
-                    className || ""
-                }`}
-                {...(register || {})}
-            />
-        </div>
+        <input
+            type="text"
+            placeholder={placeholder}
+            className={`w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${
+                className || ""
+            }`}
+            {...(register || {})}
+        />
     );
 }

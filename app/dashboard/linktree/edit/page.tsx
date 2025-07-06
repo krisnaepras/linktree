@@ -47,16 +47,21 @@ export default function EditLinktreePage() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [photoMethod, setPhotoMethod] = useState<"url" | "upload">("url");
+    const [currentHost, setCurrentHost] = useState("");
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         setValue,
-        reset
+        reset,
+        watch
     } = useForm<EditLinktreeFormData>({
         resolver: zodResolver(editLinktreeSchema)
     });
+
+    // Watch the slug field for preview
+    const watchedSlug = watch("slug", "");
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -68,6 +73,12 @@ export default function EditLinktreePage() {
             fetchLinktree();
         }
     }, [status, router]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setCurrentHost(window.location.host);
+        }
+    }, []);
 
     const fetchLinktree = async () => {
         try {
@@ -342,9 +353,18 @@ export default function EditLinktreePage() {
                                     {errors.slug.message}
                                 </p>
                             )}
-                            <p className="mt-1 text-sm text-slate-500">
+                            {watchedSlug && (
+                                <p className="mt-2 text-sm text-slate-600">
+                                    Preview:{" "}
+                                    <span className="font-medium text-sky-700">
+                                        {currentHost || "yoursite.com"}/
+                                        {watchedSlug}
+                                    </span>
+                                </p>
+                            )}
+                            {/* <p className="mt-1 text-sm text-slate-500">
                                 URL unik untuk halaman linktree Anda
-                            </p>
+                            </p> */}
                         </div>
 
                         {/* Photo */}

@@ -128,8 +128,14 @@ export default function ProfilePage() {
 
     if (status === "loading") {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-sky-500 to-teal-500 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-xl font-bold text-white">L</span>
+                    </div>
+                    <div className="w-8 h-8 border-2 border-sky-200 border-t-sky-600 rounded-full animate-spin mx-auto mb-2"></div>
+                    <p className="text-slate-600 font-medium">Memuat...</p>
+                </div>
             </div>
         );
     }
@@ -139,25 +145,45 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-slate-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-4">
                             <Link
                                 href="/dashboard"
-                                className="text-blue-600 hover:text-blue-700 font-medium"
+                                className="inline-flex items-center text-sky-600 hover:text-sky-700 font-medium bg-sky-50 hover:bg-sky-100 px-3 py-2 rounded-xl border border-sky-200"
                             >
-                                ← Kembali ke Dashboard
+                                <svg
+                                    className="w-4 h-4 mr-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                                    />
+                                </svg>
+                                Kembali ke Dashboard
                             </Link>
-                            <h1 className="text-xl font-semibold text-gray-900">
+                            <h1 className="text-xl font-semibold text-slate-800">
                                 Profil Pengguna
                             </h1>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <span className="text-sm text-gray-600">
-                                Halo, {session?.user?.name}!
+                            <div className="w-8 h-8 bg-gradient-to-r from-sky-500 to-teal-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-semibold text-sm">
+                                    {session?.user?.name
+                                        ?.charAt(0)
+                                        .toUpperCase()}
+                                </span>
+                            </div>
+                            <span className="text-sm text-slate-600 font-medium hidden sm:block">
+                                {session?.user?.name}
                             </span>
                         </div>
                     </div>
@@ -166,24 +192,24 @@ export default function ProfilePage() {
 
             {/* Main Content */}
             <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6 border border-slate-200">
                     <div className="mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        <h2 className="text-2xl font-bold text-slate-800 mb-2">
                             Kelola Profil Anda
                         </h2>
-                        <p className="text-gray-600">
+                        <p className="text-slate-600">
                             Perbarui informasi profil dan kata sandi Anda
                         </p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
                             {error}
                         </div>
                     )}
 
                     {successMessage && (
-                        <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
                             {successMessage}
                         </div>
                     )}
@@ -196,7 +222,7 @@ export default function ProfilePage() {
                         <div>
                             <label
                                 htmlFor="name"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 Nama Lengkap *
                             </label>
@@ -205,7 +231,7 @@ export default function ProfilePage() {
                                 id="name"
                                 {...register("name")}
                                 placeholder="Masukkan nama lengkap Anda"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             {errors.name && (
                                 <p className="mt-1 text-sm text-red-600">
@@ -218,7 +244,7 @@ export default function ProfilePage() {
                         <div>
                             <label
                                 htmlFor="email"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 Email *
                             </label>
@@ -227,27 +253,27 @@ export default function ProfilePage() {
                                 id="email"
                                 {...register("email")}
                                 placeholder="Masukkan email Anda"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             {errors.email && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {errors.email.message}
                                 </p>
                             )}
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-slate-500">
                                 Email digunakan untuk login ke akun Anda
                             </p>
                         </div>
 
                         {/* Divider */}
-                        <div className="border-t border-gray-200 my-6"></div>
+                        <div className="border-t border-slate-200 my-6"></div>
 
                         {/* Password Section */}
                         <div>
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">
+                            <h3 className="text-lg font-medium text-slate-800 mb-4">
                                 Ubah Kata Sandi
                             </h3>
-                            <p className="text-sm text-gray-600 mb-4">
+                            <p className="text-sm text-slate-600 mb-4">
                                 Kosongkan jika tidak ingin mengubah kata sandi
                             </p>
                         </div>
@@ -256,7 +282,7 @@ export default function ProfilePage() {
                         <div>
                             <label
                                 htmlFor="currentPassword"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 Kata Sandi Saat Ini
                             </label>
@@ -265,7 +291,7 @@ export default function ProfilePage() {
                                 id="currentPassword"
                                 {...register("currentPassword")}
                                 placeholder="Masukkan kata sandi saat ini"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             {errors.currentPassword && (
                                 <p className="mt-1 text-sm text-red-600">
@@ -278,7 +304,7 @@ export default function ProfilePage() {
                         <div>
                             <label
                                 htmlFor="newPassword"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 Kata Sandi Baru
                             </label>
@@ -287,7 +313,7 @@ export default function ProfilePage() {
                                 id="newPassword"
                                 {...register("newPassword")}
                                 placeholder="Masukkan kata sandi baru"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             {errors.newPassword && (
                                 <p className="mt-1 text-sm text-red-600">
@@ -300,7 +326,7 @@ export default function ProfilePage() {
                         <div>
                             <label
                                 htmlFor="confirmPassword"
-                                className="block text-sm font-medium text-gray-700 mb-2"
+                                className="block text-sm font-medium text-slate-700 mb-2"
                             >
                                 Konfirmasi Kata Sandi Baru
                             </label>
@@ -309,7 +335,7 @@ export default function ProfilePage() {
                                 id="confirmPassword"
                                 {...register("confirmPassword")}
                                 placeholder="Ulangi kata sandi baru"
-                                className="w-full px-3 py-2 border border-gray-400 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             {errors.confirmPassword && (
                                 <p className="mt-1 text-sm text-red-600">
@@ -319,17 +345,17 @@ export default function ProfilePage() {
                         </div>
 
                         {/* Submit Button */}
-                        <div className="flex justify-end space-x-4">
+                        <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                             <Link
                                 href="/dashboard"
-                                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                className="w-full sm:w-auto px-6 py-3 border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 font-medium text-center"
                             >
                                 Batal
                             </Link>
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-600 hover:to-teal-600 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg hover:shadow-xl"
                             >
                                 {isLoading
                                     ? "Menyimpan..."

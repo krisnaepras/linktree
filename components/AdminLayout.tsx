@@ -410,6 +410,39 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                     Analytics
                                 </span>
                             </Link>
+
+                            {/* System Cleanup - Only for SuperAdmin */}
+                            {isSuperAdmin && (
+                                <Link
+                                    href="/superadmin/system-cleanup"
+                                    className={`flex items-center px-4 py-3 text-slate-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-all duration-200 group border border-transparent hover:border-red-200 ${
+                                        desktopSidebarCollapsed
+                                            ? "lg:justify-center lg:px-3"
+                                            : ""
+                                    }`}
+                                    title={
+                                        desktopSidebarCollapsed
+                                            ? "System Cleanup"
+                                            : ""
+                                    }
+                                >
+                                    <div className="w-6 h-6 flex items-center justify-center">
+                                        <Icon
+                                            icon="material-symbols:cleaning-services-outline"
+                                            className="w-5 h-5 flex-shrink-0"
+                                        />
+                                    </div>
+                                    <span
+                                        className={`ml-3 font-medium transition-all duration-300 ${
+                                            desktopSidebarCollapsed
+                                                ? "lg:opacity-0 lg:w-0 lg:overflow-hidden"
+                                                : ""
+                                        }`}
+                                    >
+                                        System Cleanup
+                                    </span>
+                                </Link>
+                            )}
                         </div>
                     </nav>
 

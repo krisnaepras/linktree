@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import AdminLayout from "@/components/AdminLayout";
 import RichTextEditor from "@/components/RichTextEditor";
+import UploadImage from "@/components/UploadImage";
 import Swal from "sweetalert2";
 import Image from "next/image";
 
@@ -18,7 +19,14 @@ const articleSchema = z.object({
         .max(200, "Judul artikel maksimal 200 karakter"),
     content: z.string().min(1, "Konten artikel harus diisi"),
     excerpt: z.string().optional(),
-    featuredImage: z.string().url().optional().or(z.literal("")),
+    featuredImage: z
+        .string()
+        .optional()
+        .refine((val) => {
+            if (!val || val === "") return true;
+            // Allow both full URLs and relative paths
+            return /^(https?:\/\/|\/)/i.test(val);
+        }, "URL gambar tidak valid"),
     categoryId: z.string().optional(),
     status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
     metaTitle: z.string().max(60).optional(),
@@ -84,6 +92,7 @@ export default function EditArticlePage({ params }: Props) {
     const [previewMode, setPreviewMode] = useState(false);
     const [article, setArticle] = useState<Article | null>(null);
     const [hasLocalChanges, setHasLocalChanges] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
 
     const {
         register,
@@ -99,6 +108,8 @@ export default function EditArticlePage({ params }: Props) {
             isFeatured: false
         }
     });
+
+    const watchedFeaturedImage = watch("featuredImage");
 
     // Check authentication and role
     useEffect(() => {
@@ -506,29 +517,24 @@ export default function EditArticlePage({ params }: Props) {
 
                             {/* Featured Image */}
                             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                                    Gambar Unggulan
-                                </h3>
-                                <input
-                                    type="url"
-                                    {...register("featuredImage")}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                                    placeholder="URL gambar unggulan"
+                                <UploadImage
+                                    value={watchedFeaturedImage}
+                                    onChange={(url) =>
+                                        setValue("featuredImage", url)
+                                    }
+                                    onError={setUploadError}
+                                    label="Gambar Unggulan"
+                                    placeholder="https://example.com/image.jpg"
                                 />
-                                {watch("featuredImage") && (
-                                    <div className="mt-3">
-                                        <Image
-                                            src={watch("featuredImage")!}
-                                            alt="Preview"
-                                            width={200}
-                                            height={120}
-                                            className="rounded-lg object-cover"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display =
-                                                    "none";
-                                            }}
-                                        />
-                                    </div>
+                                {errors.featuredImage && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.featuredImage.message}
+                                    </p>
+                                )}
+                                {uploadError && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {uploadError}
+                                    </p>
                                 )}
                             </div>
 

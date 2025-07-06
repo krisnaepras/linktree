@@ -246,6 +246,31 @@ export default function AdminArticlesPage() {
         );
     };
 
+    // Pagination functions
+    const handlePageChange = (page: number) => {
+        setPagination((prev) => ({ ...prev, page }));
+    };
+
+    const getPaginationRange = () => {
+        const range = [];
+        const maxVisible = 5;
+
+        if (pagination.pages <= maxVisible) {
+            for (let i = 1; i <= pagination.pages; i++) {
+                range.push(i);
+            }
+        } else {
+            const start = Math.max(1, pagination.page - 2);
+            const end = Math.min(pagination.pages, start + maxVisible - 1);
+
+            for (let i = start; i <= end; i++) {
+                range.push(i);
+            }
+        }
+
+        return range;
+    };
+
     if (loading && articles.length === 0) {
         return (
             <AdminLayout>
@@ -510,53 +535,57 @@ export default function AdminArticlesPage() {
 
                 {/* Pagination */}
                 {pagination.pages > 1 && (
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                        <div className="flex items-center justify-between">
-                            <div className="text-sm text-gray-500">
-                                Halaman {pagination.page} dari{" "}
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-3 flex items-center justify-between">
+                        <div className="text-sm text-gray-700">
+                            Halaman{" "}
+                            <span className="font-medium text-gray-900">
+                                {pagination.page}
+                            </span>{" "}
+                            dari{" "}
+                            <span className="font-medium text-gray-900">
                                 {pagination.pages}
-                            </div>
-                            <div className="flex items-center space-x-1">
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() =>
+                                    handlePageChange(pagination.page - 1)
+                                }
+                                disabled={pagination.page === 1}
+                                className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Sebelumnya"
+                            >
+                                <Icon
+                                    icon="ph:caret-left"
+                                    className="w-4 h-4"
+                                />
+                            </button>
+                            {getPaginationRange().map((page) => (
                                 <button
-                                    onClick={() =>
-                                        setPagination((prev) => ({
-                                            ...prev,
-                                            page: prev.page - 1
-                                        }))
-                                    }
-                                    disabled={pagination.page === 1}
-                                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                                        pagination.page === 1
-                                            ? "text-gray-400 cursor-not-allowed"
-                                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                    key={page}
+                                    onClick={() => handlePageChange(page)}
+                                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none ${
+                                        page === pagination.page
+                                            ? "bg-blue-600 text-white shadow-md"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     }`}
                                 >
-                                    ← Sebelumnya
+                                    {page}
                                 </button>
-
-                                <span className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded-md">
-                                    {pagination.page}
-                                </span>
-
-                                <button
-                                    onClick={() =>
-                                        setPagination((prev) => ({
-                                            ...prev,
-                                            page: prev.page + 1
-                                        }))
-                                    }
-                                    disabled={
-                                        pagination.page === pagination.pages
-                                    }
-                                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                                        pagination.page === pagination.pages
-                                            ? "text-gray-400 cursor-not-allowed"
-                                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    Selanjutnya →
-                                </button>
-                            </div>
+                            ))}
+                            <button
+                                onClick={() =>
+                                    handlePageChange(pagination.page + 1)
+                                }
+                                disabled={pagination.page === pagination.pages}
+                                className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Selanjutnya"
+                            >
+                                <Icon
+                                    icon="ph:caret-right"
+                                    className="w-4 h-4"
+                                />
+                            </button>
                         </div>
                     </div>
                 )}

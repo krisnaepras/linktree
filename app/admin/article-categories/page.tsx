@@ -48,6 +48,8 @@ export default function ArticleCategoriesPage() {
         "name"
     );
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+    const [itemsPerPage] = useState(10); // Default items per page
+    const [currentPage, setCurrentPage] = useState(1);
 
     const {
         register,
@@ -204,6 +206,33 @@ export default function ArticleCategoriesPage() {
         setShowModal(true);
     };
 
+    // Handle sort column click
+    const handleSort = (column: "name" | "articles" | "createdAt") => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortBy(column);
+            setSortOrder("asc");
+        }
+    };
+
+    // Get sort icon
+    const getSortIcon = (column: "name" | "articles" | "createdAt") => {
+        if (sortBy !== column) {
+            return (
+                <Icon
+                    icon="ph:arrows-up-down"
+                    className="w-4 h-4 text-gray-400"
+                />
+            );
+        }
+        return sortOrder === "asc" ? (
+            <Icon icon="ph:caret-up" className="w-4 h-4 text-blue-600" />
+        ) : (
+            <Icon icon="ph:caret-down" className="w-4 h-4 text-blue-600" />
+        );
+    };
+
     // Sort categories
     const sortedCategories = [...categories].sort((a, b) => {
         let aValue: string | number;
@@ -233,32 +262,45 @@ export default function ArticleCategoriesPage() {
         }
     });
 
-    // Handle sort column click
-    const handleSort = (column: "name" | "articles" | "createdAt") => {
-        if (sortBy === column) {
-            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-        } else {
-            setSortBy(column);
-            setSortOrder("asc");
-        }
+    // Pagination calculations
+    const totalCategories = sortedCategories.length;
+    const totalPages = Math.ceil(totalCategories / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedCategories = sortedCategories.slice(startIndex, endIndex);
+
+    // Handle page change
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
     };
 
-    // Get sort icon
-    const getSortIcon = (column: "name" | "articles" | "createdAt") => {
-        if (sortBy !== column) {
-            return (
-                <Icon
-                    icon="ph:arrows-up-down"
-                    className="w-4 h-4 text-gray-400"
-                />
-            );
+    // Pagination range function
+    const getPaginationRange = () => {
+        const range = [];
+        const maxVisible = 5;
+
+        if (totalPages <= maxVisible) {
+            // Show all pages if total pages are less than max visible
+            for (let i = 1; i <= totalPages; i++) {
+                range.push(i);
+            }
+        } else {
+            // Show limited pages with current page in center
+            const start = Math.max(1, currentPage - 2);
+            const end = Math.min(totalPages, start + maxVisible - 1);
+
+            for (let i = start; i <= end; i++) {
+                range.push(i);
+            }
         }
-        return sortOrder === "asc" ? (
-            <Icon icon="ph:caret-up" className="w-4 h-4 text-blue-600" />
-        ) : (
-            <Icon icon="ph:caret-down" className="w-4 h-4 text-blue-600" />
-        );
+
+        return range;
     };
+
+    // Reset page when sorting changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [sortBy, sortOrder]);
 
     if (!session?.user) {
         router.push("/auth/signin");
@@ -352,7 +394,7 @@ export default function ArticleCategoriesPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {sortedCategories.map((category) => (
+                                    {paginatedCategories.map((category) => (
                                         <tr
                                             key={category.id}
                                             className="hover:bg-gray-50"
@@ -417,6 +459,76 @@ export default function ArticleCategoriesPage() {
                         </div>
                     )}
                 </div>
+
+                {/* Show total count when no pagination needed */}
+                {totalPages <= 1 && totalCategories > 0 && (
+                    <div className="mt-4 text-center">
+                        <div className="text-sm text-gray-500">
+                            Total{" "}
+                            <span className="font-medium text-gray-900">
+                                {totalCategories}
+                            </span>{" "}
+                            kategori
+                        </div>
+                    </div>
+                )}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-3 flex items-center justify-between">
+                        <div className="text-sm text-gray-700">
+                            Halaman{" "}
+                            <span className="font-medium text-gray-900">
+                                {currentPage}
+                            </span>{" "}
+                            dari{" "}
+                            <span className="font-medium text-gray-900">
+                                {totalPages}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
+                                disabled={currentPage === 1}
+                                className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Sebelumnya"
+                            >
+                                <Icon
+                                    icon="material-symbols:chevron-left"
+                                    className="w-4 h-4"
+                                />
+                            </button>{" "}
+                            {getPaginationRange().map((page) => (
+                                <button
+                                    key={page}
+                                    onClick={() => handlePageChange(page)}
+                                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none ${
+                                        page === currentPage
+                                            ? "bg-blue-600 text-white shadow-md"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    }`}
+                                >
+                                    {page}
+                                </button>
+                            ))}
+                            <button
+                                onClick={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
+                                disabled={currentPage === totalPages}
+                                className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Selanjutnya"
+                            >
+                                <Icon
+                                    icon="material-symbols:chevron-right"
+                                    className="w-4 h-4"
+                                />
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Enhanced Modal for Create/Edit Category */}
                 {showModal && (

@@ -19,7 +19,14 @@ const articleSchema = z.object({
         .max(200, "Judul artikel maksimal 200 karakter"),
     content: z.string().min(1, "Konten artikel harus diisi"),
     excerpt: z.string().optional(),
-    featuredImage: z.string().url().optional().or(z.literal("")),
+    featuredImage: z
+        .string()
+        .optional()
+        .refine((val) => {
+            if (!val || val === "") return true;
+            // Allow both full URLs and relative paths
+            return /^(https?:\/\/|\/)/i.test(val);
+        }, "URL gambar tidak valid"),
     categoryId: z.string().optional(),
     status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
     metaTitle: z.string().max(60).optional(),

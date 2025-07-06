@@ -1099,61 +1099,64 @@ export default function AdminCategoriesPage() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                        <div className="flex items-center justify-between">
-                            <div className="text-sm text-gray-500">
-                                Halaman {currentPage} dari {totalPages}
-                            </div>
-                            <div className="flex items-center space-x-1">
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-3 flex items-center justify-between">
+                        <div className="text-sm text-gray-700">
+                            Halaman{" "}
+                            <span className="font-medium text-gray-900">
+                                {currentPage}
+                            </span>{" "}
+                            dari{" "}
+                            <span className="font-medium text-gray-900">
+                                {totalPages}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
+                                disabled={currentPage === 1}
+                                className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Sebelumnya"
+                            >
+                                <Icon
+                                    icon="material-symbols:chevron-left"
+                                    className="w-4 h-4"
+                                />
+                            </button>
+                            {getPaginationRange().map((page, index) => (
                                 <button
+                                    key={index}
                                     onClick={() =>
-                                        handlePageChange(currentPage - 1)
+                                        typeof page === "number"
+                                            ? handlePageChange(page)
+                                            : undefined
                                     }
-                                    disabled={currentPage === 1}
-                                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                                        currentPage === 1
-                                            ? "text-gray-400 cursor-not-allowed"
-                                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                    disabled={page === "..."}
+                                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none ${
+                                        page === currentPage
+                                            ? "bg-blue-600 text-white shadow-md"
+                                            : page === "..."
+                                            ? "text-gray-400 cursor-default"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     }`}
                                 >
-                                    ← Sebelumnya
+                                    {page}
                                 </button>
-
-                                {getPaginationRange().map((page, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() =>
-                                            typeof page === "number"
-                                                ? handlePageChange(page)
-                                                : undefined
-                                        }
-                                        disabled={page === "..."}
-                                        className={`px-3 py-1 text-sm font-medium rounded-md ${
-                                            page === currentPage
-                                                ? "bg-blue-600 text-white"
-                                                : page === "..."
-                                                ? "text-gray-400 cursor-default"
-                                                : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                                        }`}
-                                    >
-                                        {page}
-                                    </button>
-                                ))}
-
-                                <button
-                                    onClick={() =>
-                                        handlePageChange(currentPage + 1)
-                                    }
-                                    disabled={currentPage === totalPages}
-                                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                                        currentPage === totalPages
-                                            ? "text-gray-400 cursor-not-allowed"
-                                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    Selanjutnya →
-                                </button>
-                            </div>
+                            ))}
+                            <button
+                                onClick={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
+                                disabled={currentPage === totalPages}
+                                className="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Selanjutnya"
+                            >
+                                <Icon
+                                    icon="material-symbols:chevron-right"
+                                    className="w-4 h-4"
+                                />
+                            </button>
                         </div>
                     </div>
                 )}

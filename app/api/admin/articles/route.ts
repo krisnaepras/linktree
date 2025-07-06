@@ -8,7 +8,14 @@ const articleSchema = z.object({
     title: z.string().min(1, "Title is required").max(200, "Title too long"),
     content: z.string().min(1, "Content is required"),
     excerpt: z.string().optional(),
-    featuredImage: z.string().url().optional().or(z.literal("")),
+    featuredImage: z
+        .string()
+        .optional()
+        .refine((val) => {
+            if (!val || val === "") return true;
+            // Allow both full URLs and relative paths
+            return /^(https?:\/\/|\/)/i.test(val);
+        }, "Invalid image URL"),
     categoryId: z.string().optional(),
     status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT"),
     metaTitle: z.string().max(60).optional(),

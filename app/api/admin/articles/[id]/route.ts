@@ -12,7 +12,15 @@ const articleUpdateSchema = z.object({
         .optional(),
     content: z.string().min(1, "Content is required").optional(),
     excerpt: z.string().optional().nullable(),
-    featuredImage: z.string().url().optional().or(z.literal("")).nullable(),
+    featuredImage: z
+        .string()
+        .optional()
+        .nullable()
+        .refine((val) => {
+            if (!val || val === "") return true;
+            // Allow both full URLs and relative paths
+            return /^(https?:\/\/|\/)/i.test(val);
+        }, "Invalid image URL"),
     categoryId: z.string().optional().nullable(),
     status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
     metaTitle: z.string().max(60).optional().nullable(),

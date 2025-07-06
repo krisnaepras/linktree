@@ -12,7 +12,12 @@
         "db:generate": "prisma generate",
         "db:seed": "tsx prisma/seed.ts",
         "db:studio": "prisma studio",
-        "db:reset": "prisma migrate reset"
+        "db:reset": "prisma migrate reset",
+        "cleanup:check": "node scripts/cleanup-unused-images.js",
+        "cleanup:delete": "node scripts/cleanup-unused-images.js --delete",
+        "cleanup:now": "node scripts/cleanup-scheduler.js --now",
+        "cleanup:schedule": "node scripts/cleanup-scheduler.js --schedule",
+        "storage:stats": "node scripts/storage-stats.js"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",

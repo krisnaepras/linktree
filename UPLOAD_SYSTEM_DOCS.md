@@ -7,37 +7,42 @@ The upload system has been updated to support both local development and product
 ## Storage Solutions
 
 ### Development Environment
-- **Local File System**: Files are stored in `public/uploads/` directory
-- **Access**: Files are accessible via `/uploads/` URL path
-- **Automatic**: No additional configuration needed
+
+-   **Local File System**: Files are stored in `public/uploads/` directory
+-   **Access**: Files are accessible via `/uploads/` URL path
+-   **Automatic**: No additional configuration needed
 
 ### Production Environment (Vercel)
-- **Vercel Blob Storage**: Files are uploaded to Vercel's cloud storage
-- **Access**: Files are accessible via Vercel Blob URLs
-- **Configuration**: Requires `BLOB_READ_WRITE_TOKEN` environment variable
+
+-   **Vercel Blob Storage**: Files are uploaded to Vercel's cloud storage
+-   **Access**: Files are accessible via Vercel Blob URLs
+-   **Configuration**: Requires `BLOB_READ_WRITE_TOKEN` environment variable
 
 ## Upload Categories
 
 ### 1. Category Icons
-- **Endpoint**: `/api/upload/category-icon`
-- **Field Name**: `icon`
-- **Max Size**: 2MB
-- **Allowed Types**: JPEG, PNG, GIF, WebP
-- **Storage Path**: `category-icons/`
+
+-   **Endpoint**: `/api/upload/category-icon`
+-   **Field Name**: `icon`
+-   **Max Size**: 2MB
+-   **Allowed Types**: JPEG, PNG, GIF, WebP
+-   **Storage Path**: `category-icons/`
 
 ### 2. Article Images
-- **Endpoint**: `/api/admin/upload`
-- **Field Name**: `file`
-- **Max Size**: 5MB
-- **Allowed Types**: JPEG, PNG, GIF, WebP
-- **Storage Path**: `articles/`
+
+-   **Endpoint**: `/api/admin/upload`
+-   **Field Name**: `file`
+-   **Max Size**: 5MB
+-   **Allowed Types**: JPEG, PNG, GIF, WebP
+-   **Storage Path**: `articles/`
 
 ### 3. Linktree Photos
-- **Endpoint**: `/api/upload/linktree-photo`
-- **Field Name**: `photo`
-- **Max Size**: 5MB
-- **Allowed Types**: JPEG, PNG, GIF, WebP
-- **Storage Path**: `linktree-photos/`
+
+-   **Endpoint**: `/api/upload/linktree-photo`
+-   **Field Name**: `photo`
+-   **Max Size**: 5MB
+-   **Allowed Types**: JPEG, PNG, GIF, WebP
+-   **Storage Path**: `linktree-photos/`
 
 ## Environment Configuration
 
@@ -62,19 +67,22 @@ BLOB_READ_WRITE_TOKEN=your-vercel-blob-token
 The system includes comprehensive error handling:
 
 ### File Validation Errors
-- Invalid file type
-- File size too large
-- No file provided
+
+-   Invalid file type
+-   File size too large
+-   No file provided
 
 ### Upload Errors
-- Network connection issues
-- Storage service unavailable
-- Permission denied
+
+-   Network connection issues
+-   Storage service unavailable
+-   Permission denied
 
 ### User Feedback
-- Error messages are displayed using SweetAlert2
-- Success notifications confirm successful uploads
-- Progress indicators show upload status
+
+-   Error messages are displayed using SweetAlert2
+-   Success notifications confirm successful uploads
+-   Progress indicators show upload status
 
 ## Implementation Details
 
@@ -96,7 +104,10 @@ uploadLinktreePhoto(request: NextRequest, userId: string): Promise<UploadResult>
 The system automatically detects the environment:
 
 ```typescript
-if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+if (
+    process.env.NODE_ENV === "production" &&
+    process.env.BLOB_READ_WRITE_TOKEN
+) {
     // Use Vercel Blob
 } else {
     // Use local file system
@@ -108,20 +119,23 @@ if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) 
 ### Common Issues
 
 1. **"Gagal mengupload file icon" in production**
-   - Cause: Missing `BLOB_READ_WRITE_TOKEN` environment variable
-   - Solution: Add the token to Vercel environment variables
+
+    - Cause: Missing `BLOB_READ_WRITE_TOKEN` environment variable
+    - Solution: Add the token to Vercel environment variables
 
 2. **"File too large" error**
-   - Cause: File exceeds size limit
-   - Solution: Reduce file size or increase limit in code
+
+    - Cause: File exceeds size limit
+    - Solution: Reduce file size or increase limit in code
 
 3. **"Invalid file type" error**
-   - Cause: Unsupported file format
-   - Solution: Convert to supported format (JPEG, PNG, GIF, WebP)
+
+    - Cause: Unsupported file format
+    - Solution: Convert to supported format (JPEG, PNG, GIF, WebP)
 
 4. **Upload works in development but fails in production**
-   - Cause: Missing or incorrect Vercel Blob configuration
-   - Solution: Verify environment variables and token permissions
+    - Cause: Missing or incorrect Vercel Blob configuration
+    - Solution: Verify environment variables and token permissions
 
 ### Testing
 
@@ -150,11 +164,11 @@ public/
 
 ## Security Considerations
 
-- File type validation prevents malicious uploads
-- File size limits prevent abuse
-- Authentication required for admin uploads
-- User-specific naming for linktree photos
-- Unique filenames prevent conflicts
+-   File type validation prevents malicious uploads
+-   File size limits prevent abuse
+-   Authentication required for admin uploads
+-   User-specific naming for linktree photos
+-   Unique filenames prevent conflicts
 
 ## Migration Notes
 

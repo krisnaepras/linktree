@@ -9,13 +9,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import CategoryDropdown from "@/components/CategoryDropdown";
 import Swal from "sweetalert2";
+import { urlTransform } from "@/lib/utils";
 
 const editLinkSchema = z.object({
     title: z
         .string()
         .min(1, "Judul harus diisi")
         .max(100, "Judul maksimal 100 karakter"),
-    url: z.string().url("URL tidak valid"),
+    url: z.string().min(1, "URL harus diisi").transform(urlTransform),
     categoryId: z.string().min(1, "Kategori harus dipilih"),
     sortOrder: z.number().optional(),
     isVisible: z.boolean()
@@ -357,12 +358,17 @@ export default function EditLinkPage({
                                 URL *
                             </label>
                             <input
-                                type="url"
+                                type="text"
                                 id="url"
                                 {...register("url")}
-                                placeholder="https://instagram.com/warungmakan"
+                                placeholder="www.tiktok.com/@kkn15_bongkaran atau instagram.com/username"
                                 className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
+                            <p className="mt-1 text-xs text-slate-500">
+                                Contoh: www.tiktok.com/@username, instagram.com/username, facebook.com/page
+                                <br />
+                                Sistem akan otomatis menambahkan https:// jika diperlukan
+                            </p>
                             {errors.url && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {errors.url.message}

@@ -37,11 +37,14 @@ export async function uploadCategoryIcon(
         const fileName = `${uuidv4()}.${fileExtension}`;
 
         // Use Vercel Blob in production, local storage in development
-        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+        if (
+            process.env.NODE_ENV === "production" &&
+            process.env.BLOB_READ_WRITE_TOKEN
+        ) {
             try {
                 const blob = await put(`category-icons/${fileName}`, file, {
                     access: "public",
-                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    token: process.env.BLOB_READ_WRITE_TOKEN
                 });
 
                 return {
@@ -185,11 +188,14 @@ export async function uploadLinktreePhoto(
         const fileName = `${userId}-${Date.now()}.${fileExtension}`;
 
         // Use Vercel Blob in production, local storage in development
-        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+        if (
+            process.env.NODE_ENV === "production" &&
+            process.env.BLOB_READ_WRITE_TOKEN
+        ) {
             try {
                 const blob = await put(`linktree-photos/${fileName}`, file, {
                     access: "public",
-                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    token: process.env.BLOB_READ_WRITE_TOKEN
                 });
 
                 return {
@@ -255,11 +261,14 @@ export async function uploadArticleImage(
         const fileName = `${uuidv4()}.${fileExtension}`;
 
         // Use Vercel Blob in production, local storage in development
-        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+        if (
+            process.env.NODE_ENV === "production" &&
+            process.env.BLOB_READ_WRITE_TOKEN
+        ) {
             try {
                 const blob = await put(`articles/${fileName}`, file, {
                     access: "public",
-                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    token: process.env.BLOB_READ_WRITE_TOKEN
                 });
 
                 return {

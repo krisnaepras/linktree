@@ -12,25 +12,25 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function formatUrl(url: string): string {
     if (!url) return url;
-    
+
     // Trim whitespace
     url = url.trim();
-    
+
     // If URL already has a protocol, return as is
     if (url.match(/^https?:\/\//i)) {
         return url;
     }
-    
+
     // If URL starts with //, add https:
-    if (url.startsWith('//')) {
+    if (url.startsWith("//")) {
         return `https:${url}`;
     }
-    
+
     // If URL starts with www. or contains a domain, add https://
     if (url.match(/^(www\.|[a-zA-Z0-9-]+\.[a-zA-Z]{2,})/)) {
         return `https://${url}`;
     }
-    
+
     // For other cases (like social media handles), assume it needs https://
     return `https://${url}`;
 }
@@ -57,7 +57,7 @@ export function isValidUrl(url: string): boolean {
  */
 export function urlTransform(url: string): string {
     const formatted = formatUrl(url);
-    
+
     // Validate the formatted URL
     try {
         new URL(formatted);

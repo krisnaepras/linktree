@@ -365,9 +365,11 @@ export default function EditLinkPage({
                                 className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                             />
                             <p className="mt-1 text-xs text-slate-500">
-                                Contoh: www.tiktok.com/@username, instagram.com/username, facebook.com/page
+                                Contoh: www.tiktok.com/@username,
+                                instagram.com/username, facebook.com/page
                                 <br />
-                                Sistem akan otomatis menambahkan https:// jika diperlukan
+                                Sistem akan otomatis menambahkan https:// jika
+                                diperlukan
                             </p>
                             {errors.url && (
                                 <p className="mt-1 text-sm text-red-600">

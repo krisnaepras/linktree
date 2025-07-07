@@ -135,10 +135,7 @@ function CategoryModal({
                 console.error("Upload error:", error);
                 Swal.fire({
                     title: "Error",
-                    text:
-                        error instanceof Error
-                            ? error.message
-                            : "Gagal mengupload file icon",
+                    text: error instanceof Error ? error.message : "Gagal mengupload file icon",
                     icon: "error",
                     confirmButtonText: "OK"
                 });

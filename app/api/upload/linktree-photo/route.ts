@@ -14,10 +14,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const uploadResult = await uploadLinktreePhoto(
-            request,
-            session.user.id
-        );
+        const uploadResult = await uploadLinktreePhoto(request, session.user.id);
 
         if (!uploadResult.success) {
             return NextResponse.json(

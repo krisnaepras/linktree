@@ -58,17 +58,8 @@ export async function POST(request: Request) {
             url: uploadResult.filePath,
             fileName: uploadResult.fileName,
             fileSize: file.size,
+            fileType: file.type,
             success: true
-        });
-    } catch (error) {
-        console.error("Upload error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 }
-        );
-    }
-}
-            fileType: file.type
         });
     } catch (error) {
         console.error("Upload error:", error);

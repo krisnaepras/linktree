@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import AdminLayout from "@/components/AdminLayout";
 import Link from "next/link";
+import Image from "next/image";
 import { Icon } from "@iconify/react";
 
 type User = {
@@ -392,9 +393,27 @@ export default function AdminDashboard() {
                                             <span className="text-sm font-medium text-slate-400 w-4">
                                                 {index + 1}
                                             </span>
-                                            <span className="text-sm font-medium text-slate-800">
-                                                {category.icon} {category.name}
-                                            </span>
+                                            <div className="flex items-center space-x-2">
+                                                {category.icon &&
+                                                    (category.icon.startsWith(
+                                                        "http"
+                                                    ) ? (
+                                                        <Image
+                                                            src={category.icon}
+                                                            alt={category.name}
+                                                            width={20}
+                                                            height={20}
+                                                            className="rounded-sm object-cover"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-lg">
+                                                            {category.icon}
+                                                        </span>
+                                                    ))}
+                                                <span className="text-sm font-medium text-slate-800">
+                                                    {category.name}
+                                                </span>
+                                            </div>
                                         </div>
                                         <span className="text-sm font-semibold text-slate-600">
                                             {category._count.detailLinktrees}

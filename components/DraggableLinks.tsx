@@ -123,6 +123,7 @@ export default function DraggableLinks({
                                 </div>
                                 <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
                                     {link.category.icon ? (
+                                        link.category.icon.startsWith("http") ||
                                         link.category.icon.startsWith(
                                             "/uploads/"
                                         ) ? (
@@ -217,6 +218,7 @@ export default function DraggableLinks({
                                 </div>
                                 <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
                                     {link.category.icon ? (
+                                        link.category.icon.startsWith("http") ||
                                         link.category.icon.startsWith(
                                             "/uploads/"
                                         ) ? (

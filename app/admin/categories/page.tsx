@@ -135,7 +135,10 @@ function CategoryModal({
                 console.error("Upload error:", error);
                 Swal.fire({
                     title: "Error",
-                    text: error instanceof Error ? error.message : "Gagal mengupload file icon",
+                    text:
+                        error instanceof Error
+                            ? error.message
+                            : "Gagal mengupload file icon",
                     icon: "error",
                     confirmButtonText: "OK"
                 });
@@ -354,6 +357,7 @@ function CategoryDetailModal({
                             <div className="text-center">
                                 <div className="w-24 h-24 flex items-center justify-center mx-auto mb-4 bg-gray-100 rounded-lg">
                                     {category.icon ? (
+                                        category.icon.startsWith("http") ||
                                         category.icon.startsWith(
                                             "/uploads/"
                                         ) ? (
@@ -465,6 +469,7 @@ function CategoryDetailModal({
                                 <div className="flex items-center justify-center">
                                     <div className="w-16 h-16 flex items-center justify-center bg-white rounded-lg shadow-sm border">
                                         {category.icon ? (
+                                            category.icon.startsWith("http") ||
                                             category.icon.startsWith(
                                                 "/uploads/"
                                             ) ? (
@@ -983,6 +988,9 @@ export default function AdminCategoriesPage() {
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
                                                     {category.icon ? (
+                                                        category.icon.startsWith(
+                                                            "http"
+                                                        ) ||
                                                         category.icon.startsWith(
                                                             "/uploads/"
                                                         ) ? (

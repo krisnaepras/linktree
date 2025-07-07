@@ -116,7 +116,10 @@ export default function CategoryDropdown({
         if (!category.icon) return null;
 
         // Check if icon is an emoji (not a file path)
-        if (!category.icon.startsWith("/uploads/")) {
+        if (
+            !category.icon.startsWith("/uploads/") &&
+            !category.icon.startsWith("http")
+        ) {
             return (
                 <span className="text-lg mr-2 flex-shrink-0">
                     {category.icon}

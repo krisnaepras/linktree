@@ -12,8 +12,27 @@ module.exports = {
                 foreground: "var(--foreground)"
             },
             fontFamily: {
-                sans: ["var(--font-geist-sans)", "sans-serif"],
-                mono: ["var(--font-geist-mono)", "monospace"]
+                sans: [
+                    "var(--font-poppins)",
+                    "system-ui",
+                    "-apple-system",
+                    "BlinkMacSystemFont",
+                    "'Segoe UI'",
+                    "Roboto",
+                    "'Helvetica Neue'",
+                    "Arial",
+                    "sans-serif"
+                ],
+                poppins: ["var(--font-poppins)", "sans-serif"],
+                mono: [
+                    "'SFMono-Regular'",
+                    "Menlo",
+                    "Monaco",
+                    "Consolas",
+                    "'Liberation Mono'",
+                    "'Courier New'",
+                    "monospace"
+                ]
             }
         }
     },

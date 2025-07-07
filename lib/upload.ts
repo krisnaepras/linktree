@@ -36,11 +36,8 @@ export async function uploadCategoryIcon(
         const fileExtension = file.name.split(".").pop();
         const fileName = `${uuidv4()}.${fileExtension}`;
 
-        // Use Vercel Blob in production, local storage in development
-        if (
-            process.env.NODE_ENV === "production" &&
-            process.env.BLOB_READ_WRITE_TOKEN
-        ) {
+        // Use Vercel Blob in production or when BLOB_READ_WRITE_TOKEN is available
+        if (process.env.BLOB_READ_WRITE_TOKEN) {
             try {
                 const blob = await put(`category-icons/${fileName}`, file, {
                     access: "public",
@@ -59,6 +56,12 @@ export async function uploadCategoryIcon(
                     error: "Failed to upload to cloud storage"
                 };
             }
+        } else if (process.env.NODE_ENV === "production") {
+            // In production without Blob token, return error
+            return {
+                success: false,
+                error: "Cloud storage not configured for production"
+            };
         } else {
             // Fallback to local storage for development
             const uploadDir = join(
@@ -187,11 +190,8 @@ export async function uploadLinktreePhoto(
         const fileExtension = file.name.split(".").pop();
         const fileName = `${userId}-${Date.now()}.${fileExtension}`;
 
-        // Use Vercel Blob in production, local storage in development
-        if (
-            process.env.NODE_ENV === "production" &&
-            process.env.BLOB_READ_WRITE_TOKEN
-        ) {
+        // Use Vercel Blob in production or when BLOB_READ_WRITE_TOKEN is available
+        if (process.env.BLOB_READ_WRITE_TOKEN) {
             try {
                 const blob = await put(`linktree-photos/${fileName}`, file, {
                     access: "public",
@@ -210,6 +210,12 @@ export async function uploadLinktreePhoto(
                     error: "Failed to upload to cloud storage"
                 };
             }
+        } else if (process.env.NODE_ENV === "production") {
+            // In production without Blob token, return error
+            return {
+                success: false,
+                error: "Cloud storage not configured for production"
+            };
         } else {
             // Fallback to local storage for development
             const uploadDir = join(
@@ -260,11 +266,8 @@ export async function uploadArticleImage(
         const fileExtension = file.name.split(".").pop();
         const fileName = `${uuidv4()}.${fileExtension}`;
 
-        // Use Vercel Blob in production, local storage in development
-        if (
-            process.env.NODE_ENV === "production" &&
-            process.env.BLOB_READ_WRITE_TOKEN
-        ) {
+        // Use Vercel Blob in production or when BLOB_READ_WRITE_TOKEN is available
+        if (process.env.BLOB_READ_WRITE_TOKEN) {
             try {
                 const blob = await put(`articles/${fileName}`, file, {
                     access: "public",
@@ -283,6 +286,12 @@ export async function uploadArticleImage(
                     error: "Failed to upload to cloud storage"
                 };
             }
+        } else if (process.env.NODE_ENV === "production") {
+            // In production without Blob token, return error
+            return {
+                success: false,
+                error: "Cloud storage not configured for production"
+            };
         } else {
             // Fallback to local storage for development
             const uploadDir = join(

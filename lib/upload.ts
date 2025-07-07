@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import { v4 as uuidv4 } from "uuid";
+import { put } from "@vercel/blob";
 
 export interface UploadResult {
     success: boolean;
@@ -35,25 +36,47 @@ export async function uploadCategoryIcon(
         const fileExtension = file.name.split(".").pop();
         const fileName = `${uuidv4()}.${fileExtension}`;
 
-        // Define upload path
-        const uploadDir = join(
-            process.cwd(),
-            "public",
-            "uploads",
-            "category-icons"
-        );
+        // Use Vercel Blob in production, local storage in development
+        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+            try {
+                const blob = await put(`category-icons/${fileName}`, file, {
+                    access: "public",
+                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                });
 
-        // Save the uploaded file
-        const filePath = await saveUploadedFile(file, uploadDir, fileName);
+                return {
+                    success: true,
+                    fileName,
+                    filePath: blob.url
+                };
+            } catch (blobError) {
+                console.error("Vercel Blob upload error:", blobError);
+                return {
+                    success: false,
+                    error: "Failed to upload to cloud storage"
+                };
+            }
+        } else {
+            // Fallback to local storage for development
+            const uploadDir = join(
+                process.cwd(),
+                "public",
+                "uploads",
+                "category-icons"
+            );
 
-        // Return relative path for storing in database
-        const relativePath = `/uploads/category-icons/${fileName}`;
+            // Save the uploaded file
+            const filePath = await saveUploadedFile(file, uploadDir, fileName);
 
-        return {
-            success: true,
-            fileName,
-            filePath: relativePath
-        };
+            // Return relative path for storing in database
+            const relativePath = `/uploads/category-icons/${fileName}`;
+
+            return {
+                success: true,
+                fileName,
+                filePath: relativePath
+            };
+        }
     } catch (error) {
         console.error("Upload error:", error);
         return {
@@ -137,5 +160,146 @@ export async function deleteCategoryIcon(iconPath: string): Promise<boolean> {
     } catch (error) {
         console.error("Delete error:", error);
         return false;
+    }
+}
+
+export async function uploadLinktreePhoto(
+    request: NextRequest,
+    userId: string
+): Promise<UploadResult> {
+    try {
+        const formData = await request.formData();
+        const file = formData.get("photo") as File;
+
+        if (!file) {
+            return { success: false, error: "No file uploaded" };
+        }
+
+        const validation = validateImageFile(file, 5); // 5MB limit for photos
+        if (!validation.isValid) {
+            return { success: false, error: validation.error };
+        }
+
+        // Generate unique filename
+        const fileExtension = file.name.split(".").pop();
+        const fileName = `${userId}-${Date.now()}.${fileExtension}`;
+
+        // Use Vercel Blob in production, local storage in development
+        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+            try {
+                const blob = await put(`linktree-photos/${fileName}`, file, {
+                    access: "public",
+                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                });
+
+                return {
+                    success: true,
+                    fileName,
+                    filePath: blob.url
+                };
+            } catch (blobError) {
+                console.error("Vercel Blob upload error:", blobError);
+                return {
+                    success: false,
+                    error: "Failed to upload to cloud storage"
+                };
+            }
+        } else {
+            // Fallback to local storage for development
+            const uploadDir = join(
+                process.cwd(),
+                "public",
+                "uploads",
+                "linktree-photos"
+            );
+
+            // Save the uploaded file
+            const filePath = await saveUploadedFile(file, uploadDir, fileName);
+
+            // Return relative path for storing in database
+            const relativePath = `/uploads/linktree-photos/${fileName}`;
+
+            return {
+                success: true,
+                fileName,
+                filePath: relativePath
+            };
+        }
+    } catch (error) {
+        console.error("Upload error:", error);
+        return {
+            success: false,
+            error: "Failed to upload file"
+        };
+    }
+}
+
+export async function uploadArticleImage(
+    request: NextRequest
+): Promise<UploadResult> {
+    try {
+        const formData = await request.formData();
+        const file = formData.get("image") as File;
+
+        if (!file) {
+            return { success: false, error: "No file uploaded" };
+        }
+
+        const validation = validateImageFile(file, 5); // 5MB limit for articles
+        if (!validation.isValid) {
+            return { success: false, error: validation.error };
+        }
+
+        // Generate unique filename
+        const fileExtension = file.name.split(".").pop();
+        const fileName = `${uuidv4()}.${fileExtension}`;
+
+        // Use Vercel Blob in production, local storage in development
+        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+            try {
+                const blob = await put(`articles/${fileName}`, file, {
+                    access: "public",
+                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                });
+
+                return {
+                    success: true,
+                    fileName,
+                    filePath: blob.url
+                };
+            } catch (blobError) {
+                console.error("Vercel Blob upload error:", blobError);
+                return {
+                    success: false,
+                    error: "Failed to upload to cloud storage"
+                };
+            }
+        } else {
+            // Fallback to local storage for development
+            const uploadDir = join(
+                process.cwd(),
+                "public",
+                "uploads",
+                "articles"
+            );
+
+            // Save the uploaded file
+            const filePath = await saveUploadedFile(file, uploadDir, fileName);
+
+            // Return relative path for storing in database
+            const relativePath = `/uploads/articles/${fileName}`;
+
+            return {
+                success: true,
+                fileName,
+                filePath: relativePath
+            };
+        }
+    } catch (error) {
+        console.error("Upload error:", error);
+        return {
+            success: false,
+            error: "Failed to upload file"
+        };
     }
 }

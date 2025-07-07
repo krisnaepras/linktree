@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { uploadArticleImage } from "@/lib/upload";
 
 export async function POST(request: Request) {
     try {
@@ -26,9 +25,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        const data = await request.formData();
-        const file: File | null = data.get("file") as unknown as File;
-
+        // Convert to NextRequest for compatibility with upload function
+        const formData = await request.formData();
+        const file = formData.get("file") as File;
+        
         if (!file) {
             return NextResponse.json(
                 { error: "No file uploaded" },
@@ -36,68 +36,38 @@ export async function POST(request: Request) {
             );
         }
 
-        // Validate file type
-        const allowedTypes = [
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "image/gif",
-            "image/webp"
-        ];
-        if (!allowedTypes.includes(file.type)) {
+        // Create a new FormData with the correct field name
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", file);
+
+        // Create a mock request object
+        const mockRequest = {
+            formData: async () => uploadFormData
+        } as any;
+
+        const uploadResult = await uploadArticleImage(mockRequest);
+
+        if (!uploadResult.success) {
             return NextResponse.json(
-                {
-                    error: "Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed."
-                },
+                { error: uploadResult.error },
                 { status: 400 }
             );
         }
-
-        // Validate file size (max 5MB)
-        const maxSize = 5 * 1024 * 1024;
-        if (file.size > maxSize) {
-            return NextResponse.json(
-                { error: "File too large. Maximum size is 5MB." },
-                { status: 400 }
-            );
-        }
-
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Create unique filename
-        const timestamp = Date.now();
-        const fileExt = file.name.split(".").pop();
-        const fileName = `${timestamp}-${Math.random()
-            .toString(36)
-            .substring(2)}.${fileExt}`;
-
-        // Save to public/uploads/articles directory
-        const uploadsDir = path.join(
-            process.cwd(),
-            "public",
-            "uploads",
-            "articles"
-        );
-        const filePath = path.join(uploadsDir, fileName);
-
-        try {
-            await writeFile(filePath, buffer);
-        } catch (error) {
-            console.error("Error saving file:", error);
-            return NextResponse.json(
-                { error: "Failed to save file" },
-                { status: 500 }
-            );
-        }
-
-        // Return the URL path
-        const fileUrl = `/uploads/articles/${fileName}`;
 
         return NextResponse.json({
-            url: fileUrl,
-            fileName: fileName,
+            url: uploadResult.filePath,
+            fileName: uploadResult.fileName,
             fileSize: file.size,
+            success: true
+        });
+    } catch (error) {
+        console.error("Upload error:", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}
             fileType: file.type
         });
     } catch (error) {

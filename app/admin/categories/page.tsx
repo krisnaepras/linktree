@@ -128,13 +128,16 @@ function CategoryModal({
                     const result = await uploadResponse.json();
                     finalData.icon = result.filePath;
                 } else {
-                    throw new Error("Upload failed");
+                    const errorResult = await uploadResponse.json();
+                    throw new Error(errorResult.error || "Upload failed");
                 }
             } catch (error) {
+                console.error("Upload error:", error);
                 Swal.fire({
                     title: "Error",
-                    text: "Gagal mengupload file icon",
-                    icon: "error"
+                    text: error instanceof Error ? error.message : "Gagal mengupload file icon",
+                    icon: "error",
+                    confirmButtonText: "OK"
                 });
                 return;
             }

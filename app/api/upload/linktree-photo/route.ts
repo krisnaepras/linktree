@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { saveUploadedFile, validateImageFile } from "@/lib/upload";
-import path from "path";
+import { uploadLinktreePhoto } from "@/lib/upload";
 
 export async function POST(request: NextRequest) {
     try {
@@ -15,44 +14,19 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const formData = await request.formData();
-        const file = formData.get("photo") as File;
+        const uploadResult = await uploadLinktreePhoto(request, session.user.id);
 
-        if (!file) {
+        if (!uploadResult.success) {
             return NextResponse.json(
-                { error: "No file provided" },
+                { error: uploadResult.error },
                 { status: 400 }
             );
         }
-
-        // Validate file
-        const validation = validateImageFile(file);
-        if (!validation.isValid) {
-            return NextResponse.json(
-                { error: validation.error },
-                { status: 400 }
-            );
-        }
-
-        // Save file
-        const uploadDir = path.join(
-            process.cwd(),
-            "public",
-            "uploads",
-            "linktree-photos"
-        );
-        const fileName = `${session.user.id}-${Date.now()}-${file.name.replace(
-            /[^a-zA-Z0-9.-]/g,
-            "_"
-        )}`;
-        const filePath = await saveUploadedFile(file, uploadDir, fileName);
-
-        // Return the public path
-        const publicPath = `/uploads/linktree-photos/${fileName}`;
 
         return NextResponse.json({
             success: true,
-            filePath: publicPath
+            filePath: uploadResult.filePath,
+            fileName: uploadResult.fileName
         });
     } catch (error) {
         console.error("Upload error:", error);

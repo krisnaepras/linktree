@@ -12,11 +12,6 @@ if [ -z "$DATABASE_URL" ]; then
     exit 1
 fi
 
-read -p "DIRECT_URL (same as DATABASE_URL for most cases): " DIRECT_URL
-if [ -z "$DIRECT_URL" ]; then
-    DIRECT_URL=$DATABASE_URL
-fi
-
 read -p "NEXTAUTH_SECRET (min 32 characters): " NEXTAUTH_SECRET
 if [ -z "$NEXTAUTH_SECRET" ]; then
     echo "❌ NEXTAUTH_SECRET is required!"
@@ -37,7 +32,6 @@ echo "📝 Adding environment variables to Vercel..."
 
 # Add environment variables
 vercel env add DATABASE_URL production <<< "$DATABASE_URL"
-vercel env add DIRECT_URL production <<< "$DIRECT_URL"
 vercel env add NEXTAUTH_URL production <<< "$NEXTAUTH_URL"
 vercel env add NEXTAUTH_SECRET production <<< "$NEXTAUTH_SECRET"
 

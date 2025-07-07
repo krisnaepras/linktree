@@ -38,7 +38,6 @@ cp .env.example .env.local
 
 # Edit file .env.local dengan data berikut:
 DATABASE_URL="your-postgres-url"
-DIRECT_URL="your-direct-postgres-url"
 NEXTAUTH_URL="https://your-domain.vercel.app"
 NEXTAUTH_SECRET="your-secret-32-chars-min"
 ```
@@ -80,7 +79,6 @@ npm run start
     - Tambahkan:
         ```
         DATABASE_URL = your-postgres-url
-        DIRECT_URL = your-direct-postgres-url
         NEXTAUTH_URL = https://your-domain.vercel.app
         NEXTAUTH_SECRET = your-secret-key
         ```

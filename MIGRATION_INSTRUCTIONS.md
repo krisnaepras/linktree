@@ -108,7 +108,6 @@ Pastikan password database sudah diatur di file `.env`:
 
 ```env
 DATABASE_URL="postgresql://postgres.qiybqvgiwidqaduwcmhs:YOUR_ACTUAL_PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
-DIRECT_URL="postgresql://postgres.qiybqvgiwidqaduwcmhs:YOUR_ACTUAL_PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
 ```
 
 ### 2. Jalankan Migrasi

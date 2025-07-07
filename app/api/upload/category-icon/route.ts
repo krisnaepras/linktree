@@ -5,6 +5,8 @@ import { uploadCategoryIcon } from "@/lib/upload";
 
 export async function POST(request: NextRequest) {
     try {
+        console.log("Category icon upload request received");
+
         const session = await getServerSession(authOptions);
 
         if (
@@ -12,21 +14,27 @@ export async function POST(request: NextRequest) {
             (session.user.role !== "ADMIN" &&
                 session.user.role !== "SUPERADMIN")
         ) {
+            console.log("Unauthorized upload attempt:", session?.user?.email);
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }
             );
         }
 
+        console.log("Upload authorized for user:", session.user.email);
+
         const uploadResult = await uploadCategoryIcon(request);
+        console.log("Upload result:", uploadResult);
 
         if (!uploadResult.success) {
+            console.error("Upload failed:", uploadResult.error);
             return NextResponse.json(
                 { error: uploadResult.error },
                 { status: 400 }
             );
         }
 
+        console.log("Upload successful:", uploadResult.filePath);
         return NextResponse.json({
             success: true,
             filePath: uploadResult.filePath,

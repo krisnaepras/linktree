@@ -17,7 +17,8 @@
         "cleanup:delete": "node scripts/cleanup-unused-images.js --delete",
         "cleanup:now": "node scripts/cleanup-scheduler.js --now",
         "cleanup:schedule": "node scripts/cleanup-scheduler.js --schedule",
-        "storage:stats": "node scripts/storage-stats.js"
+        "storage:stats": "node scripts/storage-stats.js",
+        "upload:test": "./scripts/test-upload.sh"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",

@@ -37,13 +37,25 @@ export async function uploadCategoryIcon(
         const fileName = `${uuidv4()}.${fileExtension}`;
 
         // Use Vercel Blob in production, local storage in development
-        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+        if (process.env.NODE_ENV === "production") {
+            if (!process.env.BLOB_READ_WRITE_TOKEN) {
+                console.error(
+                    "BLOB_READ_WRITE_TOKEN not configured for production"
+                );
+                return {
+                    success: false,
+                    error: "Upload service not configured. Please contact administrator."
+                };
+            }
+
             try {
+                console.log("Uploading to Vercel Blob:", fileName);
                 const blob = await put(`category-icons/${fileName}`, file, {
                     access: "public",
-                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    token: process.env.BLOB_READ_WRITE_TOKEN
                 });
 
+                console.log("Upload successful:", blob.url);
                 return {
                     success: true,
                     fileName,
@@ -51,9 +63,26 @@ export async function uploadCategoryIcon(
                 };
             } catch (blobError) {
                 console.error("Vercel Blob upload error:", blobError);
+
+                // More specific error messages
+                if (blobError instanceof Error) {
+                    if (blobError.message.includes("token")) {
+                        return {
+                            success: false,
+                            error: "Invalid upload token. Please contact administrator."
+                        };
+                    }
+                    if (blobError.message.includes("size")) {
+                        return {
+                            success: false,
+                            error: "File too large. Maximum size is 2MB."
+                        };
+                    }
+                }
+
                 return {
                     success: false,
-                    error: "Failed to upload to cloud storage"
+                    error: "Failed to upload to cloud storage. Please try again."
                 };
             }
         } else {
@@ -185,11 +214,14 @@ export async function uploadLinktreePhoto(
         const fileName = `${userId}-${Date.now()}.${fileExtension}`;
 
         // Use Vercel Blob in production, local storage in development
-        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+        if (
+            process.env.NODE_ENV === "production" &&
+            process.env.BLOB_READ_WRITE_TOKEN
+        ) {
             try {
                 const blob = await put(`linktree-photos/${fileName}`, file, {
                     access: "public",
-                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    token: process.env.BLOB_READ_WRITE_TOKEN
                 });
 
                 return {
@@ -255,11 +287,14 @@ export async function uploadArticleImage(
         const fileName = `${uuidv4()}.${fileExtension}`;
 
         // Use Vercel Blob in production, local storage in development
-        if (process.env.NODE_ENV === "production" && process.env.BLOB_READ_WRITE_TOKEN) {
+        if (
+            process.env.NODE_ENV === "production" &&
+            process.env.BLOB_READ_WRITE_TOKEN
+        ) {
             try {
                 const blob = await put(`articles/${fileName}`, file, {
                     access: "public",
-                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    token: process.env.BLOB_READ_WRITE_TOKEN
                 });
 
                 return {

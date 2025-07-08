@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getAppName } from "@/lib/utils";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -209,17 +210,21 @@ export default function DashboardPage() {
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-4">
                             {/* Logo Brand */}
-                            <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-teal-500 rounded-xl flex items-center justify-center">
-                                <span className="text-lg font-bold text-white">
-                                    L
-                                </span>
+                            <div className="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center overflow-hidden">
+                                <Image
+                                    src="/images/logos/logo_linkku.png"
+                                    alt={`Logo ${getAppName()}`}
+                                    width={32}
+                                    height={32}
+                                    className="w-8 h-8 object-contain"
+                                />
                             </div>
                             <div>
                                 <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
-                                    LinkUMKM Dashboard
+                                    {getAppName()} Dashboard
                                 </h1>
                                 <p className="text-xs text-slate-500 hidden sm:block">
-                                    Kelola UMKM Bongkaran
+                                    Kelola akun Anda
                                 </p>
                             </div>
                         </div>

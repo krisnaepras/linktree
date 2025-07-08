@@ -159,7 +159,7 @@ export default async function Home() {
                         <span className="relative inline-block group">
                             {/* Main animated text */}
                             <span className="relative z-10 animate-text-shimmer-slow bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent bg-[length:300%_100%]">
-                                Semua Kebutuhan
+                                Semua Koneksi
                             </span>
 
                             {/* Animated underline */}

@@ -133,7 +133,11 @@ export default function RegisterPage() {
                         Bergabung dengan Kami
                     </h1>
                     <p className="text-slate-600">
-                        Buat akun <span className="font-semibold text-sky-700">{getAppName()}</span> Anda
+                        Buat akun{" "}
+                        <span className="font-semibold text-sky-700">
+                            {getAppName()}
+                        </span>{" "}
+                        Anda
                     </p>
                 </div>
 

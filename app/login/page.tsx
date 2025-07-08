@@ -136,7 +136,11 @@ function LoginForm() {
                         Selamat Datang Kembali
                     </h1>
                     <p className="text-slate-600">
-                        Masuk ke akun <span className="font-semibold text-sky-700">{getAppName()}</span> Anda
+                        Masuk ke akun{" "}
+                        <span className="font-semibold text-sky-700">
+                            {getAppName()}
+                        </span>{" "}
+                        Anda
                     </p>
                 </div>
 

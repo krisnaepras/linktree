@@ -325,8 +325,7 @@ export default async function Home() {
                             Siap Memulai Perjalanan Digital Anda?
                         </h2>
                         <p className="text-xl mb-8 opacity-90 animate-fade-in-up animation-delay-2800">
-                            Bergabunglah dengan ratusan UMKM Bongkaran yang
-                            telah merasakan manfaatnya
+                            Bergabunglah untuk merasakan manfaatnya
                         </p>
                         <div className="animate-fade-in-up animation-delay-3000">
                             <Link

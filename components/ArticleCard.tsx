@@ -47,16 +47,20 @@ export default function ArticleCard({
     const cardClass = featured
         ? "group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white"
         : variant === "homepage"
-        ? "group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white flex flex-col border border-gray-100"
+        ? "group relative flex flex-col min-h-[320px] overflow-hidden w-full h-full"
         : "group relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white flex flex-col";
 
     const imageClass = featured
-        ? "w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-        : "w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300";
+        ? "w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-2xl"
+        : variant === "homepage"
+        ? "w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-2xl"
+        : "w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-xl";
 
     const imageContainerClass = featured
         ? "relative overflow-hidden"
-        : "relative overflow-hidden";
+        : variant === "homepage"
+        ? "relative overflow-hidden flex-shrink-0 rounded-t-2xl"
+        : "relative overflow-hidden flex-shrink-0 rounded-t-xl";
 
     return (
         <Link href={`/articles/${article.slug}`} className="block">
@@ -120,7 +124,13 @@ export default function ArticleCard({
                 </div>
 
                 {/* Content */}
-                <div className={featured ? "p-6" : "p-4"}>
+                <div
+                    className={
+                        featured
+                            ? "p-6"
+                            : "flex flex-col flex-1 p-4 justify-between"
+                    }
+                >
                     {/* Category & Meta */}
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">

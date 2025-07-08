@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getAppName } from "@/lib/utils";
 import ArticleCard from "@/components/ArticleCard";
 import HomePageRedirect from "@/components/HomePageRedirect";
 import { prisma } from "@/lib/prisma";
@@ -109,9 +110,18 @@ export default async function Home() {
 
                 <div className="flex items-center justify-between relative">
                     {/* Brand Name */}
-                    <div className="flex items-center">
+                    <div className="flex items-center space-x-1">
+                        <div className="flex items-center justify-center w-12 h-12">
+                            <Image
+                                src="/images/logos/logo_linkku.png"
+                                alt="Logo Linkku"
+                                width={32}
+                                height={32}
+                                className="w-8 h-8 object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                        </div>
                         <h1 className="text-xl sm:text-2xl font-bold text-slate-800 hover:text-sky-600 transition-colors duration-300 cursor-pointer">
-                            LinkUMKM Bongkaran
+                            {getAppName()}
                         </h1>
                     </div>
 
@@ -149,7 +159,7 @@ export default async function Home() {
                         <span className="relative inline-block group">
                             {/* Main animated text */}
                             <span className="relative z-10 animate-text-shimmer-slow bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent bg-[length:300%_100%]">
-                                UMKM Bongkaran
+                                Semua Kebutuhan
                             </span>
 
                             {/* Animated underline */}
@@ -157,8 +167,7 @@ export default async function Home() {
                         </span>
                     </h1>
                     <p className="text-xl sm:text-2xl text-slate-600 mb-12 max-w-3xl mx-auto animate-fade-in-up animation-delay-200">
-                        Bantu UMKM di Surabaya tampil online dengan mudah dan
-                        cepat.
+                        Kelola semua link penting Anda dengan mudah dan cepat.
                     </p>
 
                     {/* Animated CTA Button */}
@@ -178,7 +187,7 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-sky-50/40 via-white/60 to-teal-50/40 rounded-3xl -z-10"></div>
 
                     <h2 className="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-12 animate-fade-in-up animation-delay-800">
-                        Mengapa Memilih LinkUMKM Bongkaran?
+                        Mengapa Memilih {getAppName()}?
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -284,19 +293,17 @@ export default async function Home() {
                                 (article: Article, index: number) => (
                                     <div
                                         key={article.id}
-                                        className={`animate-fade-in-up hover:transform hover:scale-105 transition-all duration-300 hover:shadow-md rounded-2xl p-1 bg-gradient-to-br from-sky-100/30 to-teal-100/30`}
+                                        className={`animate-fade-in-up transition-all duration-300 rounded-2xl border border-slate-200 bg-white shadow-md hover:shadow-lg p-0`}
                                         style={{
                                             animationDelay: `${
                                                 2000 + index * 200
                                             }ms`
                                         }}
                                     >
-                                        <div className="rounded-xl overflow-hidden bg-white/95 backdrop-blur-sm">
-                                            <ArticleCard
-                                                article={article}
-                                                variant="homepage"
-                                            />
-                                        </div>
+                                        <ArticleCard
+                                            article={article}
+                                            variant="homepage"
+                                        />
                                     </div>
                                 )
                             )}
@@ -346,13 +353,24 @@ export default async function Home() {
                         {/* About Section */}
                         <div className="space-y-8 animate-fade-in-up animation-delay-3400">
                             <div>
-                                <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-sky-400 to-teal-400 bg-clip-text text-transparent">
-                                    LinkUMKM Bongkaran
-                                </h3>
+                                <div className="flex items-center space-x-1 mb-6">
+                                    <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-sky-100 to-teal-100">
+                                        <Image
+                                            src="/images/logos/logo_linkku.png"
+                                            alt="Logo Linkku"
+                                            width={28}
+                                            height={28}
+                                            className="w-7 h-7 object-contain"
+                                        />
+                                    </span>
+                                    <h3 className="text-2xl font-bold bg-gradient-to-r from-sky-400 to-teal-400 bg-clip-text text-transparent">
+                                        {getAppName()}
+                                    </h3>
+                                </div>
                                 <p className="text-slate-400 text-sm leading-relaxed hover:text-slate-300 transition-colors duration-300">
-                                    Platform digital untuk membantu UMKM di
-                                    Kelurahan Bongkaran, Surabaya tampil online
-                                    dengan mudah dan profesional.
+                                    Platform digital untuk mengelola semua
+                                    tautan penting Anda dengan mudah dan
+                                    profesional.
                                 </p>
                             </div>
                         </div>
@@ -514,7 +532,7 @@ export default async function Home() {
                     <div className="border-t border-slate-800 mt-16 pt-10 animate-fade-in-up animation-delay-4000">
                         <div className="text-center">
                             <p className="text-sm text-slate-400 hover:text-slate-300 transition-colors duration-300">
-                                © 2025 LinkUMKM Bongkaran. Dibuat dengan
+                                © 2025 {getAppName()}. Dibuat dengan
                                 <span className="text-red-400 mx-1">❤️</span>
                                 oleh KKN UPN di Surabaya.
                             </p>

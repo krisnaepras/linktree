@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { getAppName } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -116,14 +117,23 @@ export default function RegisterPage() {
         <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50 flex items-center justify-center px-4 py-8">
             <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
                 <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-gradient-to-r from-sky-500 to-teal-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-white">L</span>
+                    <div className="flex items-center justify-center mb-6 space-x-2">
+                        <img
+                            src="/images/logos/logo_linkku.png"
+                            alt="Logo Linkku"
+                            width={36}
+                            height={36}
+                            className="w-9 h-9 object-contain"
+                        />
+                        <span className="text-xl font-bold text-slate-700">
+                            {getAppName()}
+                        </span>
                     </div>
                     <h1 className="text-3xl font-bold bg-gradient-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent mb-2">
                         Bergabung dengan Kami
                     </h1>
                     <p className="text-slate-600">
-                        Buat akun LinkUMKM Bongkaran Anda
+                        Buat akun <span className="font-semibold text-sky-700">{getAppName()}</span> Anda
                     </p>
                 </div>
 

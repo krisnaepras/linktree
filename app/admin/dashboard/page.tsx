@@ -180,7 +180,7 @@ export default function AdminDashboard() {
                             </h1>
                             <p className="text-slate-600 mt-1">
                                 Halo, {session?.user?.name} - Kelola sistem
-                                LinkUMKM dengan mudah
+                                Linkku dengan mudah
                             </p>
                         </div>
                         {/* <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-teal-500 rounded-xl flex items-center justify-center">

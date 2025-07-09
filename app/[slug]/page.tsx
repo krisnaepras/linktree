@@ -322,7 +322,7 @@ export default async function LinktreePage({ params }: Props) {
                             Punya UMKM juga?
                         </h3>
                         <p className="text-sm opacity-90 mb-4">
-                            Buat LinkUMKM Anda sendiri dan jangkau lebih banyak
+                            Buat Linktree Anda sendiri dan jangkau lebih banyak
                             pelanggan!
                         </p>
                         <Link
@@ -342,7 +342,7 @@ export default async function LinktreePage({ params }: Props) {
                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                                 />
                             </svg>
-                            Buat LinkUMKM Gratis
+                            Buat Linkku Gratis
                         </Link>
                     </div>
                 </div>

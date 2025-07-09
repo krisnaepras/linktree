@@ -8,7 +8,7 @@ async function seedSettings() {
     const defaultSettings = [
         {
             key: "siteName",
-            value: "LinkUMKM",
+            value: "Linkku",
             type: "string"
         },
         {

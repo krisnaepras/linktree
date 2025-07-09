@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
         // Set default values if not found in database
         const defaultSettings = {
-            siteName: "LinkUMKM",
+            siteName: "Linkku",
             siteDescription:
                 "Platform untuk membangun link dalam bio yang menarik",
             allowRegistration: true,

@@ -11,9 +11,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-    title: "LinkUMKM Bongkaran - Satu Tautan untuk UMKM Surabaya",
+    title: "Linkku - Satu Tautan Semua Koneksi",
     description:
-        "Platform digital untuk UMKM di Kelurahan Bongkaran, Kecamatan Pabean Cantian, Kota Surabaya. Bantu UMKM tampil online dengan mudah dan cepat."
+        "Platform digital untuk bantu UMKM tampil online dengan mudah dan cepat."
 };
 
 export default function RootLayout({

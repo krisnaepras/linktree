@@ -198,7 +198,7 @@ export default function CreateArticlePage() {
                                 Buat Artikel Baru
                             </h1>
                             <p className="mt-1 text-sm text-gray-600">
-                                Tulis artikel untuk platform LinkUMKM
+                                Tulis artikel untuk platform Linkku
                             </p>
                         </div>
                         <div className="flex items-center space-x-3">

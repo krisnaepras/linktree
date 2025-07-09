@@ -318,7 +318,7 @@ export default function AdminArticlesPage() {
                                 Kelola Artikel
                             </h1>
                             <p className="mt-1 text-sm text-gray-600">
-                                Buat dan kelola artikel untuk platform LinkUMKM
+                                Buat dan kelola artikel untuk platform Linkku
                             </p>
                         </div>
                         <Link
@@ -937,7 +937,7 @@ export default function AdminArticlesPage() {
                             <p className="mt-2 text-sm text-gray-500 max-w-sm mx-auto">
                                 {searchQuery || statusFilter !== "ALL"
                                     ? "Coba ubah filter pencarian Anda."
-                                    : "Mulai dengan membuat artikel pertama untuk platform LinkUMKM."}
+                                    : "Mulai dengan membuat artikel pertama untuk platform Linkku."}
                             </p>
                             {!searchQuery && statusFilter === "ALL" && (
                                 <div className="mt-6">

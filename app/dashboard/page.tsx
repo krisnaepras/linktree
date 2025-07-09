@@ -223,9 +223,9 @@ export default function DashboardPage() {
                                 <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
                                     {getAppName()} Dashboard
                                 </h1>
-                                <p className="text-xs text-slate-500 hidden sm:block">
+                                {/* <p className="text-xs text-slate-500 hidden sm:block">
                                     Kelola akun Anda
-                                </p>
+                                </p> */}
                             </div>
                         </div>
 
@@ -385,7 +385,7 @@ export default function DashboardPage() {
                         Halo, {session.user.name}!
                     </h2>
                     <p className="text-slate-600">
-                        Kelola linktree UMKM Anda dengan mudah
+                        Kelola linktree Anda dengan mudah
                     </p>
                 </div>
 

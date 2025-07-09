@@ -23,6 +23,14 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="id">
+            <head>
+                <link rel="icon" type="image/png" href="/favicon.png" />
+                <link
+                    rel="shortcut icon"
+                    href="/favicon.png"
+                    type="image/png"
+                />
+            </head>
             <body className={`${poppins.variable} antialiased`}>
                 <AuthProvider>{children}</AuthProvider>
             </body>

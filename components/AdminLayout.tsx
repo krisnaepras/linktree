@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { signOut } from "next-auth/react";
 import { Icon } from "@iconify/react";
+import { getAppName } from "@/lib/utils";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -151,12 +152,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 onClick={() =>
                                     setDesktopSidebarCollapsed(false)
                                 }
-                                className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                                className="w-12 h-12 flex items-center justify-center transition-all duration-200 hover:scale-105 bg-transparent"
                                 title="Expand Sidebar"
                             >
-                                <Icon
-                                    icon="material-symbols:dashboard"
-                                    className="w-6 h-6 text-white"
+                                <Image
+                                    src="/images/logos/logo_linkku.png"
+                                    alt="Logo Linkku"
+                                    width={32}
+                                    height={32}
+                                    className="object-contain w-8 h-8"
                                 />
                             </button>
                         </div>
@@ -167,21 +171,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 desktopSidebarCollapsed ? "lg:hidden" : ""
                             }`}
                         >
-                            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
-                                <Icon
-                                    icon="material-symbols:dashboard"
-                                    className="w-6 h-6 text-white"
-                                />
-                            </div>
+                            <Image
+                                src="/images/logos/logo_linkku.png"
+                                alt="Logo Linkku"
+                                width={40}
+                                height={40}
+                                className="object-contain w-8 h-8"
+                            />
                             <div>
                                 <h1 className="text-lg font-bold text-white">
-                                    {isSuperAdmin
-                                        ? "Super Admin"
-                                        : "Admin Panel"}
+                                    {getAppName()}
                                 </h1>
-                                <p className="text-xs text-white/80">
-                                    LinkUMKM Management
-                                </p>
                             </div>
                         </div>
 

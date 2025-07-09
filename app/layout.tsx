@@ -24,10 +24,10 @@ export default function RootLayout({
     return (
         <html lang="id">
             <head>
-                <link rel="icon" type="image/png" href="/favicon.png" />
+                <link rel="icon" type="image/png" href="/favicon.ico" />
                 <link
                     rel="shortcut icon"
-                    href="/favicon.png"
+                    href="/favicon.ico"
                     type="image/png"
                 />
             </head>

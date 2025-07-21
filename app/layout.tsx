@@ -71,8 +71,10 @@ export default function RootLayout({
                 <link rel="icon" type="image/png" href="/favicon.ico" />
                 <link
                     rel="shortcut icon"
-                    href="/favicon.ico"
+                    href="/favicon.png"
                     type="image/png"
+                    sizes="any"
+                    // type="image/png"
                 />
                 {/* Menggunakan dangerouslySetInnerHTML untuk JSON-LD */}
                 <script

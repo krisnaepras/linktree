@@ -13,7 +13,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
     title: "Linkku - Satu Tautan Semua Koneksi",
     description:
-        "Platform digital untuk bantu UMKM tampil online dengan mudah dan cepat."
+        "Platform digital untuk bantu UMKM tampil online dengan mudah dan cepat.",
+    alternates: {
+        canonical: "https://linkku.web.id"
+    }
 };
 
 export default function RootLayout({

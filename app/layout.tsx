@@ -11,11 +11,33 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-    title: "Linkku - Satu Tautan Semua Koneksi",
+    title: "Linkku - Satu Tautan untuk Semua Koneksi UMKM",
     description:
-        "Platform digital untuk bantu UMKM tampil online dengan mudah dan cepat.",
+        "Kelola semua link Shopee, Instagram, WhatsApp, Google Maps UMKM Anda dalam satu halaman profesional. Gratis!",
     alternates: {
         canonical: "https://linkku.web.id"
+    },
+    openGraph: {
+        title: "Linkku - Satu Tautan Semua Koneksi",
+        description: "Platform tautan profesional gratis untuk UMKM Indonesia",
+        url: "https://linkku.web.id",
+        siteName: "Linkku",
+        images: [
+            {
+                url: "https://linkku.web.id/images/logos/logo_linkku_bgcircle.png",
+                width: 800,
+                height: 600,
+                alt: "Logo Linkku"
+            }
+        ],
+        locale: "id_ID",
+        type: "website"
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Linkku - Satu Tautan Semua Koneksi",
+        description: "Solusi praktis kelola semua tautan UMKM Anda",
+        images: ["https://linkku.web.id/images/logos/logo_linkku_bgcircle.png"]
     }
 };
 
@@ -24,6 +46,20 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    // Definisi objek JSON-LD
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Linkku",
+        url: "https://linkku.web.id",
+        logo: "https://linkku.web.id/images/logos/logo_linkku_bgcircle.png",
+        // sameAs: [
+        //     "https://facebook.com/linkkuid",
+        //     "https://instagram.com/linkkuid",
+        //     "https://tiktok.com/@linkkuid"
+        // ]
+    };
+
     return (
         <html lang="id">
             <head>
@@ -32,6 +68,13 @@ export default function RootLayout({
                     rel="shortcut icon"
                     href="/favicon.ico"
                     type="image/png"
+                />
+                {/* Menggunakan dangerouslySetInnerHTML untuk JSON-LD */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(organizationSchema)
+                    }}
                 />
             </head>
             <body className={`${poppins.variable} antialiased`}>

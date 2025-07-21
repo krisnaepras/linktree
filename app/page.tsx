@@ -269,7 +269,7 @@ export default async function Home() {
                     </div>
                 </section>
                 {/* Featured Articles Section */}
-                // Erase false to enable featured articles
+                {/* Erase false to enable featured articles */}
                 {false && featuredArticles.length > 0 && (
                     <section className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-1600 hover:shadow-xl transition-shadow duration-500 border border-white/50">
                         {/* Section background decoration */}
@@ -346,7 +346,7 @@ export default async function Home() {
                 </div>
 
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
                         {/* About Section */}
                         <div className="space-y-8 animate-fade-in-up animation-delay-3400">
                             <div>
@@ -365,127 +365,22 @@ export default async function Home() {
                                     </h3>
                                 </div>
                                 <p className="text-slate-400 text-sm leading-relaxed hover:text-slate-300 transition-colors duration-300">
-                                    Platform digital untuk mengelola semua
-                                    tautan penting Anda dengan mudah dan
-                                    profesional.
+                                    Linkku adalah platform tautan profesional
+                                    gratis untuk UMKM Indonesia. Solusi praktis
+                                    untuk mengelola semua tautan penting Anda:
+                                    Shopee, Instagram, WhatsApp, Google Maps
+                                    dalam satu halaman.
                                 </p>
                             </div>
                         </div>
-                        {/* Contact Info */}
-                        <div className="space-y-8 animate-fade-in-up animation-delay-3500">
-                            <div>
-                                <h4 className="text-lg font-semibold mb-5 text-slate-200">
-                                    Hubungi Kami
-                                </h4>
-                                <div className="space-y-4">
-                                    <div className="flex items-start space-x-3 text-sm group">
-                                        <Icon
-                                            icon="mdi:map-marker"
-                                            className="w-5 h-5 text-sky-400 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <span className="text-slate-400 hover:text-slate-300 transition-colors duration-300">
-                                            Jl. Coklat No. 5, Surabaya
-                                            <br />
-                                            Jawa Timur, Indonesia
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center space-x-3 text-sm group">
-                                        <Icon
-                                            icon="mdi:email"
-                                            className="w-5 h-5 text-sky-400 flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <a
-                                            href="mailto:kel_bongkaran@gmail.com"
-                                            className="text-slate-400 hover:text-sky-300 transition-colors duration-300 footer-link footer-focus"
-                                        >
-                                            kel_bongkaran@gmail.com
-                                        </a>
-                                    </div>
-                                    <div className="flex items-center space-x-3 text-sm group">
-                                        <Icon
-                                            icon="mdi:phone"
-                                            className="w-5 h-5 text-sky-400 flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <a
-                                            href="tel:+6231357243"
-                                            className="text-slate-400 hover:text-sky-300 transition-colors duration-300 footer-link footer-focus"
-                                        >
-                                            (031) 3572437
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Social Media Section */}
-                        <div className="space-y-8 animate-fade-in-up animation-delay-3600">
-                            <div>
-                                <h4 className="text-lg font-semibold mb-5 text-slate-200">
-                                    Ikuti Kami
-                                </h4>
-                                <div className="space-y-4">
-                                    <a
-                                        href="https://pemerintahan.surabaya.go.id/kelurahan_bongkaran/pariwisata#"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center space-x-3 text-sm group footer-focus"
-                                    >
-                                        <Icon
-                                            icon="mdi:facebook"
-                                            className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <span className="text-slate-400 group-hover:text-white text-sm font-medium transition-colors duration-300">
-                                            Facebook
-                                        </span>
-                                    </a>
-                                    <a
-                                        href="https://instagram.com/@kelurahanbongkaran"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center space-x-3 text-sm group footer-focus"
-                                    >
-                                        <Icon
-                                            icon="mdi:instagram"
-                                            className="w-5 h-5 text-pink-500 group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <span className="text-slate-400 group-hover:text-white text-sm font-medium transition-colors duration-300">
-                                            Instagram
-                                        </span>
-                                    </a>
-                                    <a
-                                        href="https://tiktok.com/@kelurahanbongkaran"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center space-x-3 text-sm group footer-focus"
-                                    >
-                                        <Icon
-                                            icon="ic:baseline-tiktok"
-                                            className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <span className="text-slate-400 group-hover:text-white text-sm font-medium transition-colors duration-300">
-                                            TikTok
-                                        </span>
-                                    </a>
-                                    <a
-                                        href="https://pemerintahan.surabaya.go.id/kelurahan_bongkaran/pariwisata#"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center space-x-3 text-sm group footer-focus"
-                                    >
-                                        <Icon
-                                            icon="mdi:twitter"
-                                            className="w-5 h-5 text-sky-400 group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                        <span className="text-slate-400 group-hover:text-white text-sm font-medium transition-colors duration-300">
-                                            Twitter
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>{" "}
+
                         {/* Partners Section */}
                         <div className="space-y-8 animate-fade-in-up animation-delay-3800">
                             <div className="space-y-4">
-                                <div className="flex items-center space-x-4 group">
+                                <h4 className="text-lg font-semibold mb-5 text-slate-200">
+                                    Dikembangkan Oleh
+                                </h4>
+                                {/* <div className="flex items-center space-x-4 group">
                                     <Image
                                         src="/images/logos/logo_surabaya.png"
                                         alt="Logo Kota Surabaya"
@@ -496,7 +391,7 @@ export default async function Home() {
                                     <span className="text-slate-400 group-hover:text-white text-sm font-medium flex-1 transition-colors duration-300">
                                         Pemerintah Kota Surabaya
                                     </span>
-                                </div>
+                                </div> */}
                                 <div className="flex items-center space-x-4 group">
                                     <Image
                                         src="/images/logos/logo_upnjatim.png"
@@ -518,7 +413,7 @@ export default async function Home() {
                                         className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
                                     />
                                     <span className="text-slate-400 group-hover:text-white text-sm font-medium flex-1 transition-colors duration-300">
-                                        Tim KKN 15 Bongkaran
+                                        KKN 15 Bongkaran
                                     </span>
                                 </div>
                             </div>

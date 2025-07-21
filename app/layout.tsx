@@ -38,7 +38,12 @@ export const metadata: Metadata = {
         title: "Linkku - Satu Tautan Semua Koneksi",
         description: "Solusi praktis kelola semua tautan UMKM Anda",
         images: ["https://linkku.web.id/images/logos/logo_linkku_bgcircle.png"]
-    }
+    },
+    icons: {
+        icon: '/favicon.png',  // Untuk regular favicon
+        shortcut: '/favicon.png', // Untuk shortcut icon
+        apple: '/favicon.png', // Untuk iOS devices (disarankan 180x180px)
+    },
 };
 
 export default function RootLayout({

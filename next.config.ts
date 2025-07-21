@@ -1,5 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
     eslint: {
         ignoreDuringBuilds: true
     },
@@ -19,10 +20,7 @@ const nextConfig = {
         ],
         dangerouslyAllowSVG: true,
         unoptimized: false
-    },
-    experimental: {
-        turbo: true
     }
 };
 
-module.exports = nextConfig;
+export default nextConfig;

@@ -180,7 +180,6 @@ export default async function Home() {
                         </Link>
                     </div>
                 </div>
-
                 {/* Features Section */}
                 <section className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-600 hover:shadow-xl transition-shadow duration-500 border border-white/50">
                     {/* Section background decoration */}
@@ -269,9 +268,9 @@ export default async function Home() {
                         </div>
                     </div>
                 </section>
-
                 {/* Featured Articles Section */}
-                {featuredArticles.length > 0 && (
+                // Erase false to enable featured articles
+                {false && featuredArticles.length > 0 && (
                     <section className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-8 sm:p-12 mb-16 animate-fade-in-up animation-delay-1600 hover:shadow-xl transition-shadow duration-500 border border-white/50">
                         {/* Section background decoration */}
                         <div className="absolute inset-0 bg-gradient-to-br from-sky-50/30 via-white/60 to-teal-50/30 rounded-3xl -z-10"></div>
@@ -310,7 +309,6 @@ export default async function Home() {
                         </div>
                     </section>
                 )}
-
                 {/* Call to Action */}
                 <section className="text-center bg-gradient-to-r from-sky-600 to-teal-600 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden animate-fade-in-up animation-delay-2400 hover:shadow-2xl transition-shadow duration-500">
                     {/* Animated Background Elements */}

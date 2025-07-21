@@ -40,9 +40,9 @@ export const metadata: Metadata = {
         images: ["https://linkku.web.id/images/logos/logo_linkku_bgcircle.png"]
     },
     icons: {
-        icon: '/favicon.png',  // Untuk regular favicon
-        shortcut: '/favicon.png', // Untuk shortcut icon
-        apple: '/favicon.png', // Untuk iOS devices (disarankan 180x180px)
+        icon: '/favicon.ico',  // Untuk regular favicon
+        shortcut: '/favicon.ico', // Untuk shortcut icon
+        apple: '/favicon.ico', // Untuk iOS devices (disarankan 180x180px)
     },
 };
 
@@ -68,11 +68,10 @@ export default function RootLayout({
     return (
         <html lang="id">
             <head>
-                <link rel="icon" type="image/png" href="/favicon.ico" />
+                <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <link
                     rel="shortcut icon"
-                    href="/favicon.png"
-                    type="image/png"
+                    href="/favicon.ico"
                     sizes="any"
                     // type="image/png"
                 />

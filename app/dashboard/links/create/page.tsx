@@ -16,7 +16,7 @@ const createLinkSchema = z.object({
         .max(100, "Judul maksimal 100 karakter"),
     url: z.string().url("URL tidak valid"),
     categoryId: z.string().min(1, "Kategori harus dipilih"),
-    sortOrder: z.number().optional(),
+    // sortOrder: z.number().optional(),    
     isVisible: z.boolean().optional()
 });
 
@@ -259,7 +259,7 @@ export default function CreateLinkPage() {
                         </div>
 
                         {/* Sort Order */}
-                        <div>
+                        {/* <div>
                             <label
                                 htmlFor="sortOrder"
                                 className="block text-sm font-medium text-slate-700 mb-2"
@@ -279,7 +279,7 @@ export default function CreateLinkPage() {
                             <p className="mt-1 text-sm text-slate-500">
                                 Kosongkan untuk menempatkan di urutan terakhir
                             </p>
-                        </div>
+                        </div> */}
 
                         {/* Is Visible */}
                         <div>

@@ -376,45 +376,33 @@ export default async function Home() {
 
                         {/* Partners Section */}
                         <div className="space-y-8 animate-fade-in-up animation-delay-3800">
-                            <div className="space-y-4">
-                                <h4 className="text-lg font-semibold mb-5 text-slate-200">
-                                    Dikembangkan Oleh
-                                </h4>
-                                {/* <div className="flex items-center space-x-4 group">
+                            <div className="flex justify-center md:justify-end items-center space-x-6">
+                                <div className="group">
                                     <Image
                                         src="/images/logos/logo_surabaya.png"
                                         alt="Logo Kota Surabaya"
-                                        width={40}
-                                        height={40}
-                                        className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+                                        width={48}
+                                        height={48}
+                                        className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300"
                                     />
-                                    <span className="text-slate-400 group-hover:text-white text-sm font-medium flex-1 transition-colors duration-300">
-                                        Pemerintah Kota Surabaya
-                                    </span>
-                                </div> */}
-                                <div className="flex items-center space-x-4 group">
+                                </div>
+                                <div className="group">
                                     <Image
                                         src="/images/logos/logo_upnjatim.png"
                                         alt="Logo UPN Jawa Timur"
-                                        width={40}
-                                        height={40}
-                                        className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+                                        width={48}
+                                        height={48}
+                                        className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300"
                                     />
-                                    <span className="text-slate-400 group-hover:text-white text-sm font-medium flex-1 transition-colors duration-300">
-                                        UPN Jawa Timur
-                                    </span>
                                 </div>
-                                <div className="flex items-center space-x-4 group">
+                                <div className="group">
                                     <Image
                                         src="/images/logos/logo_kkn15bongkaran.png"
                                         alt="Logo KKN 15 Bongkaran"
-                                        width={40}
-                                        height={40}
-                                        className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+                                        width={48}
+                                        height={48}
+                                        className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300"
                                     />
-                                    <span className="text-slate-400 group-hover:text-white text-sm font-medium flex-1 transition-colors duration-300">
-                                        KKN 15 Bongkaran
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -426,7 +414,7 @@ export default async function Home() {
                             <p className="text-sm text-slate-400 hover:text-slate-300 transition-colors duration-300">
                                 © 2025 {getAppName()}. Dibuat dengan
                                 <span className="text-red-400 mx-1">❤️</span>
-                                oleh KKN UPN di Surabaya.
+                                oleh KKN 15 UPNVJT di Kelurahan Bongkaran, Surabaya.
                             </p>
                         </div>
                     </div>

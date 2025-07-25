@@ -278,15 +278,6 @@ export default async function LinktreePage({ params }: Props) {
                             <div className="flex items-center space-x-2 transform hover:scale-110 transition-transform duration-300">
                                 <div className="w-8 h-8 bg-white rounded-full p-1 shadow-md hover:shadow-lg transition-shadow duration-300">
                                     <Image
-                                        src="/images/logos/logo_surabaya.png"
-                                        alt="Logo Surabaya"
-                                        width={24}
-                                        height={24}
-                                        className="w-full h-full object-contain"
-                                    />
-                                </div>
-                                <div className="w-8 h-8 bg-white rounded-full p-1 shadow-md hover:shadow-lg transition-shadow duration-300">
-                                    <Image
                                         src="/images/logos/logo_upnjatim.png"
                                         alt="Logo UPN"
                                         width={24}
@@ -303,10 +294,20 @@ export default async function LinktreePage({ params }: Props) {
                                         className="w-full h-full object-contain"
                                     />
                                 </div>
+                                <div className="w-8 h-8 bg-white rounded-full p-1 shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    <Image
+                                        src="/images/logos/logo_surabaya.png"
+                                        alt="Logo Surabaya"
+                                        width={24}
+                                        height={24}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <p className="text-sm text-gray-700 font-medium">
-                            Dibuat dengan ❤️ oleh KKN UPN di Kelurahan Bongkaran
+                            Dibuat dengan ❤️ oleh KKN 15 UPNVJT di Kelurahan
+                            Bongkaran
                         </p>
                         <div className="flex items-center justify-center space-x-2 mt-2">
                             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>

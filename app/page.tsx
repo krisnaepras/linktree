@@ -379,15 +379,6 @@ export default async function Home() {
                             <div className="flex justify-center md:justify-end items-center space-x-6">
                                 <div className="group">
                                     <Image
-                                        src="/images/logos/logo_surabaya.png"
-                                        alt="Logo Kota Surabaya"
-                                        width={48}
-                                        height={48}
-                                        className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <div className="group">
-                                    <Image
                                         src="/images/logos/logo_upnjatim.png"
                                         alt="Logo UPN Jawa Timur"
                                         width={48}
@@ -404,6 +395,15 @@ export default async function Home() {
                                         className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300"
                                     />
                                 </div>
+                                <div className="group">
+                                    <Image
+                                        src="/images/logos/logo_surabaya.png"
+                                        alt="Logo Kota Surabaya"
+                                        width={48}
+                                        height={48}
+                                        className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -414,7 +414,8 @@ export default async function Home() {
                             <p className="text-sm text-slate-400 hover:text-slate-300 transition-colors duration-300">
                                 © 2025 {getAppName()}. Dibuat dengan
                                 <span className="text-red-400 mx-1">❤️</span>
-                                oleh KKN 15 UPNVJT di Kelurahan Bongkaran, Surabaya.
+                                oleh KKN 15 UPNVJT di Kelurahan Bongkaran,
+                                Surabaya.
                             </p>
                         </div>
                     </div>

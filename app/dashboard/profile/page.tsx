@@ -47,7 +47,7 @@ const profileSchema = z
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
-    const { data: session, status } = useSession();
+    const { data: session, status, update } = useSession();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -68,15 +68,44 @@ export default function ProfilePage() {
             return;
         }
 
-        if (status === "authenticated" && session?.user) {
-            reset({
-                name: session.user.name || "",
-                email: session.user.email || "",
-                currentPassword: "",
-                newPassword: "",
-                confirmPassword: ""
-            });
-        }
+        // Fetch fresh data from database instead of relying on session
+        const fetchUserData = async () => {
+            if (status === "authenticated" && session?.user) {
+                try {
+                    const response = await fetch("/api/profile");
+                    if (response.ok) {
+                        const userData = await response.json();
+                        reset({
+                            name: userData.name || "",
+                            email: userData.email || "",
+                            currentPassword: "",
+                            newPassword: "",
+                            confirmPassword: ""
+                        });
+                    } else {
+                        // Fallback to session data if API fails
+                        reset({
+                            name: session.user.name || "",
+                            email: session.user.email || "",
+                            currentPassword: "",
+                            newPassword: "",
+                            confirmPassword: ""
+                        });
+                    }
+                } catch (error) {
+                    // Fallback to session data on error
+                    reset({
+                        name: session.user.name || "",
+                        email: session.user.email || "",
+                        currentPassword: "",
+                        newPassword: "",
+                        confirmPassword: ""
+                    });
+                }
+            }
+        };
+
+        fetchUserData();
     }, [status, router, session, reset]);
 
     const onSubmit = async (data: ProfileFormData) => {
@@ -106,6 +135,12 @@ export default function ProfilePage() {
 
             if (response.ok) {
                 setSuccessMessage("Profil berhasil diperbarui!");
+                
+                // Update session with new data
+                await update({
+                    name: data.name,
+                    email: data.email
+                });
 
                 // Reset password fields
                 reset({

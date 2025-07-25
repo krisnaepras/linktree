@@ -179,7 +179,7 @@ export default async function LinktreePage({ params }: Props) {
                                     />
                                 </svg>
                                 <span className="text-sm font-medium">
-                                    UMKM Kelurahan Bongkaran, Surabaya
+                                    UMKM Lokal
                                 </span>
                             </div>
                             <div className="flex items-center justify-center space-x-1 mt-2">
